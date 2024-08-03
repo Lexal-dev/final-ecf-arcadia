@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelizeInstance from '@/lib/db/sequelize.mjs';
 
-// Interface des attributs de l'entité "hours"
+
 export interface HoursAttributes {
     id: number;
     days: string;
@@ -9,10 +9,9 @@ export interface HoursAttributes {
     close: string;
 }
 
-// Interface pour la création d'une instance "hours" (avec les attributs optionnels)
 interface HoursCreationAttributes extends Optional<HoursAttributes, 'id'> {}
 
-// Définition de la classe "Hours" qui étend Model et implémente les attributs "HoursAttributes" et "HoursCreationAttributes"
+
 class Hours extends Model<HoursAttributes, HoursCreationAttributes> implements HoursAttributes {
     public id!: number;
     public days!: string;
@@ -20,7 +19,7 @@ class Hours extends Model<HoursAttributes, HoursCreationAttributes> implements H
     public close!: string;
 }
 
-// Initialiser le modèle
+
 Hours.init(
     {
         id: {

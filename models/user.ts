@@ -5,7 +5,7 @@ import sequelize from '@/lib/db/sequelize.mjs';
 const SALT_ROUNDS = 10;
 
 interface UserAttributes {
-  id?: number; // Rendre id optionnel
+  id?: number;
   email: string;
   password: string;
   role: string;
@@ -51,7 +51,7 @@ User.init(
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'USER', // Valeur par défaut
+      defaultValue: 'USER',
     },
   },
   {

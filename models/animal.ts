@@ -1,4 +1,3 @@
-// models/animal.js
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelizeInstance from '@/lib/db/sequelize.mjs';
 import Specie from './specie';
@@ -73,7 +72,7 @@ Animal.init(
             },
         },
         imageUrl: {
-            type: DataTypes.JSON, // Changement ici
+            type: DataTypes.JSON,
             allowNull: true,
         },
     },
@@ -84,9 +83,9 @@ Animal.init(
     }
 );
 
-// Fonction d'association des modèles
+
 export function associateModels() {
-    // Associations
+    // Association
     Animal.belongsTo(Specie, { foreignKey: 'specieId' }); 
     Animal.belongsTo(Habitat, { foreignKey: 'habitatId' });
 }

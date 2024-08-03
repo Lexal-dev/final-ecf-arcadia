@@ -71,7 +71,7 @@ Report.init(
     }
 );
 
-// Définir les relations
+// relation
 Report.belongsTo(Animal, { foreignKey: 'animalId' });
 
 export default Report;

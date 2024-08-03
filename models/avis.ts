@@ -5,7 +5,6 @@ export interface AvisAttributes {
     isValid: boolean;
 }
 
-// Définition de votre modèle Avis
 import { DataTypes, Model } from 'sequelize';
 import sequelizeInstance from '@/lib/db/sequelize.mjs';
 
@@ -46,7 +45,7 @@ Avis.init(
         isValid: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            defaultValue: false, // Définition de la valeur par défaut à false
+            defaultValue: false,
         },
     },
     {

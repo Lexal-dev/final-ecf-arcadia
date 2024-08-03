@@ -21,7 +21,7 @@ Specie.init(
             primaryKey: true,
         },
         name: {
-            type: DataTypes.STRING(50), // Limite de la longueur du nom à 50 caractères
+            type: DataTypes.STRING(50), // Limit the length of the name to 50 characters
             allowNull: false,
             unique: true,
             validate: {

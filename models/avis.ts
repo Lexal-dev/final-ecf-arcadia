@@ -7,7 +7,7 @@ export interface AvisAttributes {
 
 // Définition de votre modèle Avis
 import { DataTypes, Model } from 'sequelize';
-import sequelizeInstance from '@/lib/db/sequelize';
+import sequelizeInstance from '@/lib/db/sequelize.mjs';
 
 class Avis extends Model<AvisAttributes> implements AvisAttributes {
     public id!: number;

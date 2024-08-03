@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import bcrypt from 'bcryptjs'; // Importez bcryptjs pour le hachage du mot de passe
+import bcrypt from 'bcryptjs';
 import sequelize from '@/lib/db/sequelize.mjs';
 
 const SALT_ROUNDS = 10;

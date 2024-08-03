@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelizeInstance from '@/lib/db/sequelize';
+import sequelizeInstance from '@/lib/db/sequelize.mjs';
 import Animal from '@/models/animal'; // Importer le modèle Animal
 
 interface ReportAttributes {

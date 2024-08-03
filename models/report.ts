@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelizeInstance from '@/lib/db/sequelize.mjs';
-import Animal from '@/models/animal'; // Importer le modèle Animal
+import Animal from '@/models/animal';
 
 interface ReportAttributes {
     id: number;
@@ -59,7 +59,7 @@ Report.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'animals', // Nom de la table animals
+                model: 'animals', 
                 key: 'id',
             },
         },
@@ -67,7 +67,7 @@ Report.init(
     {
         sequelize: sequelizeInstance,
         tableName: 'reports',
-        timestamps: false, // Désactiver les timestamps automatiques
+        timestamps: false, 
     }
 );
 

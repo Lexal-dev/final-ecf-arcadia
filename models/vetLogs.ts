@@ -1,8 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelizeInstance from '@/lib/db/sequelize.mjs';
-import Animal from './animal'; // Importer le modèle Animal
+import Animal from './animal';
 
-// Définir les attributs pour VetLog
 interface VetLogAttributes {
     id: number;
     animalState: string;
@@ -13,10 +12,8 @@ interface VetLogAttributes {
     animalId: number;
 }
 
-// Définir les attributs optionnels pour la création de VetLog
 interface VetLogCreationAttributes extends Optional<VetLogAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-// Définir la classe VetLog qui étend Model et implémente VetLogAttributes et VetLogCreationAttributes
 class VetLog extends Model<VetLogAttributes, VetLogCreationAttributes> implements VetLogAttributes {
     public id!: number;
     public animalState!: string;
@@ -27,7 +24,6 @@ class VetLog extends Model<VetLogAttributes, VetLogCreationAttributes> implement
     public animalId!: number;
 }
 
-// Initialiser le modèle VetLog
 VetLog.init(
     {
         id: {
@@ -88,7 +84,7 @@ VetLog.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'animals', // Nom de la table animals
+                model: 'animals',
                 key: 'id',
             },
         },
@@ -96,12 +92,12 @@ VetLog.init(
     {
         sequelize: sequelizeInstance,
         tableName: 'vetLogs',
-        timestamps: true, // Activer les timestamps automatiques (createdAt et updatedAt)
+        timestamps: true, 
         updatedAt: 'updatedAt',
     }
 );
 
-// Définir les relations
+// relations
 VetLog.belongsTo(Animal, { foreignKey: 'animalId' });
 
 export default VetLog;

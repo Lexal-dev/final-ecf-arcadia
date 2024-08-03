@@ -52,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const hashedPassword = await hashPassword(password);
             const newUser = await User.create({ email, password: hashedPassword, role });
 
-            const emailSent = await sendWelcomeEmail(email, email); // Envoyer l'e-mail de bienvenue
+            const emailSent = await sendWelcomeEmail(email, email); //sending welcome email 
 
             if (emailSent) {
                 return res.status(201).json({ success: true, message: 'Utilisateur créé avec succès.', user: newUser });

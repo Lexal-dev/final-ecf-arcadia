@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method === 'GET') {
         try {
-            // Récupérer tous les utilisateurs sauf ceux avec le rôle "ADMIN"
+            //get all users exept ADMIN
             const users = await User.findAll({
                 where: {
                     role: {

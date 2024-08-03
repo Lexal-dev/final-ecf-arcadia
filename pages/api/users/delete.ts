@@ -1,19 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import User from '@/models/user'; // Assurez-vous d'importer votre modèle User correctement
+import User from '@/models/user';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'DELETE') {
-        const { id } = req.query as { id: string }; // Assurez-vous que id est de type string
+        const { id } = req.query as { id: string }; // make sure id = string
 
         try {
-            // Vérifiez si l'utilisateur existe
+            // user is existing?
             const user = await User.findByPk(id);
 
             if (!user) {
                 return res.status(404).json({ success: false, message: 'Utilisateur non trouvé.' });
             }
 
-            // Supprimez l'utilisateur de la base de données
+            // delete user on db
             await user.destroy();
 
             return res.status(200).json({ success: true, message: 'Utilisateur supprimé avec succès.' });

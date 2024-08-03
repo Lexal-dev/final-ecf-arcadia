@@ -10,26 +10,26 @@ interface UpdateBody {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'PUT') {
-    const { id } = req.query as { id: string }; // Assurez-vous que id est de type string
-    const { email, role, password } = req.body as UpdateBody; // Assurez-vous que req.body est de type UpdateBody
+    const { id } = req.query as { id: string }; // make sure id = string
+    const { email, role, password } = req.body as UpdateBody; // make sure req.body = type of UpdateBody
 
     try {
-      // Vérifier si l'utilisateur existe
+      // existing user?
       const user = await User.findByPk(id);
 
       if (!user) {
         return res.status(404).json({ success: false, message: 'Utilisateur non trouvé.' });
       }
 
-      // Mettre à jour les attributs de l'utilisateur
+      // update user attributs
       user.email = email;
       user.role = role;
 
       
       if (password) {
-        await user.setPassword(password); // Utilisez la méthode setPassword du modèle User pour hacher le mot de passe
+        await user.setPassword(password); // use setPassword to hash pass
       }
-      // Sauvegarder les modifications
+      // save modification
       await user.save();
 
       return res.status(200).json({ success: true, message: 'Utilisateur mis à jour avec succès.', user });

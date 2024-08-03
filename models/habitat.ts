@@ -17,7 +17,7 @@ Habitat.init(
       primaryKey: true,
     },
     name: {
-      type: DataTypes.STRING(30), // Limite de la longueur du nom à 30 caractères
+      type: DataTypes.STRING(30), // Limit the length of the name to 30 characters
       allowNull: false,
       unique: true,
       validate: {
@@ -28,7 +28,7 @@ Habitat.init(
       },
     },
     description: {
-      type: DataTypes.STRING(200), // Limite de la longueur de la description à 200 caractères
+      type: DataTypes.STRING(200), // Limit the length of the description to 200 characters
       allowNull: false,
       validate: {
         len: {
@@ -48,7 +48,7 @@ Habitat.init(
       },
     },
     imageUrl: {
-      type: DataTypes.JSON, // Utilisation de JSON pour imageUrl, ou TEXT si nécessaire
+      type: DataTypes.JSON, // Use JSON for imageUrl, or TEXT if necessary
       allowNull: true,
     },
   },

@@ -2,32 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+  @layer base {
+    :root {
+      --background: 95 30% 40%; /* Vert écologique plus foncé */
+      --foreground: 95 20% 90%; /* Texte clair sur fond vert */
+      --muted: 95 30% 60%; /* Vert légèrement plus clair pour éléments moins importants */
+      --muted-foreground: 95 30% 20%; /* Texte légèrement plus foncé sur fond muted */
+      --popover: 95 30% 45%; /* Un peu plus clair que le background pour popovers */
+      --popover-foreground: 95 20% 90%; /* Texte clair sur popover */
+      --card: 95 30% 45%; /* Un peu plus clair que le background pour les cartes */
+      --card-foreground: 95 20% 90%; /* Texte clair sur cartes */
+      --border: 95 30% 35%; /* Légèrement plus foncé que le background pour les bordures */
+      --input: 95 30% 45%; /* Un peu plus clair que le background pour les champs de saisie */
+      --primary: 45 100% 50%; /* Jaune pour les éléments primaires, complémentaire du vert */
+      --primary-foreground: 0 0% 0%; /* Texte noir sur éléments primaires */
+      --secondary: 210 50% 40%; /* Bleu pour les éléments secondaires */
+      --secondary-foreground: 0 0% 100%; /* Texte blanc sur éléments secondaires */
+      --accent: 120 100% 25%; /* Vert accentué pour des éléments accrocheurs */
+      --accent-foreground: 0 0% 100%; /* Texte blanc sur éléments accent */
+      --destructive: 0 70% 40%; /* Rouge pour les actions destructives */
+      --destructive-foreground: 0 0% 100%; /* Texte blanc sur éléments destructifs */
+      --ring: 95 30% 45%; /* Couleur des anneaux */
+      --radius: 0.5rem; /* Rayon des bordures arrondies */
+    }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    .dark {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+      --primary: 210 40% 98%;
+      --primary-foreground: 222.2 47.4% 11.2%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 212.7 26.8% 83.9%;
+      --chart-1: 220 70% 50%;
+      --chart-2: 160 60% 45%;
+      --chart-3: 30 80% 55%;
+      --chart-4: 280 65% 60%;
+      --chart-5: 340 75% 55%;
+    }
   }
-}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  @layer base {
+    * {
+      @apply border-border;
+    }
+    body {
+      @apply bg-background text-foreground;
+    }
   }
-}

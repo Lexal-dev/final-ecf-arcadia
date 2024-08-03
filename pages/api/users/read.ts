@@ -1,11 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Op } from 'sequelize';
+import { redirectIfNeeded } from '@/lib/security/redirectApi';
 import User from '@/models/user';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const additionalParam = req.query.additionalParam;
+
     if (additionalParam !== 'users') {
-        return res.status(404).json({ success: false, message: "Endpoint non trouvé" });
+        if (redirectIfNeeded(req, res, '/api/users/read', '/')) {
+            return;
+        }
     }
 
     if (req.method === 'GET') {

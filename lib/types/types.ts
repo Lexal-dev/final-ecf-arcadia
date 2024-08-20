@@ -10,3 +10,8 @@ export interface ImageData {
     url: string;
 }
 
+export  interface Service {
+  id: number;
+  name: string;
+  description: string;
+}

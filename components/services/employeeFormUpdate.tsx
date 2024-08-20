@@ -29,7 +29,7 @@ const FormUpdate: React.FC<ServiceUpdateFormProps> = ({ service, onUpdateSuccess
   const handleUpdateService = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation côté client pour la longueur des champs
+    // Validate client
     if (formData.name.length < 3 || formData.name.length > MAX_NAME_LENGTH) {
       return;
     }
@@ -52,10 +52,10 @@ const FormUpdate: React.FC<ServiceUpdateFormProps> = ({ service, onUpdateSuccess
 
       const data = await response.json();
       if (data.success) {
-        onUpdateSuccess(); // Appeler la fonction onUpdateSuccess
+        onUpdateSuccess();
         toast.success(`${formData.name} a bien été modifié`)
       } else {
-        setServerError(data.message); // Capturer le message d'erreur du serveur
+        setServerError(data.message);
       }
     } catch (error) {
       console.error('Error updating service:', error);

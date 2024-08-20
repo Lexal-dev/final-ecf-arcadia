@@ -7,7 +7,6 @@ import FormCreate from '@/components/avis/FormCreate';
 const HomePage = () => {
   return (
     <main className='flex flex-col items-center py-12'>
-      <div className="mb-[250px]"></div>
       <Presentation />
       <div className='my-12'></div>
       <Activity />

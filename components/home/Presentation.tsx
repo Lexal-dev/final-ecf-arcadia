@@ -80,7 +80,7 @@ export default function Presentation() {
   };
 
   // Determine the image URL to display
-  const currentImageUrl = animals.length === 0 ? '/images/Pasdimage.png' : imageUrls[currentIndex];
+  const currentImageUrl = animals.length === 0 ? '/images/Pasdimage.jpg' : imageUrls[currentIndex];
 
   return (
     <section className="w-full flex flex-col gap-6 w-full md:w-2/3 lg:w-3/4 text-start px-2">

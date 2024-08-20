@@ -95,7 +95,7 @@ export default function Activity() {
               <div className="flex-shrink-0 w-full">
                 <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
                   <Image
-                    src={getUrlAtIndex(0) || '/placeholder.jpg'}
+                    src={getUrlAtIndex(0) || '/images/Pasdimage.jpg'}
                     layout="fill"
                     objectFit="cover"
                     alt={`habitats&animaux 0`}
@@ -108,7 +108,7 @@ export default function Activity() {
                 <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
                   <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
                     <Image
-                      src={getUrlAtIndex(index) || '/placeholder.jpg'}
+                      src={getUrlAtIndex(index) || '/images/Pasdimage.jpg'}
                       layout="fill"
                       objectFit="cover"
                       alt={`habitats&animaux ${index}`}

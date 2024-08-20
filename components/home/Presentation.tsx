@@ -142,4 +142,4 @@ export default function Presentation() {
       {animals.length === 0 && !loading && !error && <p className='w-full text-center'>Aucun animal trouvé.</p>}
     </section>
   );
-}
+} 

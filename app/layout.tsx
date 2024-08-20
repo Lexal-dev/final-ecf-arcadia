@@ -4,11 +4,9 @@ import "./globals.css";
 import Header from "@/components/ui/Header";
 import { cn } from "@/lib/utils";
 
-
-
-
 const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
-const pacifico = Pacifico({weight:"400", subsets: ["latin"], variable: "--font-caption" })
+const pacifico = Pacifico({ weight: "400", subsets: ["latin"], variable: "--font-caption" });
+
 export const metadata: Metadata = {
   title: "Arcadia",
   description: "Website for a zoo",
@@ -19,15 +17,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
-      <body className={cn(merriweatherSans.className, pacifico.variable, "font-sans" )}>
-        
+      <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body className={cn(merriweatherSans.className, pacifico.variable, "font-sans")}>
         <Header />
-          <div className="text-white pt-[250px]">
-            {children}
-          </div>
+        <div className="text-white pt-[250px]">
+          {children}
+        </div>
       </body>
     </html>
   );

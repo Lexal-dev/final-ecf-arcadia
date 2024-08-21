@@ -5,6 +5,7 @@ import Header from "@/components/ui/Header";
 import { cn } from "@/lib/utils";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from "@/components/ui/Footer";
 
 const merriweatherSans = Merriweather_Sans({ subsets: ["latin"] });
 const pacifico = Pacifico({ weight: "400", subsets: ["latin"] });
@@ -31,7 +32,7 @@ export default function RootLayout({
           <div className="mb-[250px]"></div>
           {children}
         </main>
-
+        <Footer />
         <ToastContainer />
       </body>
     </html>

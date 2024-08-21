@@ -53,7 +53,7 @@ export default function UsersManager() {
             }
         } catch (error) {
             console.error('Error deleting users:', error);
-            toast.error('Error deleting user');
+            toast.error('Erreur dans la suppression du compte');
         }
     };
 

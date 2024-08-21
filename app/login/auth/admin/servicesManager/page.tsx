@@ -82,11 +82,11 @@ export default function ServicesManager() {
     };
 
     if (loading) {
-        return <p>Loading...</p>;
+        return <p className='w-full flex justify-center items-center text-center text-4xl font-bold'>Loading...</p>;
     }
 
     if (error) {
-        return <p>Error: {error}</p>;
+        return <p className='w-full flex justify-center items-center text-center text-4xl font-bold'>Error: {error}</p>;
     }
    
     return (

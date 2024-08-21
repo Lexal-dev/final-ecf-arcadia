@@ -53,7 +53,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="flex flex-col justify-between bg-foreground p-6 text-secondary w-[600px] h-[600px]">
         <div className='flex justify-between items-center mb-6'>
-          <h2 className='text-xl font-semibold'>Commentaire pour l'habitat {formData.name}</h2>
+          <h2 className='text-xl font-semibold'>Commentaire pour l&apos;habitat {formData.name}</h2>
           <button onClick={() => onClose()} className='text-red-600 hover:text-red-700 text-xl'>X</button>
         </div>
 

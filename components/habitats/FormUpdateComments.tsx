@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-
+import { MdClose } from 'react-icons/md';
 interface FormUpdateProps {
   habitat: Habitat; // Habitat à mettre à jour
   onUpdateSuccess: () => void; // Callback après la mise à jour réussie

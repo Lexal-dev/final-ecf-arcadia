@@ -58,9 +58,9 @@ export default function SpeciesManager() {
         } else {
             const data = await response.json();
             if (data.error && data.error.includes('foreign key constraint')) {
-                toast.error("Erreur : Habitat lié à un animal");  // Toast pour erreur de clé étrangère
+                toast.error("Erreur : Habitat lié à un animal"); 
             } else {
-                toast.error("Erreur lors de la suppression de l'espèce");  // Toast pour autre type d'erreur
+                toast.error("Erreur lors de la suppression de l'espèce"); 
             }
         }
     };
@@ -75,14 +75,14 @@ export default function SpeciesManager() {
         fetchSpecies('species')
         onClose();
         setLoading(true);
-        toast.success("Espèce créée avec succès");  // Toast en cas de succès de la création
+        toast.success("Espèce créée avec succès");
     };
 
     const onUpdateSuccess = async () => {
         console.log('Espèce modifiée');
         setLoading(true);
         onClose();
-        toast.success("Espèce modifiée avec succès");  // Toast en cas de succès de la modification
+        toast.success("Espèce modifiée avec succès"); 
     };
 
     const onClose = () => {
@@ -91,7 +91,7 @@ export default function SpeciesManager() {
     };
 
   return (
-    <main>
+    <main className='md:px-6'>
         
         {loading ? (<div className='w-full flex justify-center items-center text-center text-xl'>Loading...</div>) : (
         <div className='text-center'>

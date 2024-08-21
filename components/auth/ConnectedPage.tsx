@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { decodeToken } from '@/lib/db/security/decode';
+import { decodeToken } from '@/lib/security/decode';
 
 interface User {
   userEmail: string;

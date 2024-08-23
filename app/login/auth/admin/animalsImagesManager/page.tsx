@@ -217,24 +217,25 @@ export default function ImageAnimalsManager() {
     };
 
     return (
-        <main className='w-full py-12 px-1'>
-        <Loading loading={loading}> 
+        <main className='flex flex-col items-center py-12 min-h-[200x]'>
+        <Loading loading={loading}>
+            <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des images : animaux</h1>
             <div className='overflow-x-auto w-full flex flex-col items-center'>
-                <table className=' w-full md:w-2/3 text-secondary'>
-                    <thead>
-                        <tr className='bg-muted-foreground text-white'>
-                            <th className='px-4 py-2'>Name</th>
-                            <th className='px-4 py-2'>Actions</th>
+                <table className='w-full md:w-2/3'>
+                    <thead className='bg-muted-foreground'>
+                        <tr>
+                            <th className='border border-background px-4 py-2 text-left'>Name</th>
+                            <th className='border border-background px-4 py-2 text-center'>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {animals.map((animal) => (
-                            <tr key={animal.id} className='bg-foreground hover:bg-muted text-secondary'>
-                                <td className='border-b px-4 py-2'>{animal.name}</td>
-                                <td className='border-b px-4 py-2'>
+                            <tr key={animal.id} className='w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white'>
+                                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.name}</td>
+                                <td className='w-1/3 border border-background px-4 py-2 text-sm'>
                                     <div className='flex items-center justify-center'>
                                         <button
-                                            className='bg-muted hover:bg-muted-foreground hover:text-white  p-2 rounded-md'
+                                            className='bg-background hover:bg-muted-foreground text-white p-2 rounded-md'
                                             onClick={() => selectAnimal(animal)}
                                         >
                                             Images

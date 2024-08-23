@@ -1,7 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelizeInstance from '@/lib/db/sequelize.mjs';
 
-
 export interface HoursAttributes {
     id: number;
     days: string;
@@ -11,14 +10,12 @@ export interface HoursAttributes {
 
 interface HoursCreationAttributes extends Optional<HoursAttributes, 'id'> {}
 
-
 class Hours extends Model<HoursAttributes, HoursCreationAttributes> implements HoursAttributes {
     public id!: number;
     public days!: string;
     public open!: string;
     public close!: string;
 }
-
 
 Hours.init(
     {

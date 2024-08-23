@@ -24,7 +24,6 @@ const SpaceNav: React.FC = () => {
         if (storedToken) {
             const decoded = decodeToken(storedToken);
             if (decoded) {
-                // Assurez-vous que userRole est un tableau
                 setUserRoles(Array.isArray(decoded.userRole) ? decoded.userRole.map(role => role.toUpperCase()) : [decoded.userRole.toUpperCase()]);
             } else {
                 console.error('Token invalide');
@@ -36,7 +35,6 @@ const SpaceNav: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        // Mettez à jour les éléments de navigation actifs en fonction du pathname
         const updateNavItems = spaceNav.map(item => ({
             ...item,
             active: item.path === pathname
@@ -64,7 +62,6 @@ const SpaceNav: React.FC = () => {
         { name: "Habitats-Commentaire", path: "/login/auth/veterinarian/habCommentsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
     ];
 
-    // Filtrer les éléments de navigation en fonction des rôles de l'utilisateur
     const filteredNavItems = navItems.filter(navItem => navItem.roles.some(role => userRoles.includes(role)));
 
     return (

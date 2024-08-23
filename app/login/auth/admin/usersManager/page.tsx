@@ -83,19 +83,19 @@ export default function UsersManager() {
     return (
         <main className='flex flex-col items-center py-12 min-h-[200x]'>
             <Loading loading={loading}>
-                <h1 className='text-2xl mb-4 font-bold'>Gestionnaire Utilisateurs</h1>
+                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire Utilisateurs</h1>
                 <button
                     onClick={openCreateForm}
                     className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
                     Ajouter un compte
                 </button>
                 <div className="overflow-x-auto w-full flex flex-col items-center">
-                    <table className='w-full md:w-2/3 w-full'>
+                    <table className='w-full md:w-2/3'>
                         <thead className='bg-muted-foreground'>
                             <tr>
                                 <th className='border border-background px-4 py-2 text-left'>Email</th>
                                 <th className='border border-background px-4 py-2 text-left'>Role</th>
-                                <th className='border border-background px-4 py-2 text-left'>Actions</th>
+                                <th className='border border-background px-4 py-2 text-center'>Actions</th>
                             </tr>
                         </thead>
                         <tbody>

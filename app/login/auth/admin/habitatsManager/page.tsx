@@ -53,12 +53,6 @@ const HabitatsManager: React.FC = () => {
         fetchHabitats('habitats');
     };
         
-    useEffect(() => {
-        initFetch().finally(() => {
-            setLoading(false);
-        });
-    }, [loading]);
-
     // Function to handle deletion of a habitat
     const handleDelete = async (habitat: Habitat) => {
         const habitatId = Number(habitat.id);
@@ -97,9 +91,9 @@ const HabitatsManager: React.FC = () => {
                 console.error(`Error deleting image ${url}:`, error);
               }
             }
-      
+            toast.success('Habitat effacé avec succés')
             setLoading(true); // Refresh habitat list after deletion
-            toast.success('Habitat deleted successfully')
+            
             await initFetch();
             router.push('/login/auth/admin/habitatsManager');
           } else {
@@ -126,7 +120,7 @@ const HabitatsManager: React.FC = () => {
         setLoading(true);
         await initFetch();
         onClose();
-        toast.success("Habitat successfully saved")
+        toast.success("Habitat enregistré avec succés")
     };
 
     // Function to handle update success of habitat
@@ -134,7 +128,7 @@ const HabitatsManager: React.FC = () => {
         console.log('Habitat updated');
         setLoading(true);
         onClose();
-        toast.success("Habitat successfully updated")
+        toast.success("Habitat modifié avec succés")
     };
 
     // Function to open update modal and set selected habitat
@@ -150,9 +144,14 @@ const HabitatsManager: React.FC = () => {
         setSelectedHabitat(null)
     };
 
+    useEffect(() => {
+        initFetch().finally(() => {
+            setLoading(false);
+        });
+    }, [loading]);
+
     // Effect to ensure only one modal is open at a time
     useEffect(() => {
-      console.log("ARRIVER PREMS")
         if(modalCreate === true)
         {
             setModalUpdate(false)
@@ -165,33 +164,34 @@ const HabitatsManager: React.FC = () => {
     }, [modalCreate, modalUpdate])
 
     return (
-        <main className='w-full flex flex-col items-center px-1 py-12 '>
-                <Loading loading={loading}> 
+        <main className='flex flex-col items-center py-12 min-h-[200x] '>
+                <Loading loading={loading}>
+                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des habitats</h1>
                 <button onClick={()=> {setModalCreate(true)}} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>Add a habitat</button>
-                <div className='flex w-full justify-center overflow-x-auto'>
+                <div className='overflow-x-auto w-full flex flex-col items-center'>
                    
                     <table className="w-full md:w-2/3">
-                        <thead>
-                            <tr className="bg-muted-foreground text-white uppercase text-sm">
-                                <th className="py-3 px-6">Name</th>
-                                <th className="py-3 px-6">Description</th>
-                                <th className="py-3 px-6">Comment</th>
-                                <th className="py-3 px-6">Actions</th>
+                        <thead className='bg-muted-foreground'>
+                            <tr>
+                                <th className="border border-background px-4 py-2 text-left">Name</th>
+                                <th className="border border-background px-4 py-2 text-left">Description</th>
+                                <th className="border border-background px-4 py-2 text-left">Comment</th>
+                                <th className="border border-background px-4 py-2 text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="text-gray-600 font-light">
+                        <tbody>
                             {habitats.map((habitat) => (
-                                <tr key={habitat.id} className="bg-foreground border-b border-gray-200 hover:bg-muted text-secondary text-primary hover:text-white">
-                                    <td className="py-2 px-2">{habitat.name}</td>
-                                    <td className="py-2 px-2 ">{habitat.description}</td>
-                                    <td className="py-2 px-2">{habitat.comment}</td>
-                                    <td className="flex justify-center gap-2 py-3 px-6">
-                                        <div className='flex  justify-center gap-2'>
-                                            <button onClick={() => handleDelete(habitat)} className='text-white text-lg bg-red-500 hover:bg-red-600 p-2 rounded-md'>
-                                              <MdDelete />
+                                <tr key={habitat.id} className="w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white">
+                                    <td className="w-1/3 border border-background px-4 py-2 text-sm">{habitat.name}</td>
+                                    <td className="w-1/3 border border-background px-4 py-2 text-sm">{habitat.description}</td>
+                                    <td className="w-1/3 border border-background px-4 py-2 text-sm">{habitat.comment}</td>
+                                    <td className="w-1/3 border border-background px-4 py-2">
+                                        <div className='flex items-center justify-center md:gap-5'>
+                                            <button onClick={() => handleDelete(habitat)} className='text-red-500 hover:text-red-600'>
+                                              <MdDelete size={28}/>
                                             </button>
-                                            <button onClick={() => handleUpdateModalOpen(habitat)} className='text-white text-lg bg-yellow-500 hover:bg-yellow-600 rounded p-2 '>
-                                              <MdEdit />
+                                            <button onClick={() => handleUpdateModalOpen(habitat)} className='text-yellow-500 hover:text-yellow-600'>
+                                              <MdEdit size={28}/>
                                             </button>
                                         </div>
                                     </td>      

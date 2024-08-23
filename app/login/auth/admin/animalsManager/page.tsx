@@ -10,6 +10,7 @@ import FormUpdate from '@/components/animals/FormUpdate';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
 import Loading from '@/components/Loading';
+import { toast } from 'react-toastify';
 
 interface Animal {
   id: number;
@@ -83,8 +84,7 @@ const AnimalsManager: React.FC = () => {
       });
   
       if (response.ok || response.status === 404) {
-        console.log('Animal supprimé avec succès ou non trouvé');
-  
+        
         // Delete images from Firebase storage
         for (const url of animalUrls) {
           const imageRef = ref(storage, url);
@@ -95,7 +95,7 @@ const AnimalsManager: React.FC = () => {
             console.error(`Erreur lors de la suppression de l'image ${url}:`, error);
           }
         }
-  
+        toast.success('Animal effacé avec succés')
         setLoading(true); // Refresh the animal list after deletion
         await initFetch();
         router.push('/login/auth/admin/animalsManager');
@@ -154,36 +154,37 @@ const AnimalsManager: React.FC = () => {
   }, [modalCreate, modalUpdate]);
 
   return (
-    <Loading loading={loading}>
-      <main className='w-full  px-1 py-12'>
-        <div className='flex flex-col items-center'>
+    
+      <main className='flex flex-col items-center py-12 min-h-[200x]'>
+        <Loading loading={loading}>
+        <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des animaux</h1>
           <button onClick={() => setModalCreate(true)} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
             Ajouter un animal
           </button>
-          <div className='flex w-full justify-center overflow-x-auto'>
+          <div className='overflow-x-auto w-full flex flex-col items-center'>
             <table className="w-full md:w-2/3">
-              <thead>
-                <tr className="bg-muted-foreground text-white uppercase text-sm">
-                  <th className="py-3 px-6">Habitat</th>
-                  <th className="py-3 px-6">Nom</th>
-                  <th className="py-3 px-6">Espèce</th>
-                  <th className="py-3 px-6">Actions</th>
+              <thead className="bg-muted-foreground">
+                <tr>
+                  <th className="border border-background px-4 py-2 text-left">Habitat</th>
+                  <th className="border border-background px-4 py-2 text-left">Nom</th>
+                  <th className="border border-background px-4 py-2 text-left">Espèce</th>
+                  <th className="border border-background px-4 py-2 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="text-gray-600 font-light">
+              <tbody>
                 {animals.length > 0 ? (
                   animals.map((animal) => (
-                    <tr key={animal.id} className="bg-foreground border-b border-gray-200 hover:bg-muted text-secondary text-primary hover:text-white">
-                      <td className="py-3 px-6">{animal.habitatId}</td>
-                      <td className="py-3 px-6">{animal.name}</td>
-                      <td className="py-3 px-6">{animal.specieId}</td>
-                      <td className="py-3 px-6">
-                        <div className='flex justify-center gap-2'>
-                          <button onClick={() => handleDelete(animal)} className='text-white text-lg bg-red-500 hover:bg-red-600 p-2 rounded-md'>
-                            <MdDelete />
+                    <tr key={animal.id} className="w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white">
+                      <td className="w-1/3 border border-background px-4 py-2 text-sm">{animal.habitatId}</td>
+                      <td className="w-1/3 border border-background px-4 py-2 text-sm">{animal.name}</td>
+                      <td className="w-1/3 border border-background px-4 py-2 text-sm">{animal.specieId}</td>
+                      <td className="w-1/3 border border-background px-4 py-2">
+                        <div className='flex items-center justify-center md:gap-5'>
+                          <button onClick={() => handleDelete(animal)} className='text-red-500 hover:text-red-600'>
+                            <MdDelete size={28}/>
                           </button>
-                          <button onClick={() => handleUpdateModalOpen(animal)} className='text-white text-lg bg-yellow-500 hover:bg-yellow-600 rounded p-2 '>
-                            <MdEdit />
+                          <button onClick={() => handleUpdateModalOpen(animal)} className='text-yellow-500 hover:text-yellow-600'>
+                            <MdEdit size={28}/>
                           </button>
                         </div>
 
@@ -198,11 +199,11 @@ const AnimalsManager: React.FC = () => {
               </tbody>
             </table>
           </div>
-        </div>
-        {modalCreate && <FormCreate onCreateSuccess={onCreateSuccess} onClose={onClose} />}
-        {modalUpdate && selectedAnimal && <FormUpdate animal={selectedAnimal} onUpdateSuccess={onUpdateSuccess} onClose={onClose} />}
+          {modalCreate && <FormCreate onCreateSuccess={onCreateSuccess} onClose={onClose} />}
+          {modalUpdate && selectedAnimal && <FormUpdate animal={selectedAnimal} onUpdateSuccess={onUpdateSuccess} onClose={onClose} />}
+          </Loading>
       </main>
-    </Loading>
+   
   );
 };
 

@@ -83,8 +83,8 @@ export default function ListAnimals() {
 
   return (
     <>
-      <h3 className='w-full text-xl lg:text-2xl font-bold text-center mb-6'>Listes des Rapports de consommations de nourritures par animal</h3>
-      <select onChange={handleHabitatChange} className='text-secondary p-1 rounded-md bg-foreground mb-6'>
+     <h1 className='text-3xl mb-4 font-bold'>Rapports des employés</h1>
+      <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
         <option value="">Sélectionnez un habitat</option>
         {habitats.map(habitat => (
           <option key={habitat.id} value={habitat.name}>
@@ -93,7 +93,7 @@ export default function ListAnimals() {
         ))}
       </select>
 
-      <div className='w-full flex flex-col items-center'>
+
         <div className='flex items-center gap-3'>
           <h2 className='text-2xl font-bold mb-4'>Liste des animaux</h2> 
           {choiceHabitat ? (
@@ -102,26 +102,25 @@ export default function ListAnimals() {
             <p className='text-xl font-bold mb-4'> [{selectedHabitatName}]:</p>
           )}                   
         </div>
-        <div className='w-full md:w-2/3 flex flex-col  items-center text-secondary  '>
-        <table className='w-full'>
-          <thead>
-            <tr className='bg-muted-foreground text-white'>
-              <th className='p-2'>Nom</th>
-              <th className='p-2'>Race</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredAnimals.map(animal => (
-              <tr key={animal.id} onClick={() => handleAnimalId(animal.id)} className='cursor-pointer bg-foreground hover:bg-muted hover:text-white w-full text-center'>
-                <td className='p-2'>{animal.name}</td>
-                <td className='p-2'>{animal.specieId}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        </div>
 
-      </div>
+        <div className='overflow-x-auto w-full flex flex-col items-center'>
+          <table className='w-full md:w-2/3'>
+            <thead className='bg-muted-foreground'>
+              <tr >
+                <th className='border border-background px-4 py-2 text-left'>Nom</th>
+                <th className='border border-background px-4 py-2 text-left'>Race</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredAnimals.map(animal => (
+                <tr key={animal.id} onClick={() => handleAnimalId(animal.id)} className='cursor-pointer w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white'>
+                  <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.name}</td>
+                  <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.specieId}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
       {modal && (
         <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>

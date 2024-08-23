@@ -17,13 +17,13 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public password!: string;
   public role!: string;
 
-
+  // Hash le mot de passe avant de le sauvegarder
   public async setPassword(password: string): Promise<void> {
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     this.password = hashedPassword;
   }
 
-
+  // Compare le mot de passe fourni avec le mot de passe haché
   public async comparePassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password);
   }
@@ -41,7 +41,9 @@ User.init(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
+        isEmail: {
+          msg: 'Email must be valid.',
+        },
       },
     },
     password: {

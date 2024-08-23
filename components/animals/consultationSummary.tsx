@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '@/lib/db/firebaseConfig.mjs';
 import { toast } from 'react-toastify';
-
+import { MdDelete } from 'react-icons/md';
 interface ConsultationSummaryProps {}
 
 const ConsultationSummary: React.FC<ConsultationSummaryProps> = () => {
@@ -39,25 +39,25 @@ const ConsultationSummary: React.FC<ConsultationSummaryProps> = () => {
   };
 
   return (
-    <table className="w-full md:w-2/3 w-1/2">
-      <thead>
-        <tr className="bg-muted-foreground">
-          <th className="border border-background px-4 py-2">Nom de l&apos;animal</th>
-          <th className="border border-background px-4 py-2">Nombre de consultations</th>
-          <th className="border border-background px-4 py-2">Actions</th>
+    <table className="w-full md:w-2/3">
+      <thead className="bg-muted-foreground">
+        <tr >
+          <th className="border border-background px-4 py-2 text-left">Nom de l&apos;animal</th>
+          <th className="border border-background px-4 py-2 text-left">Nombre de consultations</th>
+          <th className="border border-background px-4 py-2 text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
         {consultations.map((animal) => (
-          <tr key={animal.id} className="border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white">
-            <td className="w-1/2 border border-background px-4 py-2">{animal.animalName}</td>
-            <td className="w-1/4 border border-background px-4 py-2 text-center">{animal.consultations}</td>
-            <td className="w-1/4 border border-background px-4 py-2 text-center">
+          <tr key={animal.id} className="w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white">
+            <td className="w-1/3 border border-background px-4 py-2 text-sm">{animal.animalName}</td>
+            <td className="w-1/3 border border-background px-4 py-2 text-sm text-center">{animal.consultations}</td>
+            <td className="w-1/3 border border-background px-4 py-2 text-sm text-center">
               <button
-                className="bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded"
+                className="text-red-500 hover:text-red-600"
                 onClick={() => deleteConsultation(animal.id)}
               >
-                Supprimer
+                <MdDelete size={28} />
               </button>
             </td>
           </tr>

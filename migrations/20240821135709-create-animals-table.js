@@ -15,7 +15,7 @@ module.exports = {
                 validate: {
                     len: {
                         args: [3, 30],
-                        msg: "Le nom doit être compris entre 3 et 30 caractères",
+                        msg: 'Le nom doit être compris entre 3 et 30 caractères.',
                     },
                 },
             },
@@ -25,13 +25,13 @@ module.exports = {
                 validate: {
                     len: {
                         args: [3, 100],
-                        msg: "Le message d'état doit être compris entre 3 et 100 caractères",
+                        msg: 'Le message d\'état doit être compris entre 3 et 100 caractères.',
                     },
                 },
             },
             specieId: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'species',
                     key: 'id',
@@ -39,25 +39,15 @@ module.exports = {
             },
             habitatId: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
+                allowNull: true,
                 references: {
                     model: 'habitats',
                     key: 'id',
                 },
             },
             imageUrl: {
-                type: Sequelize.JSON, // Utilisation de JSON pour stocker un tableau de chaînes (alternative à ARRAY)
+                type: Sequelize.JSONB, // Utilisez JSONB pour PostgreSQL pour stocker des tableaux de chaînes
                 allowNull: true,
-            },
-            createdAt: {
-                type: Sequelize.DATE,
-                allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-            },
-            updatedAt: {
-                type: Sequelize.DATE,
-                allowNull: false,
-                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
             },
         });
     },

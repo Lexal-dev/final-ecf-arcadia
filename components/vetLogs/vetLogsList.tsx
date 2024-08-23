@@ -8,6 +8,7 @@ import FormUpdate from '@/components/vetLogs/FormUpdate';
 import { MdEdit, MdDelete } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import Loading from "@/components/Loading"
+
 export default function VetLogsList() {
   const [animals, setAnimals] = useState<Animal[]>([]);
   const [habitats, setHabitats] = useState<Habitat[]>([]);
@@ -90,7 +91,8 @@ export default function VetLogsList() {
   const onClose = () => {
     console.log("test")
     setShowCreateForm(false)
-  }
+  };
+
   const handleCreateVetLog = (formData: any) => {
     fetch('/api/vetLogs/create', {
       method: 'POST',
@@ -159,8 +161,8 @@ export default function VetLogsList() {
   return (
     <main className="w-full flex flex-col items-center ">
       <Loading loading={loading}>
-      <h3 className='w-full text-3xl font-bold text-center mb-4'>Rapports vétérinaire</h3>
-      <select onChange={handleHabitatChange} className='text-black p-1 rounded-md bg-slate-300 mb-6'>
+      <h1 className='text-3xl mb-4 font-bold'>Rapport vétérinaire par animaux</h1>
+      <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
         <option value="">Sélectionnez un habitat</option>
         {habitats.map(habitat => (
           <option key={habitat.id} value={habitat.name}>
@@ -169,28 +171,28 @@ export default function VetLogsList() {
         ))}
       </select>
       
-      <div className='w-full flex flex-col items-center'>
-        <div className='flex items-center items-center gap-3'>
-          <h2 className='text-2xl font-bold mb-4'>Liste des animaux</h2> 
-          {choiceHabitat ? (
-            <p className='text-xl font-bold mb-4'> [Complète]:</p>
-          ) : (
-            <p className='text-xl font-bold mb-4'> [{selectedHabitatName}]:</p>
-          )}                   
-        </div>
-       
-        <table className='w-full text-secondary'>
-          <thead>
-            <tr className='bg-muted-foreground text-white'>
-              <th className='p-2 border'>Nom de l&apos;animal</th>
-              <th className='p-2 border'>Race</th>
+      <div className='flex items-center items-center gap-3'>
+        <h2 className='text-2xl font-bold mb-4'>Liste des animaux</h2> 
+        {choiceHabitat ? (
+          <p className='text-xl font-bold mb-4'> [Complète]:</p>
+        ) : (
+          <p className='text-xl font-bold mb-4'> [{selectedHabitatName}]:</p>
+        )}                   
+      </div>
+
+      <div className='overflow-x-auto w-full flex flex-col items-center'>       
+        <table className='w-full md:w-2/3'>
+          <thead className='bg-muted-foreground'>
+            <tr >
+              <th className='border border-background px-4 py-2 text-left'>Nom de l&apos;animal</th>
+              <th className='border border-background px-4 py-2 text-left'>Race</th>
             </tr>
           </thead>
           <tbody>
             {filteredAnimals.map(animal => (
-              <tr key={animal.id} className='w-full cursor-pointer bg-foreground hover:bg-muted hover:text-white w-full' onClick={() => handleAnimalId(animal.id)}>
-                <td className=' w-1/2 p-2 border-b-2'>{animal.name}</td>
-                <td className=' w-1/2 p-2 border-b-2'>{animal.specieId}</td>
+              <tr key={animal.id} className='w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white' onClick={() => handleAnimalId(animal.id)}>
+                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.name}</td>
+                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.specieId}</td>
               </tr>
             ))}
           </tbody>

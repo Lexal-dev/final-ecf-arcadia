@@ -78,7 +78,8 @@ export default function HoursManager() {
 
     return (
         <main className="flex flex-col py-12 items-center">
-            <Loading loading={loading}> {/* Utilisation du composant Loading */}
+            <Loading loading={loading}>
+                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des horraires</h1>
                 <button
                     onClick={handleCreateClick}
                     className="bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6"
@@ -86,28 +87,28 @@ export default function HoursManager() {
                     Ajouter une heure
                 </button>
                 <div className="overflow-x-auto w-full flex flex-col items-center">
-                    <table className="w-full md:w-2/3 shadow-md">
+                    <table className="w-full md:w-2/3">
                         <thead className="bg-muted-foreground">
                             <tr>
-                                <th className="py-3 px-2 text-left">Jours</th>
-                                <th className="py-3 px-2 text-left">Ouverture</th>
-                                <th className="py-3 px-2 text-left">Fermeture</th>
-                                <th className="py-3 px-2 text-center">Actions</th>
+                                <th className="border border-background px-4 py-2 text-left">Jours</th>
+                                <th className="border border-background px-4 py-2 text-center">Ouverture</th>
+                                <th className="border border-background px-4 py-2 text-center">Fermeture</th>
+                                <th className="border border-background px-4 py-2 text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {hours.map(hour => (
-                                <tr key={hour.id} className="bg-foreground text-secondary hover:bg-muted">
-                                    <td className="py-3 px-2 border-b-2 border-background">{hour.days}</td>
-                                    <td className="py-3 px-2 border-b-2 border-background">{hour.open}</td>
-                                    <td className="py-3 px-2 border-b-2 border-background">{hour.close}</td>
-                                    <td className="py-3 px-2 border-b-2 border-background">
-                                        <div className='flex justify-center gap-2'>
-                                            <button onClick={() => handleDelete(hour.id)} className='text-white text-lg bg-red-500 hover:bg-red-600 p-2 rounded-md'>
-                                                <MdDelete />
+                                <tr key={hour.id} className="w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white">
+                                    <td className="w-1/3 border border-background px-4 py-2 text-sm">{hour.days}</td>
+                                    <td className="w-1/3 border border-background px-4 py-2 text-sm text-center">{hour.open}</td>
+                                    <td className="w-1/3 border border-background px-4 py-2 text-sm text-center">{hour.close}</td>
+                                    <td className="w-1/3 border border-background px-4 py-2 text-sm">
+                                        <div className='flex items-center justify-center md:gap-5'>
+                                            <button onClick={() => handleDelete(hour.id)} className='text-red-500 hover:text-red-600'>
+                                                <MdDelete size={28}/>
                                             </button>
-                                            <button onClick={() => handleUpdate(hour)} className='text-white text-lg bg-yellow-500 hover:bg-yellow-600 rounded p-2 '>
-                                                <MdEdit />
+                                            <button onClick={() => handleUpdate(hour)} className='text-yellow-500 hover:text-yellow-600'>
+                                                <MdEdit size={28}/>
                                             </button>
                                         </div>
                                     </td>

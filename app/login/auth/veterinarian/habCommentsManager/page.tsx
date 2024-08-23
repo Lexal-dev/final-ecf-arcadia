@@ -41,31 +41,31 @@ const HabitatsComments: React.FC = () => {
     }, []);
 
     return (
-        <main className='flex flex-col items-center px-1 py-12'>
+        <main className='flex flex-col items-center py-12 min-h-[200x]'>
             <Loading loading={loading}>
-            <h1 className='text-2xl mb-4 font-bold'>Habitats Management</h1>
-            <div className="w-full lg:w-2/3 overflow-x-auto shadow-md md:rounded-lg">
-                <table className='w-full table-auto'>
-                    <thead>
-                        <tr className='bg-muted-foreground text-white'>
-                            <th className='px-4 py-2 text-center'>Name</th>
-                            <th className='px-4 py-2 text-center'>Description</th>
-                            <th className='px-4 py-2 text-center'>Comment</th>
-                            <th className='px-4 py-2 text-center'>Action</th>
+            <h1 className='text-3xl mb-4 font-bold'>Habitats Management</h1>
+            <div className="overflow-x-auto w-full flex flex-col items-center">
+                <table className='w-full md:w-2/3'>
+                    <thead className='bg-muted-foreground'>
+                        <tr >
+                            <th className='border border-background px-4 py-2 text-left'>Name</th>
+                            <th className='border border-background px-4 py-2 text-left'>Description</th>
+                            <th className='border border-background px-4 py-2 text-left'>Comment</th>
+                            <th className='border border-background px-4 py-2 text-center'>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         {habitats.map((habitat) => (
-                            <tr key={habitat.id} className='border-t bg-foreground text-secondary hover:bg-muted hover:text-white'>
-                                <td className='px-4 py-2'>{habitat.name}</td>
-                                <td className='px-4 py-2'>{habitat.description}</td>
-                                <td className='px-4 py-2'>{habitat.comment}</td>
-                                <td className='w-full min-h-[100px] flex flex-col justify-center items-center'>
+                            <tr key={habitat.id} className='w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white'>
+                                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{habitat.name}</td>
+                                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{habitat.description}</td>
+                                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{habitat.comment}</td>
+                                <td className='w-1/3 border border-background px-4 py-2 text-center'>
                                     <button
-                                        className='text-yellow-500 hover:text-yellow-700'
+                                        className='text-yellow-500 hover:text-yellow-600'
                                         onClick={() => openUpdateForm(habitat)}
                                     >
-                                        <MdEdit size={32} />
+                                        <MdEdit size={28} />
                                     </button>
                                 </td>
                             </tr>

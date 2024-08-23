@@ -99,39 +99,38 @@ export default function  FoodConsumptionManager(){
   return (
     <main className='w-full flex flex-col justify-center px-2 items-center py-6'>
       <Loading loading={loading}>
-      <div className='mb-4 text-secondary'>
-        <select onChange={handleHabitatChange} className='my-4 border border-gray-300 rounded p-2'>
-          <option value="">Tous les habitats</option>
-          {habitats.map(habitat => (
-            <option key={habitat.id} value={habitat.name}>
-              {habitat.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className='w-full md:w-2/3 overflow-x-auto'>
-        <table className='w-full table-auto bg-white shadow-md md:rounded-lg'>
-          <thead>
-            <tr className="bg-muted-foreground">
-              <th className='py-3 px-6 border-b text-left'>Nom</th>
-              <th className='py-3 px-6 border-b text-left'>Race</th>
-              <th className='py-3 px-6 border-b text-left'>Habitat</th>
-              <th className='px-4 py-2 text-center'>Actions</th>
+      <h1 className='text-3xl mb-4 font-bold'>Rapport de nourriture par animal</h1>
+      <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
+        <option value="">Tous les habitats</option>
+        {habitats.map(habitat => (
+          <option key={habitat.id} value={habitat.name}>
+            {habitat.name}
+        </option>
+        ))}
+      </select>
+   
+      <div className='overflow-x-auto w-full flex flex-col items-center'>
+        <table className='w-full md:w-2/3'>
+          <thead className="bg-muted-foreground">
+            <tr>
+              <th className='border border-background px-4 py-2 text-left'>Nom</th>
+              <th className='border border-background px-4 py-2 text-left'>Race</th>
+              <th className='border border-background px-4 py-2 text-left'>Habitat</th>
+              <th className='border border-background px-4 py-2 text-center'>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredAnimals.map(animal => (
-              <tr key={animal.id} className='border-t bg-foreground text-secondary hover:bg-muted hover:text-white'>
-                <td className='px-4 py-2'>{animal.name}</td>
-                <td className='px-4 py-2'>{animal.specieId}</td>
-                <td className='px-4 py-2'>{animal.habitatId}</td>
-                <td className='px-4 py-2 flex justify-center items-center space-x-4'>
+              <tr key={animal.id} className='w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white'>
+                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.name}</td>
+                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.specieId}</td>
+                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.habitatId}</td>
+                <td className='w-1/3 border border-background px-4 py-2 text-sm text-center'>
                   <button
                     onClick={() => openModal(animal)}
                     className='text-green-600 hover:text-green-700'
                   >
-                    <MdEdit size={24} />
+                    <MdEdit size={28} />
                   </button>
                 </td>
               </tr>

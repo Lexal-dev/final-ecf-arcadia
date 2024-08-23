@@ -1,6 +1,7 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
-import  Hour  from '@/models/hour';
+import Hour from '@/models/hour';
+import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
 interface FormUpdateProps {
@@ -60,51 +61,56 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ hour, onClose, onUpdate }) => {
   };
 
   return (
-    <form className="flex flex-col w-full md:min-w-[500px] border-2 border-slate-300 bg-foreground rounded-md p-6 gap-6" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="days"
-        placeholder="Jours : exemple - Lundi, Mardi..."
-        className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200"
-        value={formData.days}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="time"
-        name="open"
-        placeholder="Heure d'ouverture : exemple - 09:00"
-        className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200"
-        value={formData.open}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="time"
-        name="close"
-        placeholder="Heure de fermeture : exemple - 18:00"
-        className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200"
-        value={formData.close}
-        onChange={handleChange}
-        required
-      />
-      <div className="flex gap-4">
-        <button
-          type="submit"
-          className="bg-muted hover:bg-background py-2"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Mise à jour en cours...' : 'Mettre à jour'}
-        </button>
-        <button
-          type="button"
-          className="bg-red-500 hover:bg-red-600 py-2 text-white"
-          onClick={onClose}
-        >
-          Annuler
-        </button>
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
+      <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+        <div className='flex w-full justify-between mb-6'>
+          <h1 className='w-3/4 text-3xl font-bold'>Ajouter une heure</h1>
+          <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
+        </div>
+        <form className="text-secondary" onSubmit={handleSubmit}>
+        
+          <input
+            type="text"
+            name="days"
+            placeholder="Jours : exemple - Lundi, Mardi..."
+            className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200 mb-4 text-white"
+            value={formData.days}
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            type="time"
+            name="open"
+            placeholder="Heure d'ouverture : exemple - 09:00"
+            className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200 mb-4 text-white"
+            value={formData.open}
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            type="time"
+            name="close"
+            placeholder="Heure de fermeture : exemple - 18:00"
+            className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200 mb-4 text-white"
+            value={formData.close}
+            onChange={handleChange}
+            required
+          />
+
+          <div className="flex w-full justify-center text-white">
+            <button
+              type="submit"
+              className="w-full bg-muted hover:bg-background text-white py-2 px-4 rounded"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Mise à jour en cours...' : 'Mettre à jour'}
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 };
 

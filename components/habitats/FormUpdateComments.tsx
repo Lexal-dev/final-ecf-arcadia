@@ -50,11 +50,11 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="flex flex-col justify-between bg-foreground p-6 text-secondary w-[600px] h-[600px]">
-        <div className='flex justify-between items-center mb-6'>
-          <h2 className='text-xl font-semibold'>Commentaire pour l&apos;habitat {formData.name}</h2>
-          <button onClick={() => onClose()} className='text-red-600 hover:text-red-700 text-xl'>X</button>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-1">
+      <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+        <div className='flex w-full justify-between mb-6'>
+          <h1 className='w-3/4 text-3xl font-bold'>Commentaire pour l&apos;habitat {formData.name}</h1>
+          <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
         </div>
 
 
@@ -65,8 +65,9 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
           <div className="mb-4 w-full">
             <div defaultValue={formData.description} className="w-full bg-muted hover:bg-background text-white p-2 border rounded mb-4">{formData.description}</div>
           </div>
+
           <div className="mb-4">
-            <label className="block text-gray-700">Commentaire</label>
+            <label className="block text-sm">Commentaire</label>
             <textarea
               value={formData.comment}
               onChange={(e) => setFormData({ ...formData, comment: e.target.value })}

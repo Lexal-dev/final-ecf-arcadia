@@ -97,49 +97,52 @@ export default function AvisManager() {
     };
 
     return (
-<main className="w-full flex-col flex py-6 px-1 items-center">
-    <Loading loading={loading}>
-        <div className="flex justify-between mb-1">
-            <div>
-                <button className={`px-4 py-2 text-black md:rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} onClick={() => setFilter('all')}>Tous</button>
-                <button className={`px-4 py-2 ml-2 md:rounded text-black ${filter === 'valid' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} onClick={() => setFilter('valid')}>Valides</button>
-                <button className={`px-4 py-2 ml-2 md:rounded text-black ${filter === 'invalid' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} onClick={() => setFilter('invalid')}>Invalides</button>
-            </div>
-        </div>
-        <div className="w-full lg:w-2/3 overflow-x-auto bg-white shadow-md md:rounded-lg">
-            {filteredAvis.length === 0 ? (
-                <div className="p-4 text-center text-secondary">Aucun avis trouvé</div>
-            ) : (
-                <table className="w-full table-auto">
-                    <thead>
-                        <tr className="bg-muted-foreground">
-                            <th className="px-4 py-2 text-left">Pseudo</th>
-                            <th className="px-4 py-2 text-left">Commentaire</th>
-                            {filter === 'all' && <th className="px-4 py-2 text-left">Validité</th>}
-                            <th className="px-4 py-2 text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredAvis.map(a => (
-                            <tr key={a.id} className="border-t bg-foreground text-secondary hover:bg-muted hover:text-white">
-                                <td className="px-4 py-2">{a.pseudo}</td>
-                                <td className="px-4 py-2">{a.comment}</td>
-                                {filter === 'all' && <td className="px-4 py-2">{a.isValid ? 'Valide' : 'Invalide'}</td>}
-                                <td className="px-4 py-2 flex justify-center items-center space-x-4">
-                                    <button onClick={() => toggleAvisValidity(a)} className="text-yellow-500 hover:text-yellow-700">
-                                        <MdEdit size={24} />
-                                    </button>
-                                    <button onClick={() => deleteAvis(a)} className="text-red-500 hover:text-red-600">
-                                        <MdDelete size={24} />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
-        </div>
-    </Loading>
-</main>
+        <main className="flex flex-col items-center py-12 min-h-[200x]">
+            <Loading loading={loading}>
+                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des commentaires</h1>
+                <div className="flex justify-between mb-1">
+                        <button className={`px-4 py-2 text-black md:rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} onClick={() => setFilter('all')}>Tous</button>
+                        <button className={`px-4 py-2 ml-2 md:rounded text-black ${filter === 'valid' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} onClick={() => setFilter('valid')}>Valides</button>
+                        <button className={`px-4 py-2 ml-2 md:rounded text-black ${filter === 'invalid' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} onClick={() => setFilter('invalid')}>Invalides</button>
+                </div>
+            
+            
+                    {filteredAvis.length === 0 ? (
+                        <div className="p-4 text-center text-secondary">Aucun avis trouvé</div>
+                    ) : (
+                        <div className="overflow-x-auto w-full flex flex-col items-center">
+                            <table className="w-full md:w-2/3">
+                                <thead>
+                                    <tr className="bg-muted-foreground">
+                                        <th className="border border-background px-4 py-2 text-left">Pseudo</th>
+                                        <th className="border border-background px-4 py-2 text-left">Commentaire</th>
+                                        {filter === 'all' && <th className="border border-background px-4 py-2 text-left">Validité</th>}
+                                        <th className="border border-background px-4 py-2 text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredAvis.map(a => (
+                                        <tr key={a.id} className="border-t bg-foreground text-secondary hover:bg-muted hover:text-white">
+                                            <td className="w-1/4 border border-background px-4 py-2 text-sm">{a.pseudo}</td>
+                                            <td className="w-1/4 border border-background px-4 py-2 text-sm">{a.comment}</td>
+                                            {filter === 'all' && <td className="w-1/4 border border-background px-4 py-2 text-sm">{a.isValid ? 'Valide' : 'Invalide'}</td>}
+                                            <td className="w-1/4 border border-background px-4 py-2">
+                                                <div className='flex items-center justify-center md:gap-5'>
+                                                    <button onClick={() => toggleAvisValidity(a)} className="text-yellow-500 hover:text-yellow-700">
+                                                        <MdEdit size={28} />
+                                                    </button>
+                                                    <button onClick={() => deleteAvis(a)} className="text-red-500 hover:text-red-600">
+                                                        <MdDelete size={28} />
+                                                    </button>                                            
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+            </Loading>
+        </main>
     );
 }

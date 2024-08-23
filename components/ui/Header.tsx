@@ -43,7 +43,7 @@ export default function Header() {
       style={headerStyle}
     >
       <nav className="flex justify-between items-center w-full md:w-3/4 py-4 px-1 text-lg md:text-xl text-white mb-12 font-caption">
-        <Link href="/">
+        <Link href="/home">
           <FaHome size="36px" className="hover:text-yellow-300" />
         </Link>
 

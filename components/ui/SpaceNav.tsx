@@ -51,7 +51,8 @@ const SpaceNav: React.FC = () => {
         { name: "Habitats", path: "/login/auth/admin/habitatsManager", roles: ["ADMIN"], active: false },
         { name: "Habitats-Images", path: "/login/auth/admin/habitatsImagesManager", roles: ["ADMIN"], active: false },
         { name: "Services-Manager", path: "/login/auth/admin/servicesManager", roles: ["ADMIN"], active: false },
-        { name: "horraires", path: "/login/auth/admin/hoursManager", roles: ["ADMIN"], active: false },
+        { name: "Horraires", path: "/login/auth/admin/hoursManager", roles: ["ADMIN"], active: false },
+        { name: "Espèces", path: "/login/auth/admin/speciesManager", roles: ["ADMIN"], active: false },
 
         { name: "Avis", path: "/login/auth/employee/avisManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
         { name: "Services", path: "/login/auth/employee/servicesManager", roles: ["EMPLOYEE", "ADMIN"], active: false },

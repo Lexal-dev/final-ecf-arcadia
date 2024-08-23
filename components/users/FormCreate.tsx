@@ -46,7 +46,7 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
                     <h1 className='w-3/4 text-3xl font-bold'>Ajouter un utilisateur</h1>
                     <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
                 </div>
-                <form onSubmit={handleSubmit} className="text-black">
+                <form onSubmit={handleSubmit} className="text-secondary">
                     {error && <p className="text-red-500 mb-2">{error}</p>}
                     <div className="mb-4">
                         <label className="block">Email</label>
@@ -69,7 +69,7 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="">Role</label>
+                        <label className="block">Role</label>
                         <select
                             value={role}
                             onChange={(e) => setRole(e.target.value)}

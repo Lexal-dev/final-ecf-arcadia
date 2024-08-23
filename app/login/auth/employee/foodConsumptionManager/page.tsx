@@ -140,21 +140,20 @@ export default function  FoodConsumptionManager(){
       </div>
 
       {showModal && selectedAnimal && (
-        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-75'>
+        <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1'>
 
-          <div className='flex flex-col items-between justify-around bg-foreground text-secondary p-6 rounded-lg shadow-lg md:w-[600px] md:h-[400px]'>
-            <div className='text-xl flex items-center justify-between'>
-              <h2 className='text-xl font-semibold'>Ajouter un rapport de consommation pour {selectedAnimal.name}</h2>
-              <button onClick={closeModal} className=" justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button> 
+          <div className='bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary'>
+            <div className='flex w-full justify-between mb-6'>
+                  <h1 className='w-3/4 text-3xl font-bold'>Ajouter un utilisateur</h1>
+                  <button onClick={closeModal} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
             </div>
-
-            <form onSubmit={handleSubmit} className='w-full flex flex-col justify-between items-between space-y-4'>
+            <form onSubmit={handleSubmit} className='text-secondary'>
 
                 <input
                   type="text"
                   value={food}
                   onChange={(e) => setFood(e.target.value)}
-                  className="w-full text-white p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200"
+                  className="w-full p-2 border rounded bg-muted hover:bg-background text-white placeholder-slate-200 mb-4"
                   placeholder='Entrez le nom de la nourriture donnée'
                   required
                 />
@@ -163,14 +162,14 @@ export default function  FoodConsumptionManager(){
                   type="number"
                   value={quantity}
                   onChange={(e) => setQuantity(Number(e.target.value))}
-                  className="w-full text-white p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200"
+                  className="w-full p-2 border rounded bg-muted hover:bg-background text-white placeholder-slate-200 mb-4"
                   placeholder='Quantité en gramme ..'
                   required
                   min={1}
                 />
             <div>
-              <button type="submit" className="w-full bg-muted hover:bg-background text-white p-2 rounded mt-6">
-                          Créer
+              <button type="submit" className="w-full bg-muted hover:bg-background text-white p-2 rounded mt-6 mb-4">
+                Créer
               </button>              
             </div>
 

@@ -32,14 +32,16 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="w-full md:w-2/3 bg-foreground p-3">
-                <button onClick={onClose} className="w-full flex justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button>
-                <p className='text-2xl font-bold text-center text-black'>Création</p>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-1">
+            <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+                <div className='flex w-full justify-between mb-6'>
+                    <h1 className='w-3/4 text-3xl font-bold'>Ajoutez une espèce</h1>
+                    <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
+                </div>
+
                 <form onSubmit={handleSubmit} className="text-seconday">
-        
                     <div className="mb-4">
-                        <label className="block text-gray-700">Nom</label>
+                        <label className="block">Nom</label>
                         <input
                             type="text"
                             value={name}

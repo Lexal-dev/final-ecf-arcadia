@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className={cn(merriweatherSans.className, pacifico.className, "font-sans")}>
         <Header />
         <main className="text-white pt-10">
-          <div className="mb-[250px]"></div>
+          <div className="mb-[200px]"></div>
           {children}
         </main>
         <Footer />

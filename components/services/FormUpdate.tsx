@@ -49,29 +49,35 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ service, onUpdateSuccess, onClo
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-    <div className="w-full md:w-2/3 bg-foreground p-4">
-        <div className='text-xl flex items-center justify-between mb-6'>
-            <p className='w-2/3 text-secondary font-bold '>Formulaire de création de service</p>
-            <button onClick={onClose} className="w-1/3 flex justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
+    <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+        <div className='flex w-full justify-between mb-6'>
+          <h1 className='w-3/4 text-3xl font-bold'>Modifier un service</h1>
+          <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
         </div>
-        <form onSubmit={handleUpdateService} className="text-seconday flex flex-col gap-6">
+        <form onSubmit={handleUpdateService} className="text-secondary">
          
-            <input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200 text-white"
-              required
-            />
-         
+            <div className='mb-4'>
+              <label className="block">Nom</label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+                required
+              />             
+            </div>
 
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200 text-white"
-              placeholder='Entrez la description du service ..'
-              required
-            />
+            <div className='mb-4'>
+              <label className="block">Description</label>
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+                placeholder='Entrez la description du service ..'
+                required
+              />              
+            </div>
+
           <button
             type="submit"
             className="w-full bg-muted hover:bg-background text-white p-2 rounded mt-6"

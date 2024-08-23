@@ -48,27 +48,27 @@ export default function ServiceManager() {
   };
 
   return (
-    <main className="w-full flex-col flex py-12 px-2 items-center">
-      <div className="lg:w-2/3 overflow-x-auto shadow-md md:rounded-lg bg-white">
+    <main className="flex flex-col items-center py-12 min-h-[200x]">
+      <div className="overflow-x-auto w-full flex flex-col items-center">
         {loading ? (
           <div className="p-4 text-center">Chargement des services...</div>
         ) : services.length === 0 ? (
           <div className="p-4 text-center text-secondary">Aucun service trouvé</div>
         ) : (
-          <table className="w-full table-auto">
+          <table className="w-full md:w-2/3">
             <thead>
-              <tr className="bg-muted-foreground text-white">
-                <th className="w-1/5 px-4 py-2 text-left">Nom</th>
-                <th className="w-3/5 px-4 py-2 text-left">Description</th>
-                <th className="w-1/5 px-4 py-2 text-center">Actions</th>
+              <tr className="bg-muted-foreground">
+                <th className="border border-background px-4 py-2 text-left">Nom</th>
+                <th className="border border-background px-4 py-2 text-left">Description</th>
+                <th className="border border-background px-4 py-2 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {services.map(service => (
                 <tr key={service.id} className="border-t bg-foreground text-secondary hover:bg-muted hover:text-white">
-                  <td className="w-1/5 px-4 py-2">{service.name}</td>
-                  <td className="w-3/5 px-4 py-2">{service.description}</td>
-                  <td className="w-1/5 px-4 py-2 text-center">
+                  <td className="w-1/3 border border-background px-4 py-2 text-sm">{service.name}</td>
+                  <td className="w-1/3 border border-background px-4 py-2 text-sm">{service.description}</td>
+                  <td className="w-1/3 border border-background px-4 py-2 text-sm text-center">
                     <button onClick={() => handleEditService(service)} className="text-yellow-500 hover:text-yellow-700">
                       <MdEdit size={28} />
                     </button>

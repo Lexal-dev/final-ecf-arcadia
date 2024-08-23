@@ -40,15 +40,16 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ specie, onUpdateSuccess, onClos
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="flex flex-col items-center bg-foreground pb-6 w-full md:w-1/2 rounded-lg">
-        <button onClick={onClose} className="w-full flex justify-end text-red-500 hover:text-red-700">
-          <MdClose size={36} />
-        </button>
-        <p className='text-2xl font-bold text-center text-black'>Modification</p>
-        <form onSubmit={handleUpdateHabitat} className="flex flex-col w-2/3 text-secondary">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-1">
+      <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+        <div className='flex w-full justify-between mb-6'>
+          <h1 className='w-3/4 text-3xl font-bold'>Mise à jour de l&apos;espèce</h1>
+          <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
+        </div>
+
+        <form onSubmit={handleUpdateHabitat} className="text-secondary">
           <div className="mb-4">
-            <label className="block font-bold mb-2">Nom</label>
+            <label className="block">Nom</label>
             <input
               type="text"
               value={formData.name}

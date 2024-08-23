@@ -119,14 +119,17 @@ useEffect(() => {fetchSpeciesAndHabitats()}, []);
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="flex flex-col items-center bg-foreground py-12 w-full md:w-1/2 rounded-lg">
-        <button onClick={onClose} className="w-full flex justify-end text-red-500 hover:text-red-700">
-          <MdClose size={36} />
-        </button>
-        <form onSubmit={handleUpdateAnimal} className="flex flex-col w-2/3 text-secondary">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
+      <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+        <div className='flex w-full justify-between mb-6'>
+          <h1 className='w-3/4 text-3xl font-bold'>Modifier un animal</h1>
+          <button onClick={onClose} className="w-full flex justify-end text-red-500 hover:text-red-700">
+            <MdClose size={36} />
+          </button>
+        </div>
+        <form onSubmit={handleUpdateAnimal} className="text-secondary">
           <div className="mb-4">
-            <label className="block font-bold mb-2">Nom</label>
+            <label className="block">Nom</label>
             <input
               type="text"
               value={formData.name}
@@ -136,7 +139,7 @@ useEffect(() => {fetchSpeciesAndHabitats()}, []);
             />
           </div>
             <div className="mb-4">
-                <label className="font-bold mb-2">Espèce</label>
+                <label className="block">Espèce</label>
                 <select
                     value={formData.specieId}
                     onChange={(e) => setFormData({...formData, specieId: e.target.value})}
@@ -150,7 +153,7 @@ useEffect(() => {fetchSpeciesAndHabitats()}, []);
                 </select>
             </div>
             <div className="mb-4">
-                <label className="font-bold mb-2">Habitat</label>
+                <label className="block">Habitat</label>
                 <select
                     value={formData.habitatId}
                     onChange={(e) => setFormData({...formData, habitatId: e.target.value})}
@@ -162,11 +165,11 @@ useEffect(() => {fetchSpeciesAndHabitats()}, []);
                         <option key={habitat.id} value={habitat.id}>{habitat.name}</option>
                     ))}
                 </select>
-                <label className="font-bold mb-2">{formData.etat}</label>
+
             </div>
           <button
             type="submit"
-            className="w-full bg-muted hover:bg-background py-2 text-white"
+            className="w-full bg-muted hover:bg-background text-white py-2 px-4 rounded"
           >
             Mettre à Jour
           </button>

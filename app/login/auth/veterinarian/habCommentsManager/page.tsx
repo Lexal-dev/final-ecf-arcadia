@@ -43,14 +43,14 @@ const HabitatsComments: React.FC = () => {
     return (
         <main className='flex flex-col items-center py-12 min-h-[200x]'>
             <Loading loading={loading}>
-            <h1 className='text-3xl mb-4 font-bold'>Habitats Management</h1>
+            <h1 className='text-3xl mb-4 font-bold'>Gestionnaire commentaire habitats</h1>
             <div className="overflow-x-auto w-full flex flex-col items-center">
                 <table className='w-full md:w-2/3'>
                     <thead className='bg-muted-foreground'>
                         <tr >
-                            <th className='border border-background px-4 py-2 text-left'>Name</th>
+                            <th className='border border-background px-4 py-2 text-left'>nom</th>
                             <th className='border border-background px-4 py-2 text-left'>Description</th>
-                            <th className='border border-background px-4 py-2 text-left'>Comment</th>
+                            <th className='border border-background px-4 py-2 text-left'>Commentaire</th>
                             <th className='border border-background px-4 py-2 text-center'>Action</th>
                         </tr>
                     </thead>

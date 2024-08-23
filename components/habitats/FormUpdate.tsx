@@ -49,15 +49,15 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="flex flex-col items-center bg-foreground py-12 w-full md:w-1/2 rounded-lg">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
+      <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
         <div className='w-full text-xl flex items-center justify-between md:px-4 mb-6'>
-            <p className='w-full text-secondary font-bold'>Formulaire de modification d&apos;habitats</p>
-            <button onClick={onClose} className="flex justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
+          <h1 className='w-3/4 text-3xl font-bold'>Modifier un habitat</h1>
+            <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
         </div>
-        <form onSubmit={handleUpdateHabitat} className="flex flex-col w-2/3 text-secondary">
+        <form onSubmit={handleUpdateHabitat} className="text-secondary">
           <div className="mb-4">
-            <label className="block font-bold mb-2">Nom</label>
+            <label className="block">Nom</label>
             <input
               type="text"
               value={formData.name}
@@ -67,7 +67,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
             />
           </div>
           <div className="mb-4">
-            <label className="block font-bold mb-2">Description</label>
+            <label className="block">Description</label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -76,7 +76,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
             />
           </div>
           <div className="mb-12">
-            <label className="block font-bold mb-2">Commentaire</label>
+            <label className="block">Commentaire</label>
             <textarea
               value={formData.comment}
               onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
@@ -85,7 +85,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
           </div>
           <button
             type="submit"
-            className="w-full bg-muted hover:bg-background py-2 text-white"
+            className="w-full bg-muted hover:bg-background text-white py-2 px-4 rounded"
           >
             Mettre à Jour
           </button>

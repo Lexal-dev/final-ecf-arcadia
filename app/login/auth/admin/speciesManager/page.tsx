@@ -123,7 +123,7 @@ export default function SpeciesManager() {
                 </table>
             </div>
     ) : (
-        <p className='w-full flex justify-center items-center text-center text-xl'>No species available</p>
+        <p className='w-full flex justify-center items-center text-center text-xl'>Pas d&apos;espèces trouvées...</p>
     )}
         {modalCreate &&  <FormCreate onCreateSuccess={onCreateSuccess} onClose={onClose} />}
         {modalUpdate && selectedSpecie &&  <FormUpdate specie={selectedSpecie} onUpdateSuccess={onUpdateSuccess} onClose={onClose} />}

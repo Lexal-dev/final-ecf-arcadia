@@ -276,8 +276,8 @@ export default function ImageAnimalsManager() {
 
                                     {selectedImageUrl && (
                                         <div className='w-2/3 flex flex-col items-center justify-center mb-12'>
-                                            <img src={selectedImageUrl} className='object-cover h-[200px]' alt='Animal Image' />
-                                            <button onClick={handleDeleteImage(selectedAnimal.id, selectedImageUrl)} className='w-full md:w-1/3 bg-red-500 text-white px-4 py-2 hover:bg-red-600'>
+                                            <img src={selectedImageUrl} className='object-cover h-[200px] mb-4' alt='Animal Image' />
+                                            <button onClick={handleDeleteImage(selectedAnimal.id, selectedImageUrl)} className='w-[200px] bg-red-500 text-white px-4 py-2 hover:bg-red-600'>
                                                 Supprimer l&apos;image
                                             </button>
                                         </div>

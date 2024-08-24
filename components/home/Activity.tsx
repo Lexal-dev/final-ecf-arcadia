@@ -75,7 +75,7 @@ export default function Activity() {
 
   return (
     <section className='w-full flex flex-col items-center px-2'>
-      <h3 className="font-bold font-sans text-4xl mb-6">Les différentes activités du parc</h3>
+      <h2 className="text-4xl font-caption text-center mb-6">Les différentes activités du parc</h2>
       <p className="text-start text-lg md:text-xl mb-6">
         Arcadia vous propose une multitude d&apos;activités allant du visionnage des habitats au animaux qui y vivent.
         Aussi vous aurez accès à plusieurs services comprenant un train qui fait le tour du parc, un guide audio et bien d&apos;autres services.

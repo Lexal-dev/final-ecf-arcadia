@@ -11,7 +11,7 @@ const HomePage = () => {
       <div className='my-12'></div>
       <Activity />
       <div className='my-12'></div>
-      <h4 className='text-4xl font-bold mb-6'>Les commentaires laissez par nos visiteurs</h4>
+      <h3 className='text-4xl font-caption text-center mb-6'>Les commentaires laissez par nos visiteurs</h3>
       <Avis />
       <div className='my-12'></div>
       <FormCreate />

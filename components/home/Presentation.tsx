@@ -13,6 +13,14 @@ export default function Presentation() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
 
+  // Fallback images
+  const fallbackImages = [
+    '/images/Crocodile.png',
+    '/images/Lion.png',
+    '/images/Renard-roux.png',
+    '/images/Tigre.png',
+  ];
+
   useEffect(() => {
     const fetchAnimals = async (additionalParam: string | number) => {
       setLoading(true);
@@ -39,7 +47,7 @@ export default function Presentation() {
 
         // Randomly shuffle URLs
         urls = shuffleArray(urls);
-        setImageUrls(urls);
+        setImageUrls(urls.length > 0 ? urls : fallbackImages); // Use fallback images if no URLs are found
       } catch (error) {
         console.error('Error fetching animals:', error);
         setError('Échec de la récupération des animaux. Veuillez réessayer plus tard.');
@@ -79,9 +87,6 @@ export default function Presentation() {
     return array;
   };
 
-  // Determine the image URL to display
-  const currentImageUrl = animals.length === 0 ? '/images/Pasdimage.jpg' : imageUrls[currentIndex];
-
   return (
     <section className="w-full flex flex-col gap-6 w-full md:w-2/3 lg:w-3/4 text-start px-2">
       <h1 className="text-4xl font-caption text-center mb-6">Présentation du zoo</h1>
@@ -106,7 +111,7 @@ export default function Presentation() {
               transition={{ duration: 0.5, type: 'tween' }}
             >
               <Image
-                src={currentImageUrl}
+                src={imageUrls[currentIndex]}
                 layout="fill"
                 objectFit="cover"
                 alt={`Image ${currentIndex}`}
@@ -142,4 +147,4 @@ export default function Presentation() {
       {animals.length === 0 && !loading && !error && <p className='w-full text-center'>Aucun animal trouvé.</p>}
     </section>
   );
-} 
+}

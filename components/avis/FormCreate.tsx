@@ -68,7 +68,7 @@ export default function FormCreate() {
 
   return (
     <div className='flex flex-col w-full md:w-2/3 px-2'>
-      <h1 className='font-bold text-4xl text-center mb-10'>Votre avis</h1>
+      <h1 className='text-4xl font-caption text-center mb-6'>Votre avis</h1>
       <form onSubmit={handleSubmit} className='flex flex-col min-w-[300px] border-2 border-slate-300 rounded-md p-6 gap-6 bg-foreground text-secondary'>
         <div className='flex flex-col gap-6'>
           <div className='w-full flex-col'> 

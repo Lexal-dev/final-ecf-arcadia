@@ -8,7 +8,6 @@ interface UpdateBody {
   createdAt: Date;
 }
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'PUT') {
       const { id } = req.query as { id: string };
@@ -18,24 +17,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const vetLog = await VetLog.findByPk(id);
   
         if (!vetLog) {
-          return res.status(404).json({ success: false, message: 'VetLog non trouvé.' });
+          return res.status(404).json({ success: false, message: 'VetLog not found.' });
         }
   
-        // Update vetLogs
+        // Update vetLog
         vetLog.animalState = animalState;
         vetLog.foodOffered = foodOffered;
         vetLog.foodWeight = foodWeight;
         vetLog.createdAt = createdAt;
   
-        await vetLog.save(); // Save modification
+        await vetLog.save(); // Save modifications
   
-        return res.status(200).json({ success: true, message: 'VetLog mis à jour avec succès.', vetLog });
+        return res.status(200).json({ success: true, message: 'VetLog updated successfully.', vetLog });
       } catch (error) {
-        console.error('Erreur lors de la mise à jour du VetLog :', error);
-        return res.status(500).json({ success: false, message: 'Erreur serveur. Veuillez réessayer plus tard.', error: String(error) });
+        console.error('Error updating VetLog:', error);
+        return res.status(500).json({ success: false, message: 'Server error. Please try again later.', error: String(error) });
       }
     } else {
       res.setHeader('Allow', ['PUT']);
-      return res.status(405).end(`Méthode ${req.method} non autorisée`);
+      return res.status(405).end(`Method ${req.method} not allowed`);
     }
-  }
+}

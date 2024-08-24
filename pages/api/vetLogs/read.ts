@@ -15,16 +15,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const vetLogs = await VetLog.findAll();
             if (!vetLogs || vetLogs.length === 0) {
-                res.status(404).json({ success: false, message: "La liste des rapports" });
+                res.status(404).json({ success: false, message: "The list of reports" });
             } else {
-                res.status(200).json({ success: true, message: "Liste des rapports chargé", vetLogs });
+                res.status(200).json({ success: true, message: "List of reports loaded", vetLogs });
             }
         } catch (error) {
-            console.error("Erreur lors de la récupération des raports", error);
-            res.status(500).json({ success: false, message: "Échec de la synchronisation des rapports", error: String(error) });
+            console.error("Error retrieving reports", error);
+            res.status(500).json({ success: false, message: "Failed to synchronize reports", error: String(error) });
         }
     } else {
         res.setHeader('Allow', ['GET']);
-        res.status(405).end(`Méthode ${req.method} non autorisée`);
+        res.status(405).end(`Method ${req.method} not allowed`);
     }
 }

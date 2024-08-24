@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import User from '@/models/user'; 
 
-
 interface UpdateBody {
   email: string;
   role: string;
@@ -10,35 +9,35 @@ interface UpdateBody {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'PUT') {
-    const { id } = req.query as { id: string }; // make sure id = string
-    const { email, role, password } = req.body as UpdateBody; // make sure req.body = type of UpdateBody
+    const { id } = req.query as { id: string }; // ensure id is a string
+    const { email, role, password } = req.body as UpdateBody; // ensure req.body matches UpdateBody type
 
     try {
-      // existing user?
+      // Check if user exists
       const user = await User.findByPk(id);
 
       if (!user) {
-        return res.status(404).json({ success: false, message: 'Utilisateur non trouvé.' });
+        return res.status(404).json({ success: false, message: 'User not found.' });
       }
 
-      // update user attributs
+      // Update user attributes
       user.email = email;
       user.role = role;
 
-      
       if (password) {
-        await user.setPassword(password); // use setPassword to hash pass
+        await user.setPassword(password); // use setPassword to hash the password
       }
-      // save modification
+      
+      // Save changes
       await user.save();
 
-      return res.status(200).json({ success: true, message: 'Utilisateur mis à jour avec succès.', user });
+      return res.status(200).json({ success: true, message: 'User updated successfully.', user });
     } catch (error) {
-      console.error('Erreur lors de la mise à jour de l\'utilisateur :', error);
-      return res.status(500).json({ success: false, message: 'Erreur serveur. Veuillez réessayer plus tard.', error: String(error) });
+      console.error('Error updating user:', error);
+      return res.status(500).json({ success: false, message: 'Server error. Please try again later.', error: String(error) });
     }
   } else {
     res.setHeader('Allow', ['PUT']);
-    return res.status(405).end(`Méthode ${req.method} non autorisée`);
+    return res.status(405).end(`Method ${req.method} not allowed`);
   }
 }

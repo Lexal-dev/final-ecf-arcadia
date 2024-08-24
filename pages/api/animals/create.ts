@@ -10,21 +10,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const { name, specieName, habitatName } = req.body;
 
             if (!name || !specieName || !habitatName) {
-                res.status(400).json({ success: false, message: 'Le nom, le nom de l\'espèce, le nom de l\'habitat et l\'état sont requis.' });
+                res.status(400).json({ success: false, message: 'Name, species name, habitat name, and state are required.' });
                 return;
             }
 
             // Find the species and habitat IDs based on their names
             const specie = await Specie.findOne({ where: { id: specieName } });
             const habitat = await Habitat.findOne({ where: { id: habitatName } });
-            const etat = "Bonne santé"
+            const etat = "Good health"
             if (!specie) {
-                res.status(404).json({ success: false, message: `L'espèce avec le nom ${specieName} n'a pas été trouvée.` });
+                res.status(404).json({ success: false, message: `Species with name ${specieName} not found.` });
                 return;
             }
 
             if (!habitat) {
-                res.status(404).json({ success: false, message: `L'habitat avec le nom ${habitatName} n'a pas été trouvé.` });
+                res.status(404).json({ success: false, message: `Habitat with name ${habitatName} not found.` });
                 return;
             }
 
@@ -36,19 +36,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 etat
             });
 
-            res.status(201).json({ success: true, message: 'Animal créé avec succès.', animal });
+            res.status(201).json({ success: true, message: 'Animal created successfully.', animal });
         } catch (error) {
             if (error instanceof UniqueConstraintError) {
-                res.status(409).json({ success: false, message: 'Le nom de l\'animal existe déjà.' });
+                res.status(409).json({ success: false, message: 'Animal name already exists.' });
             } else if (error instanceof ValidationError) {
                 const errorMessages = error.errors.map((err) => err.message);
                 res.status(400).json({ success: false, message: errorMessages.join(', ') });
             } else {
-                res.status(500).json({ success: false, message: 'Erreur lors de la création de l\'animal.', error: String(error) });
+                res.status(500).json({ success: false, message: 'Error creating the animal.', error: String(error) });
             }
         }
     } else {
         res.setHeader('Allow', ['POST']);
-        res.status(405).json({ success: false, message: `Méthode ${req.method} non autorisée.` });
+        res.status(405).json({ success: false, message: `Method ${req.method} not allowed.` });
     }
 }

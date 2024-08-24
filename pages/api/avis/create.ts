@@ -8,33 +8,32 @@ export default async function createAvis(req: NextApiRequest, res: NextApiRespon
             const { pseudo, comment } = req.body;
 
             if (!pseudo || pseudo.length < 3 || pseudo.length > 30) {
-                res.status(400).json({ success: false, message: 'Le pseudo doit être compris entre 3 et 30 caractères.' });
+                res.status(400).json({ success: false, message: 'The pseudonym must be between 3 and 30 characters long.' });
                 return;
             }
 
             if (!comment || comment.length < 3 || comment.length > 150) {
-                res.status(400).json({ success: false, message: 'Le commentaire doit être compris entre 3 et 150 caractères.' });
+                res.status(400).json({ success: false, message: 'The comment must be between 3 and 150 characters long.' });
                 return;
             }
 
             const newAvis = await Avis.create({ pseudo, comment, isValid: false } as AvisAttributes);
 
-            res.status(200).json({ success: true, message: 'Avis créé avec succès.', avis: newAvis });
+            res.status(200).json({ success: true, message: 'Review created successfully.', avis: newAvis });
         } catch (error) {
             if (error instanceof ValidationError) {
                 const errorMessages = error.errors.map((err) => err.message);
                 res.status(400).json({ success: false, message: errorMessages.join(', ') });
             } else {
-                console.error('Error creating avis:', error);
-                res.status(500).json({ success: false, message: 'Échec de la création de l\'avis.', error: String(error) });
+                console.error('Error creating review:', error);
+                res.status(500).json({ success: false, message: 'Failed to create the review.', error: String(error) });
             }
         }
     } else {
         res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Méthode ${req.method} non autorisée.`);
+        res.status(405).end(`Method ${req.method} Not Allowed.`);
     }
 }
-
 
 (async () => {
     try {

@@ -1,4 +1,3 @@
-
 import { NextApiRequest, NextApiResponse } from 'next';
 import Specie from '@/models/specie';
 import { ValidationError } from 'sequelize';
@@ -10,34 +9,34 @@ export default async function updateSpecie(req: NextApiRequest, res: NextApiResp
 
         try {
             if (!/^\d+$/.test(id)) {
-                return res.status(400).json({ success: false, message: "L'ID de l'espèce n'est pas valide." });
+                return res.status(400).json({ success: false, message: "The species ID is not valid." });
             }
 
             const specie = await Specie.findByPk(parseInt(id, 10));
 
             if (!specie) {
-                return res.status(404).json({ success: false, message: "Espèce non trouvée." });
+                return res.status(404).json({ success: false, message: "Species not found." });
             }
 
             if (!name) {
-                return res.status(400).json({ success: false, message: "Le nom de l'espèce est requis." });
+                return res.status(400).json({ success: false, message: "The species name is required." });
             }
 
             specie.name = name;
             await specie.save();
 
-            return res.status(200).json({ success: true, message: "Espèce mise à jour avec succès.", specie });
+            return res.status(200).json({ success: true, message: "Species updated successfully.", specie });
         } catch (error) {
             if (error instanceof ValidationError) {
                 const errorMessages = error.errors.map((err) => err.message);
                 return res.status(400).json({ success: false, message: errorMessages.join(', ') });
             } else {
-                console.error("Erreur lors de la mise à jour de l'espèce:", error);
-                return res.status(500).json({ success: false, message: "Erreur serveur. Veuillez réessayer plus tard.", error: String(error) });
+                console.error("Error updating species:", error);
+                return res.status(500).json({ success: false, message: "Server error. Please try again later.", error: String(error) });
             }
         }
     } else {
         res.setHeader('Allow', ['PUT']);
-        return res.status(405).end(`Méthode ${req.method} non autorisée`);
+        return res.status(405).end(`Method ${req.method} not allowed`);
     }
 }

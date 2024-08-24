@@ -1,9 +1,8 @@
-"use client"
+"use client";
 import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import { decodeToken } from '@/lib/security/decode';
-import { FaCaretDown } from "react-icons/fa";
-import { FaCaretUp } from "react-icons/fa";
+import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 import { usePathname } from "next/navigation";
 
 interface NavItem {
@@ -14,9 +13,10 @@ interface NavItem {
 }
 
 const SpaceNav: React.FC = () => {
-    const [userRoles, setUserRoles] = useState<string[]>([]); // Changer en tableau pour plusieurs rôles
-    const [isOpen, setIsOpen] = useState<boolean>(true);
+    const [userRoles, setUserRoles] = useState<string[]>([]);
+    const [isOpen, setIsOpen] = useState<boolean>(false); // Initialiser à false pour que le menu global soit fermé
     const [navItems, setNavItems] = useState<NavItem[]>([]);
+    const [expandedSection, setExpandedSection] = useState<string | null>(null); // Etat pour la section étendue
     const pathname = usePathname();
 
     useEffect(() => {
@@ -40,9 +40,14 @@ const SpaceNav: React.FC = () => {
             active: item.path === pathname
         }));
         setNavItems(updateNavItems);
+
+        // Réinitialiser la section étendue et fermer le menu global lorsque le chemin change
+        setExpandedSection(null);
+        setIsOpen(false);
     }, [pathname]);
 
     const spaceNav: NavItem[] = [
+        // Routes Admin pures
         { name: "Dashboard", path: "/login/auth/admin/dashboard", roles: ["ADMIN"], active: false },
         { name: "Utilisateurs", path: "/login/auth/admin/usersManager", roles: ["ADMIN"], active: false },
         { name: "Animaux", path: "/login/auth/admin/animalsManager", roles: ["ADMIN"], active: false },
@@ -54,36 +59,92 @@ const SpaceNav: React.FC = () => {
         { name: "Horraires", path: "/login/auth/admin/hoursManager", roles: ["ADMIN"], active: false },
         { name: "Espèces", path: "/login/auth/admin/speciesManager", roles: ["ADMIN"], active: false },
 
+        // Routes Employee (accessible aussi par Admin)
         { name: "Avis", path: "/login/auth/employee/avisManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
         { name: "Services", path: "/login/auth/employee/servicesManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
         { name: "Rapports-Nourritures", path: "/login/auth/employee/foodConsumptionManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
 
+        // Routes Veterinarian (accessible aussi par Admin)
         { name: "Rapports-Animalié", path: "/login/auth/veterinarian/vetLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
         { name: "Rapports-Employés", path: "/login/auth/veterinarian/employLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
         { name: "Habitats-Commentaire", path: "/login/auth/veterinarian/habCommentsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
     ];
 
-    const filteredNavItems = navItems.filter(navItem => navItem.roles.some(role => userRoles.includes(role)));
+    // Filtrer les éléments de navigation en fonction des rôles
+    const employeeNavItems = navItems.filter(navItem => navItem.roles.includes("EMPLOYEE"));
+    const veterinarianNavItems = navItems.filter(navItem => navItem.roles.includes("VETERINARIAN"));
+    const adminNavItems = navItems.filter(navItem => !navItem.roles.some(role => role === "EMPLOYEE" || role === "VETERINARIAN"));
+
+    const filteredNavItems = () => {
+        if (userRoles.includes("ADMIN")) return [...adminNavItems, ...employeeNavItems, ...veterinarianNavItems];
+        if (userRoles.includes("EMPLOYEE")) return [...employeeNavItems];
+        if (userRoles.includes("VETERINARIAN")) return [...veterinarianNavItems];
+        return [];
+    };
+
+    const groupedNavItems = filteredNavItems().reduce((acc, item) => {
+        const role = item.roles.find(role => role !== "ADMIN") || "ADMIN";
+        if (!acc[role]) {
+            acc[role] = [];
+        }
+        acc[role].push(item);
+        return acc;
+    }, {} as Record<string, NavItem[]>);
+
+    const toggleSection = (role: string) => {
+        setExpandedSection(expandedSection === role ? null : role);
+    };
 
     return (
-        <nav className="px-4">
-            <div className="bg-muted rounded-b-lg pt-2">
+        <nav className="px-4 flex justify-center">
+            <div className="flex flex-col items-center bg-muted rounded-b-lg pt-2 w-full">
                 {isOpen ? (
-                    <ul className="flex flex-wrap items-center justify-center gap-6 px-2">
-                        {filteredNavItems.map((navItem, index) => (
-                            <li key={index} className={`text-lg py-3 font-semibold hover:text-secondary ${navItem.active ? 'text-secondary' : ''}`}>
-                                <Link href={navItem.path}>
-                                    {navItem.name}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    <>
+                        {userRoles.includes("ADMIN") ? (
+                            Object.keys(groupedNavItems).map((role) => (
+                                <div key={role} className="w-full flex flex-col justify-center items-center">
+                                    <h3 
+                                        className="w-full text-lg md:text-xl font-bold text-start ps-12 mt-2 mb-2 cursor-pointer"
+                                        onClick={() => toggleSection(role)}
+                                    >
+                                        {role}
+                                        {expandedSection === role ? (
+                                            <FaCaretUp size={20} className="inline ml-2" />
+                                        ) : (
+                                            <FaCaretDown size={20} className="inline ml-2" />
+                                        )}
+                                    </h3>
+                                    {expandedSection === role && (
+                                        <ul className="flex flex-wrap items-center justify-center md:justify-between gap-4 pt-2 w-full md:w-3/4 mb-6">
+                                            {groupedNavItems[role].map((navItem, index) => (
+                                                <li key={index} className="w-1/3 md:w-1/4 p-2 text-sm md:text-lg font-semibold hover:text-secondary">
+                                                    <Link href={navItem.path} className={`block ${navItem.active ? 'text-secondary' : ''}`}>
+                                                        {navItem.name}
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+                            ))
+                        ) : (
+                            <ul className="flex flex-wrap items-center justify-center md:justify-between gap-4 pt-2 w-full md:w-3/4 mb-6">
+                                {filteredNavItems().map((navItem, index) => (
+                                    <li key={index} className="w-1/3 md:w-1/4 p-2 text-sm md:text-lg font-semibold hover:text-secondary">
+                                        <Link href={navItem.path} className={`block ${navItem.active ? 'text-secondary' : ''}`}>
+                                            {navItem.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </>
                 ) : (
-                    <p className="text-lg w-full font-bold text-center pt-3">MENU {userRoles.join(', ')}</p>
+                    <p className="text-md w-full font-bold text-center pt-3">MENU {userRoles.join(', ')}</p>
                 )}
-                <div className="w-full items-center justify-center text-center pt-1">
-                    <button onClick={() => { setIsOpen(!isOpen); }}>
-                        {isOpen ? (<FaCaretUp size={24} />) : (<FaCaretDown size={24} />)}
+                <div className="w-full items-center justify-center text-center">
+                    <button onClick={() => setIsOpen(!isOpen)}>
+                        {isOpen ? (<FaCaretUp size={20} />) : (<FaCaretDown size={20} />)}
                     </button>
                 </div>
             </div>

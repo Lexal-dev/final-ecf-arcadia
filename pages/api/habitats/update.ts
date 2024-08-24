@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const habitat = await Habitat.findByPk(Number(id));
 
       if (!habitat) {
-        return res.status(404).json({ success: false, message: 'Habitat non trouvé.' });
+        return res.status(404).json({ success: false, message: 'Habitat not found.' });
       }
 
       habitat.name = name;
@@ -25,13 +25,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       await habitat.save();
 
-      return res.status(200).json({ success: true, message: 'Habitat mis à jour avec succès.', habitat });
+      return res.status(200).json({ success: true, message: 'Habitat updated successfully.', habitat });
     } catch (error) {
-      console.error('Erreur lors de la mise à jour de l\'habitat :', error);
-      return res.status(500).json({ success: false, message: 'Erreur serveur. Veuillez réessayer plus tard.', error: String(error) });
+      console.error('Error updating habitat:', error);
+      return res.status(500).json({ success: false, message: 'Server error. Please try again later.', error: String(error) });
     }
   } else {
     res.setHeader('Allow', ['PUT']);
-    return res.status(405).end(`Méthode ${req.method} non autorisée`);
+    return res.status(405).end(`Method ${req.method} Not Allowed.`);
   }
 }

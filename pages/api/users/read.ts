@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method === 'GET') {
         try {
-            //get all users exept ADMIN
+            // Get all users except ADMIN
             const users = await User.findAll({
                 where: {
                     role: {
@@ -25,16 +25,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             });
 
             if (!users || users.length === 0) {
-                return res.status(404).json({ success: false, message: "Aucun utilisateur trouvé" });
+                return res.status(404).json({ success: false, message: "No users found." });
             }
 
-            res.status(200).json({ success: true, message: "Liste d'utilisateur chargée", users });
+            res.status(200).json({ success: true, message: "User list loaded.", users });
         } catch (error) {
-            console.error("Erreur lors de la récupération des utilisateurs:", error);
-            res.status(500).json({ success: false, message: "Erreur serveur lors de la récupération des utilisateurs" });
+            console.error("Error retrieving users:", error);
+            res.status(500).json({ success: false, message: "Server error while retrieving users." });
         }
     } else {
         res.setHeader('Allow', ['GET']);
-        res.status(405).json({ message: `Méthode ${req.method} non autorisée` });
+        res.status(405).json({ message: `Method ${req.method} not allowed.` });
     }
 }

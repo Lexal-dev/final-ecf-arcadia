@@ -11,34 +11,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             typeof open !== 'string' ||
             typeof close !== 'string'
         ) {
-            return res.status(400).json({ success: false, message: "Tous les champs doivent avoir des types valides" });
+            return res.status(400).json({ success: false, message: "All fields must have valid types." });
         }
 
         // Verify format (HH:mm)
         const timeFormat = /^([0-1]\d|2[0-3]):([0-5]\d)$/;
         if (!timeFormat.test(open) || !timeFormat.test(close)) {
-            return res.status(400).json({ success: false, message: "Les champs 'open' et 'close' doivent être au format HH:mm" });
+            return res.status(400).json({ success: false, message: "The 'open' and 'close' fields must be in HH:mm format." });
         }
 
         if (!days || !open || !close) {
-            return res.status(400).json({ success: false, message: "Tous les champs sont requis" });
+            return res.status(400).json({ success: false, message: "All fields are required." });
         }
 
         try {
             // Verify number of table count
             const count = await Hours.count();
             if (count >= 7) {
-                return res.status(400).json({ success: false, message: "Vous ne pouvez pas ajouter plus de 7 horaires." });
+                return res.status(400).json({ success: false, message: "You cannot add more than 7 hours." });
             }
 
             const newHour = await Hours.create({ days, open, close });
-            return res.status(201).json({ success: true, message: "Horaire créé avec succès", hour: newHour });
+            return res.status(201).json({ success: true, message: "Hour created successfully.", hour: newHour });
         } catch (error) {
-            console.error("Erreur lors de la création de l'horaire:", error);
-            return res.status(500).json({ success: false, message: "Erreur serveur", error: String(error) });
+            console.error("Error creating hour:", error);
+            return res.status(500).json({ success: false, message: "Server error.", error: String(error) });
         }
     } else {
         res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Méthode ${req.method} non autorisée`);
+        return res.status(405).end(`Method ${req.method} Not Allowed.`);
     }
 }

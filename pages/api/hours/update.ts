@@ -5,40 +5,42 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'PUT') {
         const { id, days, open, close } = req.body;
 
-        // Verify types of data
+        // Validate the types of data
         if (
             typeof id !== 'number' || id <= 0 ||
             typeof days !== 'string' ||
             typeof open !== 'string' ||
             typeof close !== 'string'
         ) {
-            return res.status(400).json({ success: false, message: "Tous les champs doivent avoir des types valides" });
+            return res.status(400).json({ success: false, message: "All fields must have valid types." });
         }
 
-        // Verify format : (HH:mm)
+        // Validate time format (HH:mm)
         const timeFormat = /^([0-1]\d|2[0-3]):([0-5]\d)$/;
         if (!timeFormat.test(open) || !timeFormat.test(close)) {
-            return res.status(400).json({ success: false, message: "Les champs 'open' et 'close' doivent être au format HH:mm" });
+            return res.status(400).json({ success: false, message: "The 'open' and 'close' fields must be in HH:mm format." });
         }
 
         try {
+            // Find the record by primary key
             const hour = await Hours.findByPk(id);
             if (!hour) {
-                return res.status(404).json({ success: false, message: "Horaire non trouvé" });
+                return res.status(404).json({ success: false, message: "Hour not found." });
             }
 
+            // Update the record
             hour.days = days;
             hour.open = open;
             hour.close = close;
             await hour.save();
 
-            return res.status(200).json({ success: true, message: "Horaire mis à jour avec succès", hour });
+            return res.status(200).json({ success: true, message: "Hour updated successfully.", hour });
         } catch (error) {
-            console.error("Erreur lors de la mise à jour des horaires:", error);
-            return res.status(500).json({ success: false, message: "Erreur serveur", error: String(error) });
+            console.error("Error updating hour:", error);
+            return res.status(500).json({ success: false, message: "Server error.", error: String(error) });
         }
     } else {
         res.setHeader('Allow', ['PUT']);
-        res.status(405).end(`Méthode ${req.method} non autorisée`);
+        return res.status(405).end(`Method ${req.method} Not Allowed.`);
     }
 }

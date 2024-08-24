@@ -16,16 +16,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const habitats = await Habitat.findAll();
             if (!habitats) {
-                res.status(404).json({ success: false, message: "La liste des habitats n'a pas été trouvée" });
+                res.status(404).json({ success: false, message: 'Habitat list not found.' });
             } else {
-                res.status(200).json({ success: true, message: "Liste des habitats chargée", habitats });
+                res.status(200).json({ success: true, message: 'Habitats list loaded.', habitats });
             }
         } catch (error) {
-            console.error("Erreur lors de la récupération des habitats:", error);
-            res.status(500).json({ success: false, message: "Échec de la synchronisation des habitats.", error: String(error) });
+            console.error('Error retrieving habitats:', error);
+            res.status(500).json({ success: false, message: 'Failed to synchronize habitats.', error: String(error) });
         }
     } else {
         res.setHeader('Allow', ['GET']);
-        res.status(405).end(`Méthode ${req.method} non utilisée`);
+        res.status(405).end(`Method ${req.method} Not Allowed.`);
     }
 }

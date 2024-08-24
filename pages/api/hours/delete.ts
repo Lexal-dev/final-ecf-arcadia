@@ -6,23 +6,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const { id } = req.body;
 
         if (!id) {
-            return res.status(400).json({ success: false, message: "L'ID est requis" });
+            return res.status(400).json({ success: false, message: "ID is required." });
         }
 
         try {
             const hour = await Hours.findByPk(id);
             if (!hour) {
-                return res.status(404).json({ success: false, message: "Horaire non trouvé" });
+                return res.status(404).json({ success: false, message: "Hour not found." });
             }
 
             await hour.destroy();
-            return res.status(200).json({ success: true, message: "Horaire supprimé avec succès" });
+            return res.status(200).json({ success: true, message: "Hour successfully deleted." });
         } catch (error) {
-            console.error("Erreur lors de la suppression de l'horaire:", error);
-            return res.status(500).json({ success: false, message: "Erreur serveur", error: String(error) });
+            console.error("Error deleting hour:", error);
+            return res.status(500).json({ success: false, message: "Server error.", error: String(error) });
         }
     } else {
         res.setHeader('Allow', ['DELETE']);
-        res.status(405).end(`Méthode ${req.method} non autorisée`);
+        return res.status(405).end(`Method ${req.method} Not Allowed.`);
     }
 }

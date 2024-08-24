@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { animalId, animalState, foodOffered, foodWeight } = req.body;
 
       if (!animalId || !animalState || !foodOffered || !foodWeight) {
-        return res.status(400).json({ success: false, message: 'Veuillez fournir tous les champs nécessaires.' });
+        return res.status(400).json({ success: false, message: 'Please provide all required fields.' });
       }
 
       // Create new vetLog
@@ -19,13 +19,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         createdAt: new Date(),
       });
 
-      res.status(201).json({ success: true, message: 'VetLog créé avec succès.', vetLog: newVetLog });
+      res.status(201).json({ success: true, message: 'VetLog created successfully.', vetLog: newVetLog });
     } catch (error) {
-      console.error('Erreur lors de la création du vetLog:', error);
-      res.status(500).json({ success: false, message: 'Échec de la création du vetLog.', error: String(error) });
+      console.error('Error creating vetLog:', error);
+      res.status(500).json({ success: false, message: 'Failed to create vetLog.', error: String(error) });
     }
   } else {
     res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Méthode ${req.method} non autorisée`);
+    res.status(405).end(`Method ${req.method} not allowed`);
   }
 }

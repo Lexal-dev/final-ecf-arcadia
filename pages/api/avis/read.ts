@@ -15,16 +15,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const avis = await Avis.findAll();
       if (!avis) {
-        res.status(404).json({ success: false, message: "La liste des avis clients n'a pas été trouvée" });
+        res.status(404).json({ success: false, message: 'The list of customer reviews was not found.' });
       } else {
-        res.status(200).json({ success: true, message: "Liste des avis clients chargée", avis });
+        res.status(200).json({ success: true, message: 'Customer reviews list loaded successfully.', avis });
       }
     } catch (error) {
-      console.error("Erreur lors de la récupération des avis clients:", error);
-      res.status(500).json({ success: false, message: "Échec de la synchronisation des avis clients.", error: String(error) });
+      console.error('Error retrieving customer reviews:', error);
+      res.status(500).json({ success: false, message: 'Failed to retrieve customer reviews.', error: String(error) });
     }
   } else {
     res.setHeader('Allow', ['GET']);
-    res.status(405).end(`Méthode ${req.method} non utilisée`);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

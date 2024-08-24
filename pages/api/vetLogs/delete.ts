@@ -10,19 +10,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const vetLog = await VetLog.findByPk(id);
 
             if (!vetLog) {
-                return res.status(404).json({ success: false, message: 'Rapport non trouvé.' });
+                return res.status(404).json({ success: false, message: 'Report not found.' });
             }
 
             // Delete vetLog
             await vetLog.destroy();
 
-            return res.status(200).json({ success: true, message: 'Rapport supprimé avec succès.' });
+            return res.status(200).json({ success: true, message: 'Report deleted successfully.' });
         } catch (error) {
-            console.error('Erreur lors de la suppression du rapport :', error);
-            return res.status(500).json({ success: false, message: 'Erreur serveur. Veuillez réessayer plus tard.', error: String(error) });
+            console.error('Error deleting report:', error);
+            return res.status(500).json({ success: false, message: 'Server error. Please try again later.', error: String(error) });
         }
     } else {
         res.setHeader('Allow', ['DELETE']);
-        return res.status(405).end(`Méthode ${req.method} non autorisée`);
+        return res.status(405).end(`Method ${req.method} not allowed`);
     }
 }

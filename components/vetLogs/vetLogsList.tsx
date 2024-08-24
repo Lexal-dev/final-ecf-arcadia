@@ -205,7 +205,7 @@ export default function VetLogsList() {
             <ul>
                 <div className='flex justify-between w-full'>
                 {showCreateForm && (
-                    <button className='hover:text-red-600 text-xl hover:text-bold w-[100px]' onClick={() => setShowCreateForm(false)}>Annuler</button>
+                    <button className='hover:text-yellow-600 text-xl hover:text-bold w-[100px]' onClick={() => setShowCreateForm(false)}>Annuler</button>
                 )}
                     <button onClick={() => setModal(false)} className='w-full text-end text-red-600 hover:text-red-700 text-xl hover:text-bold'>Fermer</button>
                 </div>
@@ -217,7 +217,7 @@ export default function VetLogsList() {
                     </div>
                   ) : (
                     <div className='w-full flex justify-center mb-6'>
-                            <button className="hover:text-red-600 text-xl hover:text-bold " onClick={() => setShowCreateForm(true)}>Créer un nouveau log</button>              
+                            <button className="hover:text-green-600 text-xl hover:text-bold " onClick={() => setShowCreateForm(true)}>Créer un nouveau log</button>              
                     </div>
                   )}   
                 </div>
@@ -232,7 +232,7 @@ export default function VetLogsList() {
                         <p>Date : {formatDateTime(vetLog.createdAt)}</p>
                     </div>
                     <div className='w-1/3 flex items-center justify-center'>
-                        <MdEdit className='hover:text-green-600 cursor-pointer text-3xl text-green-500' onClick={() => { setUpdateModal(true); setUpdatedVetLog(vetLog); }}/>
+                        <MdEdit className='hover:text-yellow-600 cursor-pointer text-3xl text-yellow-500' onClick={() => { setUpdateModal(true); setUpdatedVetLog(vetLog); }}/>
                         <MdDelete className='hover:text-red-600 cursor-pointer text-3xl ml-2 text-red-500' onClick={() => handleDeleteVetLog(vetLog.id)}/>
                     </div>
                 </li>

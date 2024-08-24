@@ -78,7 +78,7 @@ export default function Activity() {
     '/images/Restaurant.png',
     '/images/Souvenir.png',
     '/images/Train.png',
-    '/images/stand.png'
+    '/images/Stand.png'
   ];
 
   return (

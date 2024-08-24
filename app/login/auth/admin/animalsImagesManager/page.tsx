@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { ref, listAll, getDownloadURL, deleteObject } from 'firebase/storage';
 import { useState, useEffect } from 'react';
 import ImageUploader from '@/components/images/uploaderImages';
@@ -6,6 +6,7 @@ import { storage } from "@/lib/db/firebaseConfig.mjs";
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
 import { toast } from 'react-toastify';
+import Image from 'next/image'; // Import Image from next/image
 
 interface Animal {
     id: number;
@@ -13,8 +14,8 @@ interface Animal {
     state: string;
     specieId: number;
     habitatId: number;
-    imageUrl: string[] ; 
-  }
+    imageUrl: string[]; 
+}
 
 interface ImageData {
     name: string;
@@ -29,9 +30,8 @@ export default function ImageAnimalsManager() {
     const [currentTableUrl, setCurrentTableUrl] = useState<string[]>([]);
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [images, setImages] = useState<ImageData[]>([]);
-    const router = useRouter()
+    const router = useRouter();
 
-    
     const fetchListAll = async () => {
         try {
             const res = await listAll(ref(storage, 'images/animals'));
@@ -49,8 +49,7 @@ export default function ImageAnimalsManager() {
             console.error('Erreur lors de la récupération des fichiers :', error);
         }
     };
-    
-    
+
     const fetchAnimals = async (additionalParam: string) => {
         try {
             const response = await fetch(`/api/animals/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
@@ -66,16 +65,14 @@ export default function ImageAnimalsManager() {
                 console.error('Echec de la récupération des données', data.error);
             }
         } catch (error) {
-            console.error('Erreur, donnée non trouvé', error);
+            console.error('Erreur, donnée non trouvée', error);
         }
     };
 
     useEffect(() => {
-        setModal(false);
-        router.push('/login/auth/admin/animalsImagesManager');
         fetchAnimals('animals');
         fetchListAll().finally(() => setLoading(false));
-    }, [loading]);
+    }, []); 
 
     useEffect(() => {
         if (selectedAnimal) {
@@ -109,7 +106,7 @@ export default function ImageAnimalsManager() {
         setSelectedAnimal(null);
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
-        fetchAnimals('animals'); // Re-fetch habitats after modal close
+        fetchAnimals('animals'); // Re-fetch animals after modal close
     };
 
     const updateImage = (url: string) => {
@@ -137,12 +134,12 @@ export default function ImageAnimalsManager() {
             setSelectedAnimal(updateAnimal);
 
             updateImageUrl(selectedAnimal.id, updateAnimal.imageUrl)
-                .then((updateAnimalFromServer) => {
-                    console.log("Image Url bien ajouté à l'animal");
+                .then(() => {
+                    console.log("Image URL bien ajouté à l'animal");
                     fetchAnimals('animals'); 
                 })
                 .catch((error) => {
-                    console.error("Erreur, l'image url n'a pas pu être ajouté.", error);
+                    console.error("Erreur, l'image URL n'a pas pu être ajoutée.", error);
                 });
         }
         setLoading(true);
@@ -155,7 +152,7 @@ export default function ImageAnimalsManager() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ imageUrl: selectedImage}), // Pass selectedImage instead of selectedAnimal
+                body: JSON.stringify({ imageUrl: selectedImage}),
             });
     
             const data = await response.json();
@@ -165,7 +162,7 @@ export default function ImageAnimalsManager() {
             } else {
                 throw new Error(data.message || 'Failed to update image URL');
             }
-        } catch (error:any) {
+        } catch (error: any) {
             console.error('Failed to update image URL:', error);
             throw new Error(error.message || 'Failed to update image URL');
         }
@@ -180,7 +177,6 @@ export default function ImageAnimalsManager() {
 
     const handleDeleteImage = (animalId: number, imageRemoveUrl: string) => async () => {
         try {
-          
             const storageRef = ref(storage, imageRemoveUrl);
             await deleteObject(storageRef);
 
@@ -201,7 +197,7 @@ export default function ImageAnimalsManager() {
                 setCurrentTableUrl(updatedUrls);
                 fetchAnimals('animals'); 
                 router.push('/login/auth/admin/animalsImagesManager');
-                toast.success("l'image a bien été supprimé");
+                toast.success("L'image a bien été supprimée");
                 setLoading(true);
             } else {
                 throw new Error(data.message || 'Failed to update image URL');
@@ -211,85 +207,90 @@ export default function ImageAnimalsManager() {
         }
     };
 
-    const removeImageUrlFromCurrentTable = (imageUrlToRemove:string, currentTableUrl:string[]) => {
-        const updatedCurrentTableUrl = currentTableUrl.filter(url => url !== imageUrlToRemove);
-        return updatedCurrentTableUrl;
+    const removeImageUrlFromCurrentTable = (imageUrlToRemove: string, currentTableUrl: string[]) => {
+        return currentTableUrl.filter(url => url !== imageUrlToRemove);
     };
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200x]'>
-        <Loading loading={loading}>
-            <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des images : animaux</h1>
-            <div className='overflow-x-auto w-full flex flex-col items-center'>
-                <table className='w-full md:w-2/3'>
-                    <thead className='bg-muted-foreground'>
-                        <tr>
-                            <th className='border border-background px-4 py-2 text-left'>Name</th>
-                            <th className='border border-background px-4 py-2 text-center'>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {animals.map((animal) => (
-                            <tr key={animal.id} className='w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white'>
-                                <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.name}</td>
-                                <td className='w-1/3 border border-background px-4 py-2 text-sm'>
-                                    <div className='flex items-center justify-center'>
-                                        <button
-                                            className='bg-background hover:bg-muted-foreground text-white p-2 rounded-md'
-                                            onClick={() => selectAnimal(animal)}
-                                        >
-                                            Images
-                                        </button>                                        
-                                    </div>
-
-                                </td>
+        <main className='flex flex-col items-center py-12 min-h-[200px]'>
+            <Loading loading={loading}>
+                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des images : animaux</h1>
+                <div className='overflow-x-auto w-full flex flex-col items-center'>
+                    <table className='w-full md:w-2/3'>
+                        <thead className='bg-muted-foreground'>
+                            <tr>
+                                <th className='border border-background px-4 py-2 text-left'>Name</th>
+                                <th className='border border-background px-4 py-2 text-center'>Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                {modal && (
-                    <div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-70 z-50 text-secondary px-1'>
-                        <div className=' w-full md:w-2/3 h-2/3 bg-white rounded-lg shadow-lg p-6 overflow-y-auto'>
-                            <div className='w-full flex justify-end mb-2'>
-                                <button className='text-red-400 hover:text-red-500' onClick={onCloseModal}>Fermer</button>
-                            </div>
-                            
-                            {selectedAnimal != null && (
-                                <div className='flex flex-col w-full items-center'>
-                                    <p className='font-bold text-xl text-primary'>{selectedAnimal.name}</p>
-                                    <select
-                                        value={selectedImageUrl || ''}
-                                        onChange={(e) => handleImageSelect(e.target.value)}
-                                        className='my-4 border border-gray-300 rounded p-2'
-                                    >
-                                        <option value="">Sélectionner une image</option>
-                                        {currentTableUrl.map((url, index) => {
-                                            const matchedImage = images.find(image => image.url === url);
-                                            if (matchedImage) {
-                                                return <option key={index} value={url}>{matchedImage.name}</option>;
-                                            } else {
-                                                return null;
-                                            }
-                                        })}
-                                    </select>
-
-                                    {selectedImageUrl && (
-                                        <div className='w-2/3 flex flex-col items-center justify-center mb-12'>
-                                            <img src={selectedImageUrl} className='object-cover h-[200px] mb-4' alt='Animal Image' />
-                                            <button onClick={handleDeleteImage(selectedAnimal.id, selectedImageUrl)} className='w-[200px] bg-red-500 text-white px-4 py-2 hover:bg-red-600'>
-                                                Supprimer l&apos;image
-                                            </button>
+                        </thead>
+                        <tbody>
+                            {animals.map((animal) => (
+                                <tr key={animal.id} className='w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white'>
+                                    <td className='w-1/3 border border-background px-4 py-2 text-sm'>{animal.name}</td>
+                                    <td className='w-1/3 border border-background px-4 py-2 text-sm'>
+                                        <div className='flex items-center justify-center'>
+                                            <button
+                                                className='bg-background hover:bg-muted-foreground text-white p-2 rounded-md'
+                                                onClick={() => selectAnimal(animal)}
+                                            >
+                                                Images
+                                            </button>                                        
                                         </div>
-                                    )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    {modal && (
+                        <div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-70 z-50 text-secondary px-1'>
+                            <div className='w-full md:w-2/3 h-2/3 bg-white rounded-lg shadow-lg p-6 overflow-y-auto'>
+                                <div className='w-full flex justify-end mb-2'>
+                                    <button className='text-red-400 hover:text-red-500' onClick={onCloseModal}>Fermer</button>
                                 </div>
-                            )}
-                            <ImageUploader folderName='animals' onClose={onCloseModal} onUpdate={(url: string) => updateImage(url) } />
+                                
+                                {selectedAnimal && (
+                                    <div className='flex flex-col w-full items-center'>
+                                        <p className='font-bold text-xl text-primary'>{selectedAnimal.name}</p>
+                                        <select
+                                            value={selectedImageUrl || ''}
+                                            onChange={(e) => handleImageSelect(e.target.value)}
+                                            className='my-4 border border-gray-300 rounded p-2'
+                                        >
+                                            <option value="">Sélectionner une image</option>
+                                            {currentTableUrl.map((url, index) => {
+                                                const matchedImage = images.find(image => image.url === url);
+                                                if (matchedImage) {
+                                                    return <option key={index} value={url}>{matchedImage.name}</option>;
+                                                } else {
+                                                    return null;
+                                                }
+                                            })}
+                                        </select>
+
+                                        {selectedImageUrl && (
+                                            <div className='w-2/3 flex flex-col items-center justify-center mb-12'>
+                                                <div className='relative w-full h-48'>
+                                                    <Image
+                                                        src={selectedImageUrl}
+                                                        layout="fill"
+                                                        objectFit="cover"
+                                                        alt='Animal Image'
+                                                    />
+                                                </div>
+                                                <button onClick={handleDeleteImage(selectedAnimal.id, selectedImageUrl)} className='w-[200px] bg-red-500 text-white px-4 py-2 hover:bg-red-600'>
+                                                    Supprimer l&apos;image
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                                <ImageUploader folderName='animals' onClose={onCloseModal} onUpdate={(url: string) => updateImage(url)} />
+                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
-        </Loading>
-    </main>
+                    )}
+                </div>
+            </Loading>
+        </main>
     );
 }

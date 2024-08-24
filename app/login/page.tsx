@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function LoginPage(){
+export default function LoginPage() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,7 +13,7 @@ export default function LoginPage(){
         if (token) {
             router.push('/login/auth');
         }
-    }, []);
+    }, [router]); // Ajoutez router ici
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,7 +50,7 @@ export default function LoginPage(){
                 <input type="email" id="email" placeholder='Entrez votre adresse e-mail..' className='w-full  text-white p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200' value={email} onChange={(e) => setEmail(e.target.value)} required />
                 <input type="password" id="password" placeholder='Entrez votre mot de passe..'  className='w-full  text-white p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200'value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <button type="submit" className='w-full bg-muted hover:bg-background text-white p-2'>Se connecter</button>
-     
+      
             </form>
         </main>
     );

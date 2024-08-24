@@ -1,4 +1,3 @@
-"use client"
 import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
@@ -37,9 +36,10 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
   });
   const [species, setSpecies] = useState<Specie[]>([]);
   const [habitats, setHabitats] = useState<Habitat[]>([]);
-  
-  const fetchSpecies = async (additionalParam: string) => {
-    try {
+
+  useEffect(() => {
+    const fetchSpecies = async (additionalParam: string) => {
+      try {
         const response = await fetch(`/api/species/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
         const data = await response.json();   
         if (response.ok) {
@@ -53,14 +53,14 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
             console.error('Echec de la récupération des données', data.error);
             setSpecies([]);
         }
-    } catch (error) {
+      } catch (error) {
         console.error('Erreur de connexion à la base de données:', error);
         setSpecies([]);
-    }
-};
+      }
+    };
 
-const fetchHabitats = async (additionalParam: string) => {
-    try {
+    const fetchHabitats = async (additionalParam: string) => {
+      try {
         const response = await fetch(`/api/habitats/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
         const data = await response.json();
 
@@ -73,17 +73,18 @@ const fetchHabitats = async (additionalParam: string) => {
         } else {
             console.error('Failed to fetch data:', data.error);
         }
-    } catch (error) {
+      } catch (error) {
         console.error('Error fetching data:', error);
-    }
-};
+      }
+    };
 
-const fetchSpeciesAndHabitats = async () => {
-        fetchHabitats('habitats');
-        fetchSpecies('species');
-};
+    const fetchSpeciesAndHabitats = async () => {
+      fetchHabitats('habitats');
+      fetchSpecies('species');
+    };
 
-useEffect(() => {fetchSpeciesAndHabitats()}, []);
+    fetchSpeciesAndHabitats();
+  }, []); // Le tableau des dépendances est vide ici, ce qui est approprié
 
   const handleUpdateAnimal = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,16 +106,15 @@ useEffect(() => {fetchSpeciesAndHabitats()}, []);
 
       const data = await response.json();
       if (data.success) {
-        toast.success("Animal modifié avec succès") 
+        toast.success("Animal modifié avec succès");
         onUpdateSuccess();
-        
       } else {
         console.error('Error updating habitat:', data.message);
-        toast.error('erreur, animal non modifié.')
+        toast.error('Erreur, animal non modifié.');
       }
     } catch (error) {
-      console.error("error de la modification de l'animal:", error);
-      toast.error('erreur, animal non modifié.')
+      console.error("Erreur de la modification de l'animal:", error);
+      toast.error('Erreur, animal non modifié.');
     }
   };
 

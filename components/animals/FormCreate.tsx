@@ -1,4 +1,3 @@
-"use client"
 import React, { useState, useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
@@ -27,53 +26,55 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
     const [species, setSpecies] = useState<Specie[]>([]);
     const [habitats, setHabitats] = useState<Habitat[]>([]);
 
-    const fetchSpecies = async (additionalParam: string) => {
-        try {
-            const response = await fetch(`/api/species/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
-            const data = await response.json();
-    
-            if (response.ok) {
-                if (data.species) {
-                    setSpecies(data.species);
+    useEffect(() => {
+        const fetchSpecies = async (additionalParam: string) => {
+            try {
+                const response = await fetch(`/api/species/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
+                const data = await response.json();
+        
+                if (response.ok) {
+                    if (data.species) {
+                        setSpecies(data.species);
+                    } else {
+                        console.error('Echec de la récupération des données des espèces');
+                        setSpecies([]);
+                    }
                 } else {
-                    console.error('Echec de la récupération des données des espèces');
+                    console.error('Echec de la récupération des données', data.error);
                     setSpecies([]);
                 }
-            } else {
-                console.error('Echec de la récupération des données', data.error);
+            } catch (error) {
+                console.error('Erreur de connexion à la base de données:', error);
                 setSpecies([]);
             }
-        } catch (error) {
-            console.error('Erreur de connexion à la base de données:', error);
-            setSpecies([]);
-        }
-    };
+        };
 
-    const fetchHabitats = async (additionalParam: string) => {
-        try {
-            const response = await fetch(`/api/habitats/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
-            const data = await response.json();
+        const fetchHabitats = async (additionalParam: string) => {
+            try {
+                const response = await fetch(`/api/habitats/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
+                const data = await response.json();
 
-            if (response.ok) {
-                if (data.habitats) {
-                    setHabitats(data.habitats);
+                if (response.ok) {
+                    if (data.habitats) {
+                        setHabitats(data.habitats);
+                    } else {
+                        console.error('Failed to fetch data: habitats not found');
+                    }
                 } else {
-                    console.error('Failed to fetch data: habitats not found');
+                    console.error('Failed to fetch data:', data.error);
                 }
-            } else {
-                console.error('Failed to fetch data:', data.error);
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+        };
 
-    const fetchSpeciesAndHabitats = async () => {
+        const fetchSpeciesAndHabitats = async () => {
             fetchHabitats('habitats');
             fetchSpecies('species');
-    };
-    
-    useEffect(() => {fetchSpeciesAndHabitats()}, []);
+        };
+
+        fetchSpeciesAndHabitats();
+    }, []); // Le tableau des dépendances est vide ici, ce qui est approprié
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -86,7 +87,7 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name, specieName, habitatName }),
-            });name
+            });
 
             const data = await response.json();
             if (data.success) {
@@ -94,14 +95,14 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
                 setName('');
                 setSpecieName('');
                 setHabitatName('');
-                toast.success('Animal bien enregistré.')
+                toast.success('Animal bien enregistré.');
             } else {
                 setError(data.message || "Erreur lors de la création de l'animal");
                 console.error("Error creating animal:", data.message);
             }
         } catch (error) {
             console.error("Erreur lors de la création de l'animal:", error);
-            toast.error("erreur lors de la création de l'animal.")
+            toast.error("Erreur lors de la création de l'animal.");
         } finally {
             setLoading(false);
         }
@@ -110,11 +111,11 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
             <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
-            <div className='flex w-full justify-between mb-6'>
-                <h1 className='w-3/4 text-3xl font-bold'>Ajouter un Animal</h1>
-                <button onClick={onClose} className="w-full flex justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button>
-            </div>
-                
+                <div className='flex w-full justify-between mb-6'>
+                    <h1 className='w-3/4 text-3xl font-bold'>Ajouter un Animal</h1>
+                    <button onClick={onClose} className="w-full flex justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button>
+                </div>
+                    
                 <form onSubmit={handleSubmit} className="text-secondary">
                     {error && <p className="text-red-500 mb-2">{error}</p>}
                     <div className="mb-4">

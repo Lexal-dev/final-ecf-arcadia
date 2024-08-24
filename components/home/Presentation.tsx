@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
@@ -12,14 +12,6 @@ export default function Presentation() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
-
-  // Fallback images
-  const fallbackImages = [
-    '/images/Crocodile.png',
-    '/images/Lion.png',
-    '/images/Renard-roux.png',
-    '/images/Tigre.png',
-  ];
 
   useEffect(() => {
     const fetchAnimals = async (additionalParam: string | number) => {
@@ -45,6 +37,14 @@ export default function Presentation() {
           }
         });
 
+        // Define fallbackImages inside the effect
+        const fallbackImages = [
+          '/images/Crocodile.png',
+          '/images/Lion.png',
+          '/images/Renard-roux.png',
+          '/images/Tigre.png',
+        ];
+
         // Randomly shuffle URLs
         urls = shuffleArray(urls);
         setImageUrls(urls.length > 0 ? urls : fallbackImages); // Use fallback images if no URLs are found
@@ -57,28 +57,26 @@ export default function Presentation() {
     };
 
     fetchAnimals('animals');
-  }, []);
+  }, []); // Ce useEffect n'a pas besoin de dépendances ici
 
-  // Timer to switch to the next slide
+  const nextSlide = useCallback(() => {
+    setCurrentIndex(prevIndex => (prevIndex === imageUrls.length - 1 ? 0 : prevIndex + 1));
+    setDirection('right');
+  }, [imageUrls.length]);
+
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
     }, 20000);
 
     return () => clearInterval(interval);
-  }, [currentIndex, imageUrls]);
-
-  const nextSlide = () => {
-    setCurrentIndex(prevIndex => (prevIndex === imageUrls.length - 1 ? 0 : prevIndex + 1));
-    setDirection('right');
-  };
+  }, [nextSlide]);
 
   const prevSlide = () => {
     setCurrentIndex(prevIndex => (prevIndex === 0 ? imageUrls.length - 1 : prevIndex - 1));
     setDirection('left');
   };
 
-  // Shuffle array and return a new order
   const shuffleArray = (array: string[]) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

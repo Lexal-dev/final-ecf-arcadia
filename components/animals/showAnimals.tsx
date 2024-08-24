@@ -6,6 +6,7 @@ import Animal from '@/models/animal';
 import Habitat from '@/models/habitat';
 import { TbHandFinger } from 'react-icons/tb';
 import Loading from '@/components/Loading';
+import Image from 'next/image';
 
 export default function ShowAnimals() {
   const [animals, setAnimals] = useState<Animal[]>([]);
@@ -100,7 +101,7 @@ export default function ShowAnimals() {
         </select>
         {selectedHabitat && selectedHabitat.imageUrl && selectedHabitat.imageUrl.length > 0 && (
           <div className='w-full flex justify-center mb-4'>
-            <img
+            <Image
               src={selectedHabitat.imageUrl[0]}
               alt={selectedHabitat.name}
               className='w-[500px] h-auto rounded-md border-2 border-green-100'

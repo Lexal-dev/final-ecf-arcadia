@@ -19,12 +19,17 @@ const SpaceNav: React.FC = () => {
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
     const pathname = usePathname();
 
+    // take user's role with token
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
             const decoded = decodeToken(storedToken);
             if (decoded) {
-                setUserRoles(Array.isArray(decoded.userRole) ? decoded.userRole.map(role => role.toUpperCase()) : [decoded.userRole.toUpperCase()]);
+                setUserRoles(
+                    Array.isArray(decoded.userRole) 
+                        ? decoded.userRole.map(role => role.toUpperCase()) 
+                        : [decoded.userRole.toUpperCase()]
+                );
             } else {
                 console.error('Token invalide');
                 localStorage.removeItem('token');
@@ -34,7 +39,32 @@ const SpaceNav: React.FC = () => {
         }
     }, []);
 
+    // update navigation elements
     useEffect(() => {
+        const spaceNav: NavItem[] = [
+            // Route Admin 
+            { name: "Dashboard", path: "/login/auth/admin/dashboard", roles: ["ADMIN"], active: false },
+            { name: "Utilisateurs", path: "/login/auth/admin/usersManager", roles: ["ADMIN"], active: false },
+            { name: "Animaux", path: "/login/auth/admin/animalsManager", roles: ["ADMIN"], active: false },
+            { name: "Animaux-Images", path: "/login/auth/admin/animalsImagesManager", roles: ["ADMIN"], active: false },
+            { name: "Rapports-Vétérinaire", path: "/login/auth/admin/showVetLogs", roles: ["ADMIN"], active: false },
+            { name: "Habitats", path: "/login/auth/admin/habitatsManager", roles: ["ADMIN"], active: false },
+            { name: "Habitats-Images", path: "/login/auth/admin/habitatsImagesManager", roles: ["ADMIN"], active: false },
+            { name: "Services-Manager", path: "/login/auth/admin/servicesManager", roles: ["ADMIN"], active: false },
+            { name: "Horraires", path: "/login/auth/admin/hoursManager", roles: ["ADMIN"], active: false },
+            { name: "Espèces", path: "/login/auth/admin/speciesManager", roles: ["ADMIN"], active: false },
+
+            // Route Employee 
+            { name: "Avis", path: "/login/auth/employee/avisManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
+            { name: "Services", path: "/login/auth/employee/servicesManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
+            { name: "Rapports-Nourritures", path: "/login/auth/employee/foodConsumptionManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
+
+            // Route Veterinarian
+            { name: "Rapports-Animalié", path: "/login/auth/veterinarian/vetLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
+            { name: "Rapports-Employés", path: "/login/auth/veterinarian/employLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
+            { name: "Habitats-Commentaire", path: "/login/auth/veterinarian/habCommentsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
+        ];
+
         const updateNavItems = spaceNav.map(item => ({
             ...item,
             active: item.path === pathname
@@ -45,31 +75,7 @@ const SpaceNav: React.FC = () => {
         setIsOpen(false);
     }, [pathname]);
 
-    const spaceNav: NavItem[] = [
-        // Route Admin 
-        { name: "Dashboard", path: "/login/auth/admin/dashboard", roles: ["ADMIN"], active: false },
-        { name: "Utilisateurs", path: "/login/auth/admin/usersManager", roles: ["ADMIN"], active: false },
-        { name: "Animaux", path: "/login/auth/admin/animalsManager", roles: ["ADMIN"], active: false },
-        { name: "Animaux-Images", path: "/login/auth/admin/animalsImagesManager", roles: ["ADMIN"], active: false },
-        { name: "Rapports-Vétérinaire", path: "/login/auth/admin/showVetLogs", roles: ["ADMIN"], active: false },
-        { name: "Habitats", path: "/login/auth/admin/habitatsManager", roles: ["ADMIN"], active: false },
-        { name: "Habitats-Images", path: "/login/auth/admin/habitatsImagesManager", roles: ["ADMIN"], active: false },
-        { name: "Services-Manager", path: "/login/auth/admin/servicesManager", roles: ["ADMIN"], active: false },
-        { name: "Horraires", path: "/login/auth/admin/hoursManager", roles: ["ADMIN"], active: false },
-        { name: "Espèces", path: "/login/auth/admin/speciesManager", roles: ["ADMIN"], active: false },
-
-        // Route Employee 
-        { name: "Avis", path: "/login/auth/employee/avisManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
-        { name: "Services", path: "/login/auth/employee/servicesManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
-        { name: "Rapports-Nourritures", path: "/login/auth/employee/foodConsumptionManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
-
-        // Route Veterinarian
-        { name: "Rapports-Animalié", path: "/login/auth/veterinarian/vetLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
-        { name: "Rapports-Employés", path: "/login/auth/veterinarian/employLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
-        { name: "Habitats-Commentaire", path: "/login/auth/veterinarian/habCommentsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
-    ];
-
-    // filter navigation element with role
+    // Filter navigation elements with role
     const employeeNavItems = navItems.filter(navItem => navItem.roles.includes("EMPLOYEE"));
     const veterinarianNavItems = navItems.filter(navItem => navItem.roles.includes("VETERINARIAN"));
     const adminNavItems = navItems.filter(navItem => !navItem.roles.some(role => role === "EMPLOYEE" || role === "VETERINARIAN"));

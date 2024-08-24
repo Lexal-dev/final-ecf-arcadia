@@ -82,7 +82,7 @@ export default function Activity() {
   ];
 
   return (
-    <section className='w-full flex flex-col items-center px-2'>
+    <section className='w-full flex flex-col gap-6 w-full md:w-2/3 lg:w-3/4 text-start px-2'>
       <h3 className="text-4xl font-caption text-center mb-6">Les différentes activités du parc</h3>
       <p className="text-start text-lg md:text-xl mb-6">
         Arcadia vous propose une multitude d&apos;activités allant du visionnage des habitats au animaux qui y vivent.

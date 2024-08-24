@@ -27,7 +27,8 @@ yarn-error.log*
 
 # local env files
 .env
-
+.env.development
+.env.production
 # vercel
 .vercel
 
@@ -35,3 +36,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+#password js
+hashPass.js
+lib/db/postgreeSQL
+
+# Ignorer le répertoire config
+/config/
+
+# Ignorer le fichier config/config.json
+/config/config.json

@@ -9,7 +9,7 @@ module.exports = {
                 primaryKey: true,
             },
             days: {
-                type: Sequelize.STRING, // Limite de la taille du champ (ajustez si nécessaire)
+                type: Sequelize.STRING,
                 allowNull: false,
                 validate: {
                     notEmpty: {
@@ -18,7 +18,7 @@ module.exports = {
                 },
             },
             open: {
-                type: Sequelize.STRING, // Limite de la taille du champ (ajustez si nécessaire)
+                type: Sequelize.STRING,
                 allowNull: false,
                 validate: {
                     notEmpty: {
@@ -27,7 +27,7 @@ module.exports = {
                 },
             },
             close: {
-                type: Sequelize.STRING, // Limite de la taille du champ (ajustez si nécessaire)
+                type: Sequelize.STRING,
                 allowNull: false,
                 validate: {
                     notEmpty: {

@@ -9,7 +9,7 @@ module.exports = {
                 primaryKey: true,
             },
             animalState: {
-                type: Sequelize.STRING(100), // Limite de la taille du champ
+                type: Sequelize.STRING(100), // Field size limit
                 allowNull: false,
                 validate: {
                     notEmpty: {
@@ -22,7 +22,7 @@ module.exports = {
                 },
             },
             foodOffered: {
-                type: Sequelize.STRING(50), // Limite de la taille du champ
+                type: Sequelize.STRING(50), // Field size limit
                 allowNull: false,
                 validate: {
                     notEmpty: {
@@ -35,7 +35,7 @@ module.exports = {
                 },
             },
             foodWeight: {
-                type: Sequelize.FLOAT, // Utilisez FLOAT pour le poids de la nourriture
+                type: Sequelize.FLOAT,
                 allowNull: false,
                 validate: {
                     isFloat: {

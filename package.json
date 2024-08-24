@@ -6,8 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "init-db": "node lib/db/initLocalDb.mjs",
-    "post-db": "ts-node lib/db/initPostgreeDb.ts",
     "lint": "next lint"
   },
   "dependencies": {

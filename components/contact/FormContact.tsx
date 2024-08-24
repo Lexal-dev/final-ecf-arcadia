@@ -54,14 +54,14 @@ const FormContact: React.FC<FormContactProps> = () => {
   };
 
   const isValidEmail = (email: string) => {
-    // Fonction simple de validation d'email
+    // Fonction validate email
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validation du formulaire avant envoi
+    // Validate form
     if (!validateForm()) {
       return;
     }

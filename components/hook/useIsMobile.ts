@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-// Hook personnalisé pour vérifier si l'écran est mobile
+// Custom hook to check if the screen is mobile
 const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -9,12 +9,12 @@ const useIsMobile = () => {
       setIsMobile(window.innerWidth < 1200); // 1200px
     };
 
-    checkScreenSize(); // Vérifier initialement
+    checkScreenSize(); // Check initially
 
-    // Ajouter un écouteur d'événement pour surveiller les changements de taille d'écran
+    // Add an event listener to monitor screen size changes
     window.addEventListener('resize', checkScreenSize);
 
-    // Nettoyage de l'écouteur d'événement
+    // Cleanup the event listener
     return () => {
       window.removeEventListener('resize', checkScreenSize);
     };

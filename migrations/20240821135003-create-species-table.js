@@ -9,11 +9,11 @@ module.exports = {
                 primaryKey: true,
             },
             name: {
-                type: Sequelize.STRING(50), // Limiter la longueur du nom à 50 caractères
+                type: Sequelize.STRING(50), // Limit the length of the name to 50 characters
                 allowNull: false,
                 unique: true,
                 validate: {
-                    len: [3, 50], // Validation de longueur pour Sequelize
+                    len: [3, 50], // Length validation for Sequelize
                 },
             },
         });

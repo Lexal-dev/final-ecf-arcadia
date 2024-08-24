@@ -9,45 +9,47 @@ module.exports = {
                 primaryKey: true,
             },
             name: {
-                type: Sequelize.STRING(30), // Limite de la taille du champ
+                type: Sequelize.STRING(30), // Field size limit
                 allowNull: false,
                 unique: true,
-                validate: {
-                    len: {
-                        args: [3, 30],
-                        msg: 'Le nom doit être compris entre 3 et 30 caractères.',
-                    },
-                },
             },
             etat: {
-                type: Sequelize.STRING(100), // Limite de la taille du champ
+                type: Sequelize.STRING(100), // Field size limit
                 allowNull: false,
-                validate: {
-                    len: {
-                        args: [3, 100],
-                        msg: 'Le message d\'état doit être compris entre 3 et 100 caractères.',
-                    },
-                },
             },
             specieId: {
                 type: Sequelize.INTEGER,
-                allowNull: true,
+                allowNull: true, // Set to false if the foreign key should not be null
                 references: {
                     model: 'species',
                     key: 'id',
                 },
+                onUpdate: 'CASCADE',
+                onDelete: 'SET NULL', // or 'CASCADE', depending on your need
             },
             habitatId: {
                 type: Sequelize.INTEGER,
-                allowNull: true,
+                allowNull: true, // Set to false if the foreign key should not be null
                 references: {
                     model: 'habitats',
                     key: 'id',
                 },
+                onUpdate: 'CASCADE',
+                onDelete: 'SET NULL', // or 'CASCADE', depending on your need
             },
             imageUrl: {
-                type: Sequelize.JSONB, // Utilisez JSONB pour PostgreSQL pour stocker des tableaux de chaînes
+                type: Sequelize.JSON, // Use JSON for MySQL
                 allowNull: true,
+            },
+            createdAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.NOW,
+            },
+            updatedAt: {
+                type: Sequelize.DATE,
+                allowNull: false,
+                defaultValue: Sequelize.NOW,
             },
         });
     },

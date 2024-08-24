@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { MdClose } from 'react-icons/md';
 interface FormUpdateProps {
-  habitat: Habitat; // Habitat à mettre à jour
-  onUpdateSuccess: () => void; // Callback après la mise à jour réussie
-  onClose: () => void; // Callback pour fermer le formulaire
+  habitat: Habitat; 
+  onUpdateSuccess: () => void; 
+  onClose: () => void;
 }
 
 interface Habitat {
@@ -39,7 +39,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
 
       const data = await response.json();
       if (data.success) {
-        onUpdateSuccess(); // Appeler la fonction de callback après la mise à jour réussie
+        onUpdateSuccess(); 
         toast.success(`Commentaire sur l'habitat ${formData.name} modifié avec succés`)
       } else {
         console.error('Error updating habitat:', data.message);

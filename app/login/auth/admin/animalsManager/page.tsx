@@ -98,7 +98,6 @@ const AnimalsManager: React.FC = () => {
         toast.success('Animal effacé avec succés')
         setLoading(true); // Refresh the animal list after deletion
         await initFetch();
-        router.push('/login/auth/admin/animalsManager');
       } else {
         throw new Error('Failed to delete animal');
       }

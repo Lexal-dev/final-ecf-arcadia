@@ -70,7 +70,6 @@ export default function ImageHabitatManager() {
 
     useEffect(() => {
         setModal(false)
-        router.push('/login/auth/admin/habitatsImagesManager')
         fetchHabitats('habitats');
         fetchListAll().finally(() => setLoading(false));
     }, [loading]);

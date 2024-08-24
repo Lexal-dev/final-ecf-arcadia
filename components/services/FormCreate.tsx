@@ -49,7 +49,7 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200"
+                            className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200 text-white"
                             placeholder='Entrez le nom du service ..'
                             required
                         />                    
@@ -60,16 +60,11 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200"
+                            className="w-full p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200 text-white"
                             placeholder='Entrez la description du service ..'
                             required
                         />                        
                     </div>
-
-        
-
-
-
 
                     <button type="submit" className="w-full bg-muted hover:bg-background text-white p-2 rounded mt-6">
                         Créer

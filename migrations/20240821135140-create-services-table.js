@@ -9,14 +9,14 @@ module.exports = {
                 primaryKey: true,
             },
             name: {
-                type: Sequelize.STRING, // Définir une longueur maximale si nécessaire
+                type: Sequelize.STRING, // Define a maximum length if necessary
                 allowNull: false,
                 validate: {
                     len: [3, 30],
                 },
             },
             description: {
-                type: Sequelize.STRING, // Définir une longueur maximale si nécessaire
+                type: Sequelize.STRING, // Define a maximum length if necessary
                 allowNull: false,
                 validate: {
                     len: [3, 150],

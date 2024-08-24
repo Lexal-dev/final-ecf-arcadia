@@ -9,14 +9,14 @@ module.exports = {
                 primaryKey: true,
             },
             pseudo: {
-                type: Sequelize.STRING(30), // Limite de la taille du champ
+                type: Sequelize.STRING(30), // Field size limit
                 allowNull: false,
                 validate: {
                     len: [3, 30],
                 },
             },
             comment: {
-                type: Sequelize.STRING(150), // Limite de la taille du champ
+                type: Sequelize.STRING(150), // Field size limit
                 allowNull: false,
                 validate: {
                     len: [3, 150],

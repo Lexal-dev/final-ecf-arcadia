@@ -14,9 +14,9 @@ interface NavItem {
 
 const SpaceNav: React.FC = () => {
     const [userRoles, setUserRoles] = useState<string[]>([]);
-    const [isOpen, setIsOpen] = useState<boolean>(false); // Initialiser à false pour que le menu global soit fermé
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     const [navItems, setNavItems] = useState<NavItem[]>([]);
-    const [expandedSection, setExpandedSection] = useState<string | null>(null); // Etat pour la section étendue
+    const [expandedSection, setExpandedSection] = useState<string | null>(null);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -41,13 +41,12 @@ const SpaceNav: React.FC = () => {
         }));
         setNavItems(updateNavItems);
 
-        // Réinitialiser la section étendue et fermer le menu global lorsque le chemin change
         setExpandedSection(null);
         setIsOpen(false);
     }, [pathname]);
 
     const spaceNav: NavItem[] = [
-        // Routes Admin pures
+        // Route Admin 
         { name: "Dashboard", path: "/login/auth/admin/dashboard", roles: ["ADMIN"], active: false },
         { name: "Utilisateurs", path: "/login/auth/admin/usersManager", roles: ["ADMIN"], active: false },
         { name: "Animaux", path: "/login/auth/admin/animalsManager", roles: ["ADMIN"], active: false },
@@ -59,18 +58,18 @@ const SpaceNav: React.FC = () => {
         { name: "Horraires", path: "/login/auth/admin/hoursManager", roles: ["ADMIN"], active: false },
         { name: "Espèces", path: "/login/auth/admin/speciesManager", roles: ["ADMIN"], active: false },
 
-        // Routes Employee (accessible aussi par Admin)
+        // Route Employee 
         { name: "Avis", path: "/login/auth/employee/avisManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
         { name: "Services", path: "/login/auth/employee/servicesManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
         { name: "Rapports-Nourritures", path: "/login/auth/employee/foodConsumptionManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
 
-        // Routes Veterinarian (accessible aussi par Admin)
+        // Route Veterinarian
         { name: "Rapports-Animalié", path: "/login/auth/veterinarian/vetLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
         { name: "Rapports-Employés", path: "/login/auth/veterinarian/employLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
         { name: "Habitats-Commentaire", path: "/login/auth/veterinarian/habCommentsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
     ];
 
-    // Filtrer les éléments de navigation en fonction des rôles
+    // filter navigation element with role
     const employeeNavItems = navItems.filter(navItem => navItem.roles.includes("EMPLOYEE"));
     const veterinarianNavItems = navItems.filter(navItem => navItem.roles.includes("VETERINARIAN"));
     const adminNavItems = navItems.filter(navItem => !navItem.roles.some(role => role === "EMPLOYEE" || role === "VETERINARIAN"));

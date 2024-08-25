@@ -28,8 +28,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const checkPath = (userCurrent: User | null) => {
         const token = localStorage.getItem('token');
-        console.log(token)
-        console.log(userCurrent);
 
         if (token === null) {
             if(pathname && !authorizedRoutes.includes(pathname))
@@ -44,8 +42,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             if (pathname && (pathname.includes('/admin') || pathname.includes('/employee'))) {
                 router.push('/login/auth');
             }
-        } else {
-            console.log("admin")
         }
     };
 
@@ -77,7 +73,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         if (pathname) {
             checkToken();
-            console.log("debut de l'attente");
             setTimeout(() => {
                 setLoading(false);
             }, 1000);

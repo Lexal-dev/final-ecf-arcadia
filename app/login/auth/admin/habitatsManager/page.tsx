@@ -72,21 +72,18 @@ const HabitatsManager: React.FC = () => {
       
         // Delete habitat from database via Next.js API
         try {
-          console.log(habitatId);
           const response = await fetch(`/api/habitats/delete?id=${habitatId}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
           });
       
           if (response.ok || response.status === 404) {
-            console.log('Habitat deleted successfully or not found');
-      
+    
             // Delete images from Firebase storage
             for (const url of habitatUrls) {
               const storageRef = ref(storage, url);
               try {
                 await deleteObject(storageRef);
-                console.log(`Image deleted successfully: ${url}`);
               } catch (error) {
                 console.error(`Error deleting image ${url}:`, error);
               }
@@ -107,7 +104,6 @@ const HabitatsManager: React.FC = () => {
             const storageRef = ref(storage, url);
             try {
               await deleteObject(storageRef);
-              console.log(`Image deleted successfully: ${url}`);
             } catch (error) {
               console.error(`Error deleting image ${url}:`, error);
             }
@@ -125,7 +121,6 @@ const HabitatsManager: React.FC = () => {
 
     // Function to handle update success of habitat
     const onUpdateSuccess = async () => {
-        console.log('Habitat updated');
         setLoading(true);
         onClose();
         toast.success("Habitat modifié avec succés")
@@ -164,7 +159,7 @@ const HabitatsManager: React.FC = () => {
     }, [modalCreate, modalUpdate])
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200x] '>
+        <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
                 <Loading loading={loading}>
                 <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des habitats</h1>
                 <button onClick={()=> {setModalCreate(true)}} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>Ajouter un habitat</button>

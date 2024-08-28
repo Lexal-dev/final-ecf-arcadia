@@ -3,10 +3,9 @@ import { ref, listAll, getDownloadURL, deleteObject } from 'firebase/storage';
 import { useState, useEffect } from 'react';
 import ImageUploader from '@/components/images/uploaderImages';
 import { storage } from "@/lib/db/firebaseConfig.mjs";
-import { useRouter } from 'next/navigation';
-import Loading from '@/components/Loading';
 import { toast } from 'react-toastify';
-import Image from 'next/image'; // Import Image from next/image
+import Loading from '@/components/Loading';
+import Image from 'next/image';
 
 interface Animal {
     id: number;
@@ -30,7 +29,7 @@ export default function ImageAnimalsManager() {
     const [currentTableUrl, setCurrentTableUrl] = useState<string[]>([]);
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [images, setImages] = useState<ImageData[]>([]);
-    const router = useRouter();
+
 
     const fetchListAll = async () => {
         try {
@@ -58,6 +57,7 @@ export default function ImageAnimalsManager() {
             if (response.ok) {
                 if (data.animals) {
                     setAnimals(data.animals);
+                    sessionStorage.setItem('animals', JSON.stringify(data.animals))
                 } else {
                     console.error('Echec de la récupération des animaux');
                 }
@@ -70,8 +70,7 @@ export default function ImageAnimalsManager() {
     };
 
     useEffect(() => {
-        fetchAnimals('animals');
-        fetchListAll().finally(() => setLoading(false));
+        onCloseModal()
     }, []); 
 
     useEffect(() => {
@@ -97,6 +96,7 @@ export default function ImageAnimalsManager() {
             ...animal,
             imageUrl: animal.imageUrl || [],
         });
+
         setSelectedImageUrl(null); // Reset selected image URL
         setModal(true);
     };
@@ -106,7 +106,9 @@ export default function ImageAnimalsManager() {
         setSelectedAnimal(null);
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
-        fetchAnimals('animals'); // Re-fetch animals after modal close
+        fetchAnimals('animals');
+        fetchListAll().finally(() => setLoading(false))
+
     };
 
     const updateImage = (url: string) => {
@@ -134,15 +136,10 @@ export default function ImageAnimalsManager() {
             setSelectedAnimal(updateAnimal);
 
             updateImageUrl(selectedAnimal.id, updateAnimal.imageUrl)
-                .then(() => {
-                    console.log("Image URL bien ajouté à l'animal");
-                    fetchAnimals('animals'); 
-                })
                 .catch((error) => {
                     console.error("Erreur, l'image URL n'a pas pu être ajoutée.", error);
                 });
         }
-        setLoading(true);
     };
 
     const updateImageUrl = async (animalId: number, selectedImage: string[]) => {
@@ -192,13 +189,9 @@ export default function ImageAnimalsManager() {
 
             const data = await response.json();
             if (response.ok) {
-                console.log('Image supprimée avec succès');
-
-                setCurrentTableUrl(updatedUrls);
-                fetchAnimals('animals'); 
-                router.push('/login/auth/admin/animalsImagesManager');
+                setCurrentTableUrl(updatedUrls); 
                 toast.success("L'image a bien été supprimée");
-                setLoading(true);
+                onCloseModal();
             } else {
                 throw new Error(data.message || 'Failed to update image URL');
             }
@@ -212,9 +205,9 @@ export default function ImageAnimalsManager() {
     };
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200px]'>
+        <main className='flex flex-col items-center py-12 min-h-[200px] px-2'>
             <Loading loading={loading}>
-                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des images : animaux</h1>
+                <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire des images : animaux</h1>
                 <div className='overflow-x-auto w-full flex flex-col items-center'>
                     <table className='w-full md:w-2/3'>
                         <thead className='bg-muted-foreground'>
@@ -244,12 +237,12 @@ export default function ImageAnimalsManager() {
 
                     {modal && (
                         <div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-70 z-50 text-secondary px-1'>
-                            <div className='w-full md:w-2/3 h-2/3 bg-white rounded-lg shadow-lg p-6 overflow-y-auto'>
-                                <div className='w-full flex justify-end mb-2'>
-                                    <button className='text-red-400 hover:text-red-500' onClick={onCloseModal}>Fermer</button>
-                                </div>
-                                
-                                {selectedAnimal && (
+                            <div className='flex flex-col justify-between sm:w-2/3 w-full h-[75%] bg-white rounded-lg overflow-y-auto'>
+                                <div>
+                                    <div className='w-full flex justify-end mb-2 p-2'>
+                                        <button className='text-red-400 hover:text-red-500' onClick={onCloseModal}>Fermer</button>
+                                    </div>
+                                    {selectedAnimal && (
                                     <div className='flex flex-col w-full items-center'>
                                         <p className='font-bold text-xl text-primary'>{selectedAnimal.name}</p>
                                         <select
@@ -267,7 +260,6 @@ export default function ImageAnimalsManager() {
                                                 }
                                             })}
                                         </select>
-
                                         {selectedImageUrl && (
                                             <div className='w-2/3 flex flex-col items-center justify-center mb-12'>
                                                 <div className='relative w-full h-48'>
@@ -284,8 +276,12 @@ export default function ImageAnimalsManager() {
                                             </div>
                                         )}
                                     </div>
-                                )}
-                                <ImageUploader folderName='animals' onClose={onCloseModal} onUpdate={(url: string) => updateImage(url)} />
+                                    )}
+                                </div>
+
+                                <div className='pb-4 px-4'>
+                                    <ImageUploader folderName='animals' onClose={onCloseModal} onUpdate={(url: string) => updateImage(url)} />  
+                                </div>
                             </div>
                         </div>
                     )}

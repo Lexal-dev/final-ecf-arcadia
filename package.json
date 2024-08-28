@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "drop-db": "node lib/db/mySQL/deleteDb.mjs",
+    "create-db": "node lib/db/mySQL/createDb.mjs",
+    "insert-data": "node lib/db/mySQL/insertData.mjs"
+    
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

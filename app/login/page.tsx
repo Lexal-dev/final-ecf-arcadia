@@ -9,11 +9,11 @@ export default function LoginPage() {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token) {
             router.push('/login/auth');
         }
-    }, [router]); // Ajoutez router ici
+    }, [router]); 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,7 +33,7 @@ export default function LoginPage() {
             }
 
             const { token } = await response.json();
-            localStorage.setItem('token', token);
+            sessionStorage.setItem('token', token);
             await new Promise(resolve => setTimeout(resolve, 1000));
             router.push('/login/auth');
         } catch (error:any) {

@@ -9,7 +9,7 @@ import { redirectIfNeeded } from '@/lib/security/redirectApi';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const additionalParam = req.query.additionalParam;
-    if (additionalParam !== 'animals') {
+    if (typeof additionalParam !== 'string' || additionalParam !== 'animals') {
         if (redirectIfNeeded(req, res, '/api/animals/read', '/habitats')) {
             return;
         }
@@ -22,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const habitats = await Habitat.findAll({});
             const reports = await Report.findAll({});
             const vetLogs = await VetLog.findAll({});
+            
             if (!animals || !species || !habitats) {
                 res.status(404).json({ success: false, message: "The list of animals, species, reports, or habitats was not found" });
             } else {

@@ -29,15 +29,15 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
             onCreateSuccess();
             toast.success(`Le service ${name} à été créer avec succès`)
         } else {
-            toast.error(`Le service n'a pas pu etre ajouté. erreur :`, data.message)
+            console.error(`Le service n'a pas pu etre ajouté. erreur :`, data.message)
         }
     };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
-            <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+            <div className="w-full sm:w-1/2 bg-foreground p-6 rounded shadow-md text-secondary">
                 <div className='flex w-full justify-between mb-6'>
-                    <h1 className='w-3/4 text-3xl font-bold'>Ajouter un service</h1>
+                    <h1 className='w-full sm:text-3xl text-2xl font-bold'>Ajouter un service</h1>
                     <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
                 </div>
 

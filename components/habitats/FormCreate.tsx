@@ -47,9 +47,9 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
-            <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+            <div className="md:w-1/2 w-full bg-foreground p-6 rounded shadow-md  text-secondary">
                 <div className='w-full text-xl flex items-center justify-between md:px-4 mb-6'>
-                    <h1 className='w-3/4 text-3xl font-bold'>Ajouter un habitat</h1>
+                    <h1 className='w-full md:text-3xl text-2xl font-bold'>Ajouter un habitat</h1>
                     <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
                 </div>
                 <form onSubmit={handleSubmit} className="text-secondary">

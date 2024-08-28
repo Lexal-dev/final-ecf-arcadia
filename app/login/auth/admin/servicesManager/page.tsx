@@ -5,16 +5,16 @@ import FormUpdate from '@/components/services/FormUpdate';
 import Service from '@/models/service';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import Loading from '@/components/Loading';
+import { toast } from 'react-toastify';
 
 export default function ServicesManager() {
     const [services, setServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [showForm, setShowForm] = useState<boolean>(false); // Create
-    const [showUpdateForm, setShowUpdateForm] = useState<boolean>(false); // Update
+    const [showForm, setShowForm] = useState<boolean>(false);
+    const [showUpdateForm, setShowUpdateForm] = useState<boolean>(false);
     const [selectedService, setSelectedService] = useState<Service | null>(null);
 
     const fetchServices = async (additionalParam: string | number) => {
-        setLoading(true);
         try {
             const response = await fetch(`/api/services/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
             const data = await response.json();
@@ -42,6 +42,7 @@ export default function ServicesManager() {
             const data = await response.json();
             if (data.success) {
                 setServices(services.filter(service => service.id !== id));
+                toast.success("Le service a bien été supprimé")
             } else {
                 console.error('Error deleting service:', data.message);
             }

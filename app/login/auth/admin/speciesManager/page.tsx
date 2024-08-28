@@ -91,16 +91,15 @@ export default function SpeciesManager() {
     useEffect(() => {fetchSpecies('species'), setLoading(false)}, [loading])
 
   return (
-    <main className='flex flex-col items-center py-12 min-h-[200x]'>
+    <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
         <Loading loading={loading}>
-            <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des espèces</h1>
+            <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire des espèces</h1>
             <button onClick={()=> {setModalCreate(true)}} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>Ajouter une espèce</button>
             {species.length > 0 ? (
             <div className='overflow-x-auto w-full flex flex-col items-center'>
                 <table className="w-full md:w-2/3 w-full">
                     <thead className='bg-muted-foreground'>
                         <tr>
-                            <th className="border border-background px-4 py-2 text-left">ID</th>
                             <th className="border border-background px-4 py-2 text-left">Name</th>
                             <th className="border border-background px-4 py-2 text-center">Action</th>
                         </tr>
@@ -108,7 +107,6 @@ export default function SpeciesManager() {
                     <tbody>
                         {species.map((specie) => (
                             <tr key={specie.id} className="w-full border border-background bg-foreground hover:bg-opacity-50 text-secondary hover:bg-muted hover:text-white">
-                                <td className="w-1/3 border border-background px-4 py-2 text-sm">{specie.id}</td>
                                 <td className="w-1/3 border border-background px-4 py-2 text-sm">{specie.name}</td>
                                 <td className='w-1/3 border border-background px-4 py-2'>
                                     <div className='flex items-center justify-center md:gap-5'>

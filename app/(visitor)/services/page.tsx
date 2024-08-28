@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import {Service} from "@/lib/types/types"
+import { Service } from "@/lib/types/types";
 import Loading from '@/components/Loading';
 
 interface ModalProps {
@@ -28,29 +28,37 @@ const ServicePage: React.FC = () => {
     const [services, setServices] = useState<Service[]>([]);
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [loading, setLoading] = useState(true);
-   
-    const fetchServices = async (additionalParam: string | number) => {
 
-            try {
+    const fetchServices = async (additionalParam: string) => {
+        try {
+            const cachedService = sessionStorage.getItem('services');
+
+            if (cachedService) {
+                setServices(JSON.parse(cachedService));
+            } else {
                 const response = await fetch(`/api/services/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
                 if (!response.ok) {
                     throw new Error('Service synchronization failure');
                 }
-
                 const { success, services } = await response.json();
-                if (success) {
+
+                if (success && services.length > 0) {
                     setServices(services);
-                    setLoading(false)
+                    sessionStorage.setItem('services', JSON.stringify(services));
                 } else {
-                    console.error('Service not found');
+                    console.error('No services found');
                 }
-            } catch (error) {
-                console.error('Service synchronization error', error);
             }
+        } catch (error) {
+            console.error('Service synchronization error', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
-       
-     useEffect(() => { fetchServices("service");}, []);
+    useEffect(() => {
+        fetchServices("service");
+    }, []);
 
     const openModal = (service: Service) => {
         setSelectedService(service);
@@ -64,18 +72,21 @@ const ServicePage: React.FC = () => {
         <main className='flex flex-col items-center py-12 px-1 md:p-12 gap-6 min-h-[300px]'>
             <h1 className='text-4xl font-bold mb-10 text-center'>Services disponibles</h1>
             <Loading loading={loading}>
-            
-            <section className='bg-muted p-6 rounded-lg border border-slate-200'>
-                <div className='flex flex-wrap justify-center gap-6'>
-                    {services.map((service) => (
-                        <div key={service.id} className='border-2 bg-foreground hover:bg-background border-slate-200 p-2 rounded-md w-[250px] cursor-pointer text-secondary hover:text-white' onClick={() => openModal(service)}>
-                            <p className='text-xl font-bold mb-2'>{service.name}</p>
-                            <p className='text-md'>{service.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-            <Modal service={selectedService} onClose={closeModal} />
+                <section className='bg-muted p-6 rounded-lg border border-slate-200'>
+                    <div className='flex flex-wrap justify-center gap-6'>
+                        {services.length > 0 ? (
+                            services.map((service) => (
+                                <div key={service.id} className='border-2 bg-foreground hover:bg-background border-slate-200 p-2 rounded-md w-[250px] cursor-pointer text-secondary hover:text-white' onClick={() => openModal(service)}>
+                                    <p className='text-xl font-bold mb-2'>{service.name}</p>
+                                    <p className='text-md'>{service.description}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className='text-xl font-bold text-center w-full'>Aucun service trouvé.</p>
+                        )}
+                    </div>
+                </section>
+                <Modal service={selectedService} onClose={closeModal} />
             </Loading>
         </main>
     );

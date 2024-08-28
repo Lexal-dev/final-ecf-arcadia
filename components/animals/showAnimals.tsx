@@ -3,15 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { doc, updateDoc, increment, setDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/db/firebaseConfig.mjs';
 import Animal from '@/models/animal';
-import Habitat from '@/models/habitat';
 import { TbHandFinger } from 'react-icons/tb';
 import Loading from '@/components/Loading';
-import Image from 'next/image';
 
 export default function ShowAnimals() {
   const [animals, setAnimals] = useState<Animal[]>([]);
-  const [habitats, setHabitats] = useState<Habitat[]>([]);
-  const [selectedHabitatName, setSelectedHabitatName] = useState<string | null>(null);
+  const [selectedHabitatId, setSelectedHabitatId] = useState<string | null>(null);
   const [selectedAnimal, setSelectedAnimal] = useState<Animal | null>(null);
   const [modal, setModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -19,17 +16,25 @@ export default function ShowAnimals() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/animals/read?additionalParam=${encodeURIComponent('animals')}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const data = await response.json();
-        if (data.success) {
-          setAnimals(data.animals);
-          setHabitats(data.habitats);
+        const cachedAnimals =  sessionStorage.getItem('animals')
+
+        if(cachedAnimals)
+        {
+          setAnimals(JSON.parse(cachedAnimals))
         } else {
-          console.error('Failed to fetch data:', data.message);
+          const response = await fetch(`/api/animals/read?additionalParam=${encodeURIComponent('animals')}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch data');
+          }
+          const data = await response.json();
+          if (data.success) {
+            setAnimals(data.animals);
+            sessionStorage.setItem('animals', JSON.stringify(data.animals));
+          } else {
+            console.error('Failed to fetch data:', data.message);
+          }          
         }
+
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -41,8 +46,8 @@ export default function ShowAnimals() {
   }, []);
 
   const handleHabitatChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const habitatName = event.target.value;
-    setSelectedHabitatName(habitatName !== '' ? habitatName : null);
+    const habitatId = event.target.value;
+    setSelectedHabitatId(habitatId !== '' ? habitatId : null);
   };
 
   const handleAnimalId = async (animalId: number) => {
@@ -75,11 +80,12 @@ export default function ShowAnimals() {
     }
   };
 
-  const filteredAnimals = selectedHabitatName
-    ? animals.filter((animal) => animal.habitatId.toString() === selectedHabitatName)
-    : animals;
+  // Extract unique habitatIds
+  const habitatIds = Array.from(new Set(animals.map((animal) => animal.habitatId.toString())));
 
-  const selectedHabitat = habitats.find((habitat) => habitat.name === selectedHabitatName);
+  const filteredAnimals = selectedHabitatId
+    ? animals.filter((animal) => animal.habitatId.toString() === selectedHabitatId)
+    : animals;
 
   const defaultImageUrl = '/images/Pasdimage.jpg';
 
@@ -87,27 +93,18 @@ export default function ShowAnimals() {
     <div className='min-h-[250px] w-full flex flex-col items-center'>
       <Loading loading={loading}>
         <h2 className='text-3xl font-bold mb-6 text-center'>Liste des animaux</h2>
-        <select onChange={handleHabitatChange} className='text-black p-1 rounded-md bg-foreground text-secondary mb-6'>
+        <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
           <option value=''>Sélectionnez un habitat</option>
-          {habitats.map((habitat) => (
-            <option key={habitat.id} value={habitat.name}>
-              {habitat.name}
+          {habitatIds.map((habitatId) => (
+            <option key={habitatId} value={habitatId}>
+              {habitatId}
             </option>
           ))}
         </select>
-        {selectedHabitat && selectedHabitat.imageUrl && selectedHabitat.imageUrl.length > 0 && (
-          <div className='w-full flex justify-center mb-4'>
-            <Image
-              src={selectedHabitat.imageUrl[0]}
-              alt={selectedHabitat.name}
-              className='w-[500px] h-auto rounded-md border-2 border-green-100'
-            />
-          </div>
-        )}
-        <div className='flex flex-col w-full md:w-2/3 items-start text-secondary bg-foreground rounded-md p-2'>
+        <div className='flex flex-col sm:w-auto min-w-[400px]  items-start text-secondary bg-foreground rounded-md py-6'>
           <div className='flex flex-col w-full mb-4'>
-            {selectedHabitatName ? (
-              <p className='text-2xl font-bold mb-4 w-full text-center'>[{selectedHabitatName}]</p>
+            {selectedHabitatId ? (
+              <p className='text-2xl font-bold mb-4 w-full text-center'>[{selectedHabitatId}]</p>
             ) : (
               <p className='text-2xl font-bold mb-4 w-full text-center'>[Complète]</p>
             )}

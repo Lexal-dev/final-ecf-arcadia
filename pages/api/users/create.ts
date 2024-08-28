@@ -26,8 +26,8 @@ async function sendWelcomeEmail(email: string, username: string) {
             html: `<h1>Welcome ${username}!</h1><p>Your account has been successfully created.</p><p>Contact the admin to receive your password.</p>`,
         };
 
-        const result = await transporter.sendMail(mailOptions); // Use `transporter` instead of `transport`
-        console.log('Email sent...', result);
+        await transporter.sendMail(mailOptions); // Send email
+        console.log('Email sent to', email);
         return true;
     } catch (error) {
         console.error('Error sending email:', error);
@@ -52,13 +52,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const hashedPassword = await hashPassword(password);
             const newUser = await User.create({ email, password: hashedPassword, role });
 
-            const emailSent = await sendWelcomeEmail(email, email); //sending welcome email 
+            // Send welcome email, but don't block user creation if it fails
+            sendWelcomeEmail(email, email).catch(error => {
+                // Log the error but continue
+                console.error('Failed to send welcome email:', error);
+            });
 
-            if (emailSent) {
-                return res.status(201).json({ success: true, message: 'User created successfully.', user: newUser });
-            } else {
-                return res.status(500).json({ success: false, message: 'Error sending welcome email.' });
-            }
+            return res.status(201).json({ success: true, message: 'User created successfully.', user: newUser });
         } catch (error) {
             console.error('Error creating user:', error);
             return res.status(500).json({ success: false, message: 'Server error. Please try again later.', error: String(error) });

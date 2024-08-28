@@ -27,7 +27,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const authorizedRoutes = ["/", "services", "habitats", "contact","login"]
 
     const checkPath = (userCurrent: User | null) => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
 
         if (token === null) {
             if(pathname && !authorizedRoutes.includes(pathname))
@@ -46,7 +46,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const checkToken = () => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         
         if (token) {
             const decodedToken = decodeToken(token);
@@ -60,7 +60,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 setUser(userData);
                 checkPath(userData);
             } else {
-                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
                 router.push('/login');
             }
         } else {

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Animal from '@/models/animal';
 import Habitat from '@/models/habitat';
 import Report from '@/models/report';
+import { MdClose } from 'react-icons/md';
 
 export default function ListAnimals() {
   const [animals, setAnimals] = useState<Animal[]>([]);
@@ -83,7 +84,7 @@ export default function ListAnimals() {
 
   return (
     <>
-     <h1 className='text-3xl mb-4 font-bold'>Rapports des employés</h1>
+     <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Rapports des employés</h1>
       <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
         <option value="">Sélectionnez un habitat</option>
         {habitats.map(habitat => (
@@ -95,11 +96,11 @@ export default function ListAnimals() {
 
 
         <div className='flex items-center gap-3'>
-          <h2 className='text-2xl font-bold mb-4'>Liste des animaux</h2> 
+          <h2 className='sm:text-xl text-lg font-bold mb-4'>Liste des animaux</h2> 
           {choiceHabitat ? (
-            <p className='text-xl font-bold mb-4'> [Complète]:</p>
+            <p className='sm:text-xl text-lg font-bold mb-4'> [Complète]:</p>
           ) : (
-            <p className='text-xl font-bold mb-4'> [{selectedHabitatName}]:</p>
+            <p className='sm:text-xl text-lg font-bold mb-4'> [{selectedHabitatName}]:</p>
           )}                   
         </div>
 
@@ -123,12 +124,13 @@ export default function ListAnimals() {
         </div>
 
       {modal && (
-        <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
+        <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 px-1'>
           <div className='bg-foreground rounded-lg p-4 max-w-xl w-full text-secondary'>
             <div className='flex justify-between items-center'>
-              <h2 className='text-xl font-semibold mb-6'>Détails du rapport pour {selectedAnimal?.name}</h2>
-              <button onClick={() => setModal(false)} className='text-red-600 hover:text-red-700 text-xl hover:text-2xl'>X</button>
+              <h1 className='w-full sm:text-3xl text-2xl font-bold'>Détails du rapport pour {selectedAnimal?.name}</h1>
+              <button onClick={() => setModal(false)} className='text-red-600 hover:text-red-700 text-xl hover:text-2xl'><MdClose size={36} /></button>
             </div>
+
 
             <div className='mb-4'>
               <label className='block text-gray-700'>Date de début :</label>

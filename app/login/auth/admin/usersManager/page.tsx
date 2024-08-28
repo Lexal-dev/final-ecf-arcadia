@@ -49,11 +49,9 @@ export default function UsersManager() {
                 toast.success("Utilisateur effacé avec succès !");
             } else {
                 console.error('Error deleting users:', data.message);
-                toast.error('Erreur dans la suppression du compte');
             }
         } catch (error) {
             console.error('Error deleting users:', error);
-            toast.error('Erreur dans la suppression du compte');
         }
     };
 
@@ -83,7 +81,7 @@ export default function UsersManager() {
     return (
         <main className='flex flex-col items-center py-12 min-h-[200x]'>
             <Loading loading={loading}>
-                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire Utilisateurs</h1>
+                <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire Utilisateurs</h1>
                 <button
                     onClick={openCreateForm}
                     className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>

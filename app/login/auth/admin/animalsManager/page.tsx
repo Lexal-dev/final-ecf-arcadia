@@ -37,6 +37,7 @@ const AnimalsManager: React.FC = () => {
       if (response.ok) {
         if (data.animals) {
           setAnimals(data.animals);
+          sessionStorage.setItem('animals', JSON.stringify(data.animals))
         } else {
           console.error('Échec de la récupération des données des animaux');
           setAnimals([]);
@@ -77,7 +78,6 @@ const AnimalsManager: React.FC = () => {
   
     // Remove the animal from the database via the Next.js API
     try {
-      console.log(animalId);
       const response = await fetch(`/api/animals/delete?id=${animalId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -90,7 +90,6 @@ const AnimalsManager: React.FC = () => {
           const imageRef = ref(storage, url);
           try {
             await deleteObject(imageRef);
-            console.log(`Image supprimée avec succès: ${url}`);
           } catch (error) {
             console.error(`Erreur lors de la suppression de l'image ${url}:`, error);
           }
@@ -98,6 +97,7 @@ const AnimalsManager: React.FC = () => {
         toast.success('Animal effacé avec succés')
         setLoading(true); // Refresh the animal list after deletion
         await initFetch();
+
       } else {
         throw new Error('Failed to delete animal');
       }
@@ -110,7 +110,6 @@ const AnimalsManager: React.FC = () => {
         const imageRef = ref(storage, url);
         try {
           await deleteObject(imageRef);
-          console.log(`Image supprimée avec succès: ${url}`);
         } catch (error) {
           console.error(`Erreur lors de la suppression de l'image ${url}:`, error);
         }
@@ -154,9 +153,9 @@ const AnimalsManager: React.FC = () => {
 
   return (
     
-      <main className='flex flex-col items-center py-12 min-h-[200x]'>
+      <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
         <Loading loading={loading}>
-        <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des animaux</h1>
+        <h1 className=' sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire des animaux</h1>
           <button onClick={() => setModalCreate(true)} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
             Ajouter un animal
           </button>

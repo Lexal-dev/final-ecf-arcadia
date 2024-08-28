@@ -74,7 +74,7 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
         };
 
         fetchSpeciesAndHabitats();
-    }, []); // Le tableau des dépendances est vide ici, ce qui est approprié
+    }, []); 
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -110,10 +110,11 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
-            <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+            <div className="bg-foreground p-6 rounded shadow-md w-full md:w-1/2 text-secondary">
                 <div className='flex w-full justify-between mb-6'>
-                    <h1 className='w-3/4 text-3xl font-bold'>Ajouter un Animal</h1>
-                    <button onClick={onClose} className="w-full flex justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button>
+                    <h1 className='w-3/4 text-2xl sm:text-3xl font-bold'>Ajouter un Animal</h1>
+
+                    <button onClick={onClose} className="w-1/4 flex justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button>
                 </div>
                     
                 <form onSubmit={handleSubmit} className="text-secondary">

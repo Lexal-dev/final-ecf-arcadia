@@ -5,59 +5,41 @@ import { motion } from 'framer-motion';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { Animal } from "@/lib/types/types";
 
-export default function Presentation() {
-  const [animals, setAnimals] = useState<Animal[]>([]);
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+type PresentationProps = {
+  animals: Animal[];
+  error: string;
+  loadingImage: boolean;
+};
+
+export default function Presentation({ animals, error, loadingImage }: PresentationProps) {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
 
   useEffect(() => {
-    const fetchAnimals = async (additionalParam: string | number) => {
-      setLoading(true);
-      setError(''); // Clear previous errors
-      try {
-        const response = await fetch(`/api/animals/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    let urls: string[] = [];
+
+    animals.forEach((animal) => {
+      if (animal.imageUrl) {
+        try {
+          const parsedUrls = JSON.parse(animal.imageUrl);
+          urls = urls.concat(parsedUrls.filter((url: string) => url)); // Filter out empty values
+        } catch (error) {
+          console.error(`Error parsing imageUrl for animal ID ${animal.id}:`, error);
         }
-        const data = await response.json();
-        setAnimals(data.animals);
-
-        let urls: string[] = [];
-        data.animals.forEach((animal: Animal) => {
-          if (animal.imageUrl) {
-            try {
-              const parsedUrls = JSON.parse(animal.imageUrl);
-              urls = urls.concat(parsedUrls.filter((url: string) => url)); // Filter out empty values
-            } catch (error) {
-              console.error(`Error parsing imageUrl for animal ID ${animal.id}:`, error);
-            }
-          }
-        });
-
-        // Define fallbackImages inside the effect
-        const fallbackImages = [
-          '/images/Crocodile.png',
-          '/images/Lion.png',
-          '/images/Renard-roux.png',
-          '/images/Tigre.png',
-        ];
-
-        // Randomly shuffle URLs
-        urls = shuffleArray(urls);
-        setImageUrls(urls.length > 0 ? urls : fallbackImages); // Use fallback images if no URLs are found
-      } catch (error) {
-        console.error('Error fetching animals:', error);
-        setError('Échec de la récupération des animaux. Veuillez réessayer plus tard.');
-      } finally {
-        setLoading(false);
       }
-    };
+    });
 
-    fetchAnimals('animals');
-  }, []); // Ce useEffect n'a pas besoin de dépendances ici
+    const fallbackImages = [
+      '/images/Crocodile.png',
+      '/images/Lion.png',
+      '/images/Renard-roux.png',
+      '/images/Tigre.png',
+    ];
+
+    urls = shuffleArray(urls);
+    setImageUrls(urls.length > 0 ? urls : fallbackImages);
+  }, [animals]);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex(prevIndex => (prevIndex === imageUrls.length - 1 ? 0 : prevIndex + 1));
@@ -93,7 +75,7 @@ export default function Presentation() {
         variété d&apos;animaux, de beaux paysages et des programmes éducatifs.
       </p>
 
-      {loading ? (
+      {loadingImage ? (
         <p className="text-center">Chargement des images...</p>
       ) : (
         <div className="flex flex-col gap-6">
@@ -142,7 +124,7 @@ export default function Presentation() {
       )}
 
       {error && <p>Erreur : {error}</p>}
-      {animals.length === 0 && !loading && !error && <p className='w-full text-center'>Aucun animal trouvé.</p>}
+      {animals.length === 0 && !loadingImage && !error && <p className='w-full text-center'>Aucun animal trouvé.</p>}
     </section>
   );
 }

@@ -92,8 +92,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ folderName, onClose, onUp
 
                 if (url) {
                     onUpdate(url);
-                    onClose();
-
                     // Reset local state
                     setFile(null);
                     setError(null);
@@ -103,6 +101,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ folderName, onClose, onUp
                 setError('Failed to upload image');
             } finally {
                 setUploading(false);
+                onClose();
             }
         } else {
             setError('Please select an image file.');
@@ -113,7 +112,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ folderName, onClose, onUp
         <div className="flex flex-col w-full gap-6">
             <input type="file" onChange={handleFileChange} />
             {error && <p className="text-red-500">{error}</p>}
-            <div className='flex justify-center'>
+            <div className='flex justify-center mt-auto'>
                 <button
                     className="mt-2 bg-muted hover:bg-background text-white font-bold py-2 px-4 rounded"
                     onClick={handleUpload}

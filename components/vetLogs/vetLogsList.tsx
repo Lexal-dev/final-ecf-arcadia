@@ -161,7 +161,7 @@ export default function VetLogsList() {
   return (
     <main className="w-full flex flex-col items-center ">
       <Loading loading={loading}>
-      <h1 className='text-3xl mb-4 font-bold'>Rapport vétérinaire par animaux</h1>
+      <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Rapport vétérinaire par animaux</h1>
       <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
         <option value="">Sélectionnez un habitat</option>
         {habitats.map(habitat => (
@@ -172,11 +172,11 @@ export default function VetLogsList() {
       </select>
       
       <div className='flex items-center items-center gap-3'>
-        <h2 className='text-2xl font-bold mb-4'>Liste des animaux</h2> 
+        <h2 className='sm:text-xl text-lg font-bold mb-4'>Liste des animaux</h2> 
         {choiceHabitat ? (
-          <p className='text-xl font-bold mb-4'> [Complète]:</p>
+          <p className='sm:text-xl text-lg font-bold mb-4'> [Complète]:</p>
         ) : (
-          <p className='text-xl font-bold mb-4'> [{selectedHabitatName}]:</p>
+          <p className='sm:text-xl text-lg font-bold mb-4'> [{selectedHabitatName}]:</p>
         )}                   
       </div>
 

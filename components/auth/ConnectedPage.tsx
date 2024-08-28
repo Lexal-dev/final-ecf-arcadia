@@ -13,14 +13,14 @@ const ConnectedPage: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     setTimeout(() => {
       router.push('/login');
   }, 1000);
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
+    const storedToken = sessionStorage.getItem('token');
     if (storedToken) {
       const decoded = decodeToken(storedToken);
       if (decoded) {
@@ -30,7 +30,7 @@ const ConnectedPage: React.FC = () => {
         });
       } else {
         console.error('Token invalide');
-        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         router.push('/login');
       }
     }
@@ -42,9 +42,9 @@ const ConnectedPage: React.FC = () => {
 
   return (
     <main className='flex flex-col items-center pt-6 pb-12 px-4'>
-      <h1 className='text-4xl font-bold mb-6'>Bienvenue sur votre espace dédiés!</h1>
+      <h1 className='sm:text-4xl text-xl font-bold mb-6 font-caption'>Bienvenue sur votre espace dédiés!</h1>
 
-      <div className='flex flex-col md:flex-row w-full justify-around items-center bg-muted rounded-md py-12'>
+      <div className='flex flex-col md:flex-row w-full justify-around items-center bg-muted rounded-md py-12 px-2'>
 
           <div className='w-full md:w-1/2 mb-12 md:mb-0'>
             <div className='flex gap-2 mb-6'>
@@ -57,8 +57,8 @@ const ConnectedPage: React.FC = () => {
             </div>
           </div>
 
-          <button className="w-[100px] h-[100px] rounded-full border-4 border-red-400 hover:border-red-600 text-xl font-bold text-red-400 hover:text-red-600 " onClick={handleLogout}>
-              <p>Logout</p>
+          <button className="w-[175px] h-[175px] rounded-full border-4 border-red-400 hover:border-red-600 text-xl font-bold text-red-400 hover:text-red-600 " onClick={handleLogout}>
+              <p className='text-2xl font-bold'>deconnexion</p>
           </button>
           
       </div>

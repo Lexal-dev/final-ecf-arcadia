@@ -99,7 +99,8 @@ export default function  FoodConsumptionManager(){
   return (
     <main className='w-full flex flex-col justify-center px-2 items-center py-6'>
       <Loading loading={loading}>
-      <h1 className='text-3xl mb-4 font-bold'>Rapport de nourriture par animal</h1>
+      <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Rapport de nourriture par animal</h1>
+
       <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
         <option value="">Tous les habitats</option>
         {habitats.map(habitat => (
@@ -144,7 +145,7 @@ export default function  FoodConsumptionManager(){
 
           <div className='bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary'>
             <div className='flex w-full justify-between mb-6'>
-                  <h1 className='w-3/4 text-3xl font-bold'>Ajouter un utilisateur</h1>
+                  <h1 className='w-full sm:text-3xl text-2xl text-3xl font-bold'>Ajouter un rapport</h1>
                   <button onClick={closeModal} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
             </div>
             <form onSubmit={handleSubmit} className='text-secondary'>

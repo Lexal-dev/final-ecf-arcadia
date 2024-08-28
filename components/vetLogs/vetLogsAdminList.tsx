@@ -124,14 +124,14 @@ export default function VetLogsAdminList() {
   return (
     <div className=''>
       <Loading loading={loading}>
-        <h1 className="text-3xl font-bold mb-12 text-center">Rapports vétérinaires</h1>
+        <h1 className="sm:text-3xl text-2xl font-bold mb-12 text-center">Rapports vétérinaires</h1>
         <div className="w-full flex flex-col md:flex-row gap-x-6">
           <div className="w-full flex flex-col items-center md:items-start mb-6 md:mb-0 items-start md:w-1/4">
             <div className="flex flex-col items-start">
-              <h2 className="text-xl font-bold mb-2">Listes des animaux</h2>
+              <h2 className="sm:text-xl text-lg font-bold mb-2">Listes des animaux</h2>
               <select
                 onChange={handleHabitatChange}
-                className="p-2 border rounded-md bg-forground text-secondary mb-2">
+                className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-2'>
                 <option value="">Selectionnez un habitat</option>
                 {habitats.map(habitat => (
                   <option key={habitat.id} value={habitat.name}>
@@ -141,17 +141,17 @@ export default function VetLogsAdminList() {
               </select>
             </div> 
 
-            <ul>
+            <ul className='w-full'>
               {filteredAnimals.map(animal => (
                 <li
                   key={animal.id}
                   onClick={() => handleAnimalClick(animal.id)}
-                  className="cursor-pointer p-2 hover:bg-muted rounded-md hover:text-green-200">
-                  <div className='flex gap-2 items-center'>
+                  className="w-full cursor-pointer p-2 rounded-md">
+                  <div className='w-full flex justify-between gap-2 border-b-2 border-muted pb-3 hover:text-green-200'>
                     <p>
                       {animal.name} - {animal.specieId} 
                     </p>
-                    <TbHandFinger size={20}/>
+                    <TbHandFinger size={20} className='hover:text-green-400'/>
                   </div>
                 </li>
               ))}
@@ -160,7 +160,7 @@ export default function VetLogsAdminList() {
 
           <div className="w-full md:w-3/4">
             <div className="flex flex-col items-center">
-              <h2 className="text-xl font-bold mb-2">RAPPORTS</h2>
+              <h2 className="sm:text-xl text-lg font-bold mb-2">RAPPORTS</h2>
               <input
                 type="date"
                 className="p-2 border rounded-md bg-gray-100 shadow-md mb-2 text-secondary"

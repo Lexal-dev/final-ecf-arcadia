@@ -84,7 +84,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
     };
 
     fetchSpeciesAndHabitats();
-  }, []); // Le tableau des dépendances est vide ici, ce qui est approprié
+  }, []);
 
   const handleUpdateAnimal = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,10 +120,10 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
-      <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+      <div className="bg-foreground p-6 rounded shadow-md w-full md:w-1/2 text-secondary">
         <div className='flex w-full justify-between mb-6'>
-          <h1 className='w-3/4 text-3xl font-bold'>Modifier un animal</h1>
-          <button onClick={onClose} className="w-full flex justify-end text-red-500 hover:text-red-700">
+          <h1 className='w-3/4 sm:text-3xl text-2xl font-bold'>Modifier un animal</h1>
+          <button onClick={onClose} className="w-1/4 flex justify-end text-red-500 hover:text-red-700">
             <MdClose size={36} />
           </button>
         </div>
@@ -140,13 +140,13 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
           </div>
             <div className="mb-4">
                 <label className="block">Espèce</label>
+                
                 <select
                     value={formData.specieId}
                     onChange={(e) => setFormData({...formData, specieId: e.target.value})}
                     className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
                     required
                 >
-                    <option value="">Select Specie</option>
                     {species.map(specie => (
                         <option key={specie.id} value={specie.id}>{specie.name}</option>
                     ))}
@@ -160,7 +160,6 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
                     className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
                     required
                 >
-                    <option value="">Select Habitat</option>
                     {habitats.map(habitat => (
                         <option key={habitat.id} value={habitat.id}>{habitat.name}</option>
                     ))}

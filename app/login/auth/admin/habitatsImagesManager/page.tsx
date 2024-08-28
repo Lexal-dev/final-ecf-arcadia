@@ -3,7 +3,7 @@ import { ref, listAll, getDownloadURL, deleteObject } from 'firebase/storage';
 import { useState, useEffect } from 'react';
 import ImageUploader from '@/components/images/uploaderImages';
 import { storage } from "@/lib/db/firebaseConfig.mjs";
-import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 import Loading from '@/components/Loading';
 import Image from 'next/image';
 
@@ -28,9 +28,7 @@ export default function ImageHabitatManager() {
     const [currentTableUrl, setCurrentTableUrl] = useState<string[]>([]);
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [images, setImages] = useState<ImageData[]>([]);
-    const router = useRouter()
 
-    
     const fetchListAll = async () => {
         try {
             const res = await listAll(ref(storage, 'images/habitats'));
@@ -70,9 +68,7 @@ export default function ImageHabitatManager() {
     };
 
     useEffect(() => {
-        setModal(false)
-        fetchHabitats('habitats');
-        fetchListAll().finally(() => setLoading(false));
+        onCloseModal()
     }, [loading]);
 
     useEffect(() => {
@@ -108,6 +104,7 @@ export default function ImageHabitatManager() {
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
         fetchHabitats('habitats'); // Re-fetch habitats after modal close
+        fetchListAll().finally(() => setLoading(false));
     };
 
     const updateImage = (url: string) => {
@@ -135,10 +132,6 @@ export default function ImageHabitatManager() {
             setSelectedHabitat(updatedHabitat);
 
             updateImageUrl(selectedHabitat.id, updatedHabitat.imageUrl)
-                .then((updatedHabitatFromServer) => {
-                    console.log("Image Url bien ajouté à l'habitat");
-                    fetchHabitats('habitats'); // Re-fetch habitats after update
-                })
                 .catch((error) => {
                     console.error("Erreur, l'image url n'a pas pu être ajouté.", error);
                 });
@@ -158,6 +151,7 @@ export default function ImageHabitatManager() {
 
             const data = await response.json();
             if (response.ok) {
+                toast.success("L'image a bien été ajoutée");
                 return data.habitat;
             } else {
                 throw new Error(data.message || 'Failed to update image URL');
@@ -194,13 +188,10 @@ export default function ImageHabitatManager() {
 
             const data = await response.json();
             if (response.ok) {
-                console.log('Image supprimée avec succès');
-
                 // Update the state with the updated URLs
                 setCurrentTableUrl(updatedUrls);
-                fetchHabitats('habitats'); // Re-fetch habitats after delete
-                router.push('/login/auth/admin/habitatsImagesManager')
-                setLoading(true)
+                toast.success("L'image a bien été supprimée");
+                onCloseModal();
             } else {
                 throw new Error(data.message || 'Failed to update image URL');
             }
@@ -215,9 +206,9 @@ export default function ImageHabitatManager() {
     };
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200x]'>
+        <main className='flex flex-col items-center py-12 px-2 min-h-[200x]'>
             <Loading loading={loading}>
-                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des images : habitats</h1>
+                <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire des images : habitats</h1>
                 <div className='overflow-x-auto w-full flex flex-col items-center'>
                 <table className='w-full md:w-2/3'>
                     <thead className='bg-muted-foreground'>
@@ -247,41 +238,50 @@ export default function ImageHabitatManager() {
 
                     {modal && (
                         <div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-70 z-50 text-secondary px-1'>
-                            <div className=' w-full md:w-2/3 h-2/3 bg-white rounded-lg shadow-lg p-6 overflow-x-auto'>
-                            <div className='w-full flex justify-end mb-2'>
-                                <button className='text-red-400 hover:text-red-500' onClick={onCloseModal}>Fermer</button>
-                            </div>
-                                
-                                {selectedHabitat != null && (
-                                    <div className='flex flex-col w-full items-center'>
-                                        <p className='font-bold text-xl text-primary'>{selectedHabitat.name}</p>
-                                        <select
-                                            value={selectedImageUrl || ''}
-                                            onChange={(e) => handleImageSelect(e.target.value)}
-                                            className='my-4 border border-gray-300 rounded p-2'
-                                        >
-                                            <option value="">Sélectionner une image</option>
-                                            {currentTableUrl.map((url, index) => {
-                                                const matchedImage = images.find(image => image.url === url);
-                                                if (matchedImage) {
-                                                    return <option key={index} value={url}>{matchedImage.name}</option>;
-                                                } else {
-                                                    return null;
-                                                }
-                                            })}
-                                        </select>
-
-                                        {selectedImageUrl && (
-                                            <div className='w-2/3 flex flex-col items-center justify-center mb-12'>
-                                                <Image src={selectedImageUrl} className='object-cover h-[200px] mb-4' alt='Habitat Image' />
-                                                <button onClick={handleDeleteImage(selectedHabitat.id, selectedImageUrl)} className='w-[200px] bg-red-500 text-white px-4 py-2 hover:bg-red-600'>
-                                                    Supprimer l&apos;image
-                                                </button>
-                                            </div>
-                                        )}
+                            <div className='flex flex-col justify-between sm:w-2/3 w-full h-[75%] bg-white rounded-lg overflow-y-auto'>
+                                <div>
+                                    <div className='w-full flex justify-end mb-2 p-2'>
+                                        <button className='text-red-400 hover:text-red-500' onClick={onCloseModal}>Fermer</button>
                                     </div>
-                                )}
-                                <ImageUploader folderName='habitats' onClose={onCloseModal} onUpdate={(url: string) => updateImage(url) } />
+                                    {selectedHabitat != null && (
+                                        <div className='flex flex-col w-full items-center'>
+                                            <p className='font-bold text-xl text-primary'>{selectedHabitat.name}</p>
+                                            <select
+                                                value={selectedImageUrl || ''}
+                                                onChange={(e) => handleImageSelect(e.target.value)}
+                                                className='my-4 border border-gray-300 rounded p-2'
+                                            >
+                                                <option value="">Sélectionner une image</option>
+                                                {currentTableUrl.map((url, index) => {
+                                                    const matchedImage = images.find(image => image.url === url);
+                                                    if (matchedImage) {
+                                                        return <option key={index} value={url}>{matchedImage.name}</option>;
+                                                    } else {
+                                                        return null;
+                                                    }
+                                                })}
+                                            </select>
+
+                                            {selectedImageUrl && (
+                                                <div className='w-2/3 flex flex-col items-center justify-center mb-12'>
+                                                    <div className='relative w-full h-48'>
+                                                        <Image 
+                                                            src={selectedImageUrl} 
+                                                            layout="fill"
+                                                            objectFit="cover" 
+                                                            alt='Habitat Image' />
+                                                    </div>
+                                                    <button onClick={handleDeleteImage(selectedHabitat.id, selectedImageUrl)} className='w-[200px] bg-red-500 text-white px-4 py-2 hover:bg-red-600'>
+                                                        Supprimer l&apos;image
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className='pb-4 px-4'>
+                                    <ImageUploader folderName='habitats' onClose={onCloseModal} onUpdate={(url: string) => updateImage(url) } />
+                                </div>
                             </div>
                         </div>
                     )}

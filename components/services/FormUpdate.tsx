@@ -40,7 +40,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ service, onUpdateSuccess, onClo
         toast.success(`Le service ${formData.name} à été modifié avec succès`)
       } else {
         console.error('Error updating service:', data.message);
-        toast.error(`Le service n'a pas pu etre modifié. erreur :`, data.message)
+        console.error(`Le service n'a pas pu etre modifié. erreur :`, data.message)
       }
     } catch (error) {
       console.error('Error updating service:', error)
@@ -48,35 +48,34 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ service, onUpdateSuccess, onClo
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-    <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
+      <div className="w-full sm:w-1/2 bg-foreground p-6 rounded shadow-md text-secondary">
         <div className='flex w-full justify-between mb-6'>
-          <h1 className='w-3/4 text-3xl font-bold'>Modifier un service</h1>
+          <h1 className='w-full sm:text-3xl text-2xl font-bold'>Modifier un service</h1>
           <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
         </div>
         <form onSubmit={handleUpdateService} className="text-secondary">
-         
-            <div className='mb-4'>
-              <label className="block">Nom</label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
-                required
-              />             
-            </div>
+          <div className='mb-4'>
+            <label className="block">Nom</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+              required
+            />             
+          </div>
 
-            <div className='mb-4'>
-              <label className="block">Description</label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
-                placeholder='Entrez la description du service ..'
-                required
-              />              
-            </div>
+          <div className='mb-4'>
+            <label className="block">Description</label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+              placeholder='Entrez la description du service ..'
+              required
+            />              
+          </div>
 
           <button
             type="submit"

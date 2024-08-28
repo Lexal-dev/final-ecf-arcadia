@@ -21,7 +21,7 @@ const SpaceNav: React.FC = () => {
 
     // take user's role with token
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
+        const storedToken = sessionStorage.getItem('token');
         if (storedToken) {
             const decoded = decodeToken(storedToken);
             if (decoded) {
@@ -32,7 +32,7 @@ const SpaceNav: React.FC = () => {
                 );
             } else {
                 console.error('Token invalide');
-                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
             }
         } else {
             console.warn('Token non trouvé');
@@ -133,9 +133,9 @@ const SpaceNav: React.FC = () => {
                                 </div>
                             ))
                         ) : (
-                            <ul className="flex flex-wrap items-center justify-center md:justify-between gap-4 pt-2 w-full md:w-3/4 mb-6">
+                            <ul className="flex flex-wrap justify-between gap-4 pt-2 w-full">
                                 {filteredNavItems().map((navItem, index) => (
-                                    <li key={index} className="w-1/3 md:w-1/4 p-2 text-sm md:text-lg font-semibold hover:text-secondary">
+                                    <li key={index} className="w-1/3 md:w-1/4 p-2 text-sm md:text-lg font-semibold hover:text-secondary text-center">
                                         <Link href={navItem.path} className={`block ${navItem.active ? 'text-secondary' : ''}`}>
                                             {navItem.name}
                                         </Link>

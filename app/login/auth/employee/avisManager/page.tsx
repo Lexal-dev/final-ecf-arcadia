@@ -85,10 +85,7 @@ export default function AvisManager() {
             if (data.success) {
                 handleDeleteSuccess(avis.id);
                 toast.success("L'avis a bien été supprimé")
-            } else {
-
-                toast.error("Erreur l'avis n'a pas pu être supprimé :", data.message)
-            }
+            } 
         } catch (error) {
             console.error('Error deleting avis:', error);
         } finally {
@@ -97,9 +94,9 @@ export default function AvisManager() {
     };
 
     return (
-        <main className="flex flex-col items-center py-12 min-h-[200x]">
+        <main className="flex flex-col items-center py-12 min-h-[200x] px-2">
             <Loading loading={loading}>
-                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des commentaires</h1>
+                <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire des commentaires</h1>
                 <div className="flex justify-between mb-1">
                         <button className={`px-4 py-2 text-black md:rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} onClick={() => setFilter('all')}>Tous</button>
                         <button className={`px-4 py-2 ml-2 md:rounded text-black ${filter === 'valid' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`} onClick={() => setFilter('valid')}>Valides</button>
@@ -108,7 +105,7 @@ export default function AvisManager() {
             
             
                     {filteredAvis.length === 0 ? (
-                        <div className="p-4 text-center text-secondary">Aucun avis trouvé</div>
+                        <div className="p-4 text-center text-white">Aucun avis trouvé</div>
                     ) : (
                         <div className="overflow-x-auto w-full flex flex-col items-center">
                             <table className="w-full md:w-2/3">

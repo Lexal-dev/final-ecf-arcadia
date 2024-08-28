@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 interface FormUpdateProps {
   user: User; 
@@ -42,20 +42,18 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ user, onUpdateSuccess, onClose 
         toast.success('Utilisateur mis à jour avec succès !');
         onUpdateSuccess();
       } else {
-        toast.error('Erreur lors de la mise à jour de l\'utilisateur');
         console.error('Error updating user:', data.message);
       }
     } catch (error) {
-      toast.error('Erreur lors de la mise à jour de l\'utilisateur');
       console.error('Error updating user:', error);
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-1">
-      <div className="bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary">
+      <div className="bg-foreground p-6 rounded shadow-md w-full md:w-1/2 text-secondary">
         <div className='flex w-full justify-between mb-6'>
-          <h1 className='w-3/4 text-3xl font-bold'>Mise à jour utilisateur</h1>
+          <h1 className='w-3/4 sm:text-3xl text-2xl font-bold'>Mise à jour utilisateur</h1>
           <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
         </div>
         <form onSubmit={handleUpdateUser}>

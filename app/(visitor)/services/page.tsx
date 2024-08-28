@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import {Service} from "@/lib/types/types"
 import Loading from '@/components/Loading';
+
 interface ModalProps {
     service: Service | null;
     onClose: () => void;
@@ -28,24 +29,25 @@ const ServicePage: React.FC = () => {
     const [selectedService, setSelectedService] = useState<Service | null>(null);
     const [loading, setLoading] = useState(true);
    
-        const fetchServices = async (additionalParam: string | number) => {
+    const fetchServices = async (additionalParam: string | number) => {
 
             try {
                 const response = await fetch(`/api/services/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
                 if (!response.ok) {
-                    throw new Error('Echec de la synchronisation des services');
+                    throw new Error('Service synchronization failure');
                 }
 
                 const { success, services } = await response.json();
                 if (success) {
                     setServices(services);
+                    setLoading(false)
                 } else {
-                    console.error('Service non trouvé');
+                    console.error('Service not found');
                 }
             } catch (error) {
-                console.error('Erreur dans la synchronisation des services:', error);
+                console.error('Service synchronization error', error);
             }
-        };
+    };
 
        
      useEffect(() => { fetchServices("service");}, []);
@@ -57,14 +59,6 @@ const ServicePage: React.FC = () => {
     const closeModal = () => {
         setSelectedService(null);
     };
-
-    useEffect(() => {
-        const loading = setTimeout(() => {
-            setLoading(false);
-        }, 1000);
-    
-        return () => clearTimeout(loading);
-    }, []);
 
     return (
         <main className='flex flex-col items-center py-12 px-1 md:p-12 gap-6 min-h-[300px]'>

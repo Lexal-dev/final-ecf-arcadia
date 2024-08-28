@@ -31,7 +31,7 @@ export default function Footer() {
             <div className="overflow-x-auto w-full">
                 <table className="min-w-full bwhiteg- border-gray-200 shadow-md roundeds">
                     <thead>
-                        <tr className="border">
+                        <tr className="border bg-gray-900">
                             <th className="py-2 px-4 border-r">Jours</th>
                             <th className="py-2 px-4 border-r">Ouverture</th>
                             <th className="py-2 px-4">Fermeture</th>
@@ -39,7 +39,7 @@ export default function Footer() {
                     </thead>
                     <tbody>
                         {hours.map(hour => (
-                            <tr key={hour.id} className="border-b hover:bg-gray-100 text-center border-x">
+                            <tr key={hour.id} className="border-b bg-gray-700 hover:bg-gray-800 text-center border-x">
                                 <td className="py-2 px-4 border-r">{hour.days}</td>
                                 <td className="py-2 px-4 border-r">{hour.open}</td>
                                 <td className="py-2 px-4">{hour.close}</td>

@@ -7,7 +7,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from "@/components/ui/Footer";
 
-// Import des polices
 const merriweatherSans = Merriweather_Sans({ subsets: ["latin"], variable: "--font-sans" });
 const pacifico = Pacifico({ weight: "400", subsets: ["latin"], variable: "--font-caption" });
 
@@ -27,11 +26,13 @@ export default function RootLayout({
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
-      <body className={cn(merriweatherSans.variable, pacifico.variable, "font-sans")}>
+      <body className={cn(merriweatherSans.variable, pacifico.variable, "font-sans min-h-screen flex flex-col")}>
         <Header />
-        <main className="text-white pt-10">
-          <div className="mb-[200px]"></div>
-          {children}
+        <main className="flex-grow">
+          <div className="text-white pt-10">
+            <div className="mb-[200px]"></div>
+            {children}
+          </div>
         </main>
         <Footer />
         <ToastContainer />

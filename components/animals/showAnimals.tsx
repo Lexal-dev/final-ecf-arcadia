@@ -83,10 +83,6 @@ export default function ShowAnimals() {
 
   const defaultImageUrl = '/images/Pasdimage.jpg';
 
-  useEffect(() => {
-    console.log(selectedAnimal?.imageUrl);
-  }, [selectedAnimal?.imageUrl]);
-
   return (
     <div className='min-h-[250px] w-full flex flex-col items-center'>
       <Loading loading={loading}>

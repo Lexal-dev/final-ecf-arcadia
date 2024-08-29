@@ -1,17 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Specie from '@/models/specie';
 import { ValidationError } from 'sequelize';
-import { validateRoleAccess } from '@/lib/security/validateUtils';
+import { isValidString, validateRoleAccess } from '@/lib/security/validateUtils';
 
 export default async function createSpecie(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'POST') {
     // extract Authorization
-    const token = req.headers.authorization?.split(' ')[1];
-
+    const token = req.headers.authorization?.split(' ')[1]
     // role verification
     if (!token || !validateRoleAccess('ADMIN', token)) {
         return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
-    }        
+    }      
+    if (req.method === 'POST') {
+      
         try {
             await Specie.sync({ alter: true });
 
@@ -20,6 +20,9 @@ export default async function createSpecie(req: NextApiRequest, res: NextApiResp
             if (!name) {
                 res.status(400).json({ success: false, message: "The species name is required." });
                 return;
+            }
+            if (!isValidString(name, 3, 30)) {
+                return res.status(400).json({ success: false, message: "le nom de l'espèce doit être compris entre 3 et 50 caractére." });
             }
 
             const newSpecie = await Specie.create({ name });

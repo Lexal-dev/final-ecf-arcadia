@@ -28,7 +28,7 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
         if (data.success) {
             onCreateSuccess();
         } else {
-            setError(data.message || 'Failed to create service');
+            setError(data.message || 'Une erreur est survenue lors de l\'envoi de l\'éspèce.');
             console.error('Error creating service:', data.message);
         }
     };
@@ -42,6 +42,7 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
                 </div>
 
                 <form onSubmit={handleSubmit} className="text-seconday">
+                    {error && (<div className="w-full text-center text-red-500"> {error}</div>)}
                     <div className="mb-4">
                         <label className="block">Nom</label>
                         <input
@@ -49,6 +50,8 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+                            minLength={3}
+                            maxLength={30}
                             required
                         />
                     </div>

@@ -14,6 +14,11 @@ export const isValidString = (value: string, minLength: number, maxLength: numbe
     return typeof value === 'string' && value.length >= minLength && value.length <= maxLength;
 };
 
+
+export const isValidPositiveNumber = (value: number): boolean => {
+    return typeof value === 'number' && Number.isInteger(value) && value > 0;
+};
+
 // Vérifie si le rôle de l'utilisateur est valide
 export const validateRoleAccess = (requiredRole: string, token:any): boolean => {
 

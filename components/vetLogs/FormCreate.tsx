@@ -9,26 +9,14 @@ const FormCreate: React.FC<FormCreateProps> = ({ animalId, onCreate }) => {
   const [animalState, setAnimalState] = useState('');
   const [foodOffered, setFoodOffered] = useState('');
   const [foodWeight, setFoodWeight] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Validation des contraintes
-    if (animalState.length < 3 || animalState.length > 100) {
-      alert('L\'état de l\'animal doit avoir entre 3 et 100 caractères.');
-      return;
-    }
-
-    if (foodOffered.length < 3 || foodOffered.length > 50) {
-      alert('La nourriture proposée doit avoir entre 3 et 50 caractères.');
-      return;
-    }
+    setError(null); 
 
     const parsedFoodWeight = parseFloat(foodWeight);
-    if (isNaN(parsedFoodWeight) || parsedFoodWeight <= 0) {
-      alert('Le grammage de la nourriture doit être un nombre supérieur à zéro.');
-      return;
-    }
 
     // formData object
     const formData = {
@@ -40,7 +28,6 @@ const FormCreate: React.FC<FormCreateProps> = ({ animalId, onCreate }) => {
 
     onCreate(formData);
 
-    // reset champ
     setAnimalState('');
     setFoodOffered('');
     setFoodWeight('');
@@ -48,6 +35,7 @@ const FormCreate: React.FC<FormCreateProps> = ({ animalId, onCreate }) => {
 
   return (
     <form onSubmit={handleSubmit} className="mt-4 w-full md:w-2/4 mt-6 text-secondary">
+      {error && <p className="text-red-500 mb-2">{error}</p>}
       <div className="mb-2">
         <label className="block text-sm font-medium">État de l&apos;animal</label>
         <input
@@ -84,11 +72,11 @@ const FormCreate: React.FC<FormCreateProps> = ({ animalId, onCreate }) => {
           placeholder="Grammage de la nourriture"
           required
           min="0"
-          step="INTEGER" 
+          step="INTEGER"
         />
       </div>
       
-        <button type="submit" className="bg-muted hover:bg-muted-foreground text-white font-semibold py-2 px-4 rounded-md w-full">Créer vetLog</button>
+      <button type="submit" className="bg-muted hover:bg-muted-foreground text-white font-semibold py-2 px-4 rounded-md w-full">Créer vetLog</button>
     </form>
   );
 };

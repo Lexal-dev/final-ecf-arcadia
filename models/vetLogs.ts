@@ -65,7 +65,7 @@ VetLog.init(
                     msg: 'Le champ grammage de la nourriture doit être un nombre.',
                 },
                 min: {
-                    args: [0],
+                    args: [1],
                     msg: 'Le champ grammage de la nourriture doit être supérieur à zéro.',
                 },
             },

@@ -23,7 +23,7 @@ export default function VetLogsList() {
   const [updatedVetLog, setUpdatedVetLog] = useState<VetLog | null>(null);
   const [loading, setLoading] = useState<boolean>(true)
   const token = sessionStorage.getItem('token');
-
+  
   const fetchAnimal = async (additionalParam: string | number) => {
     setLoading(true); 
     try {
@@ -261,7 +261,7 @@ export default function VetLogsList() {
                         <p className="font-bold text-lg mb-2">{selectedAnimal?.name}</p>
                         <p>Date : {formatDateTime(updatedVetLog?.createdAt)}</p>
                       </div>
-                      <FormUpdate onclose={onClose} vetLog={updatedVetLog} onUpdate={handleUpdateVetLog} />
+                      <FormUpdate onClose={onClose} vetLog={updatedVetLog} onUpdate={handleUpdateVetLog} />
                     </div>
                   </div>
                 </div>

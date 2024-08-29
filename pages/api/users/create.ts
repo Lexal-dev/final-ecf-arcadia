@@ -34,20 +34,20 @@ async function sendWelcomeEmail(email: string, username: string) {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    // extract Authorization
+    const token = req.headers.authorization?.split(' ')[1];
+    // role verification
+    if (!token || !validateRoleAccess('ADMIN', token)) {
+        return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+    }    
     if (req.method === 'POST') {
-        // extract Authorization
-        const token = req.headers.authorization?.split(' ')[1];
 
-        // role verification
-        if (!token || !validateRoleAccess('ADMIN', token)) {
-            return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
-        }
         const { email, password, role } = req.body;
 
         if (!email || !password || !role) {
             return res.status(400).json({ success: false, message: 'All fields are required.' });
         }
-
+        
         try {
             const existingUser = await User.findOne({ where: { email } });
             if (existingUser) {

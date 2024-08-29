@@ -21,6 +21,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
     description: habitat.description,
     comment: habitat.comment,
   });
+  const [error, setError] = useState<string | null>(null);
 
   const handleUpdateHabitat = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,10 +45,11 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
         onUpdateSuccess(); 
         toast.success(`Commentaire sur l'habitat ${formData.name} modifié avec succés`)
       } else {
-        console.error('Error updating habitat:', data.message);
+        setError(data.message || 'Une erreur est survenue lors de la modification ducommentaire.');
       }
     } catch (error) {
-      console.error('Error updating habitat:', error);
+      setError('Erreur lors de la création de l\'avis. Veuillez réessayer plus tard.');
+      console.error('Error updating comment:', error);
     }
   };
 
@@ -61,6 +63,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
 
 
         <form onSubmit={handleUpdateHabitat} className="flex flex-col justify-between h-full">
+        {error && (<div className="w-full text-center text-red-500"> {error}</div>)}
           <div className="mb-4 w-full">
             <div defaultValue={formData.name} className="w-full bg-muted hover:bg-background text-white p-2 border rounded mb-4">{formData.name}</div>
           </div>

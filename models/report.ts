@@ -35,6 +35,10 @@ Report.init(
                 notEmpty: {
                     msg: 'Le champ food ne peut pas être vide.',
                 },
+                len: {
+                    args: [3, 50],
+                    msg: "Le nom de la nourriture doit être comprise entre 3 et 50 caractères",
+                },
             },
         },
         quantity: {

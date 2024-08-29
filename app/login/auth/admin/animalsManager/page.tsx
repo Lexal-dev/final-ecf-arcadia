@@ -21,6 +21,8 @@ interface Animal {
   imageUrl: string[]; 
 }
 
+
+
 const AnimalsManager: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [animals, setAnimals] = useState<Animal[]>([]);

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Service from '@/models/service';
 import { ValidationError } from 'sequelize';
-import { validateRoleAccess } from '@/lib/security/validateUtils';
+import { isValidString, validateRoleAccess } from '@/lib/security/validateUtils';
 
 interface UpdateBody {
   name: string;
@@ -30,12 +30,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(404).json({ success: false, message: 'Service not found.' });
       }
     
-      if (name.length < 3 || name.length > 30) {
-        return res.status(400).json({ success: false, message: 'Name must be between 3 and 30 characters.' });
+      if (!isValidString(name, 3, 30)) {
+        return res.status(400).json({ success: false, message: 'Le nom de la nourriture doit être compris entre 3 et 50 caractére.' });
       }
-
-      if (description.length < 3 || description.length > 150) {
-        return res.status(400).json({ success: false, message: 'Description must be between 3 and 150 characters.' });
+      if (!isValidString(description, 3, 150)) {
+        return res.status(400).json({ success: false, message: 'La desicrption doit être compris entre 3 et 50 caractére.' });
       }
 
       // Update service

@@ -21,35 +21,37 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
     description: habitat.description,
     comment: habitat.comment,
   });
+  const [error, setError] = useState<string | null>(null);
 
-  const handleUpdateHabitat = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const token = sessionStorage.getItem('token');
-      const response = await fetch(`/api/habitats/update?id=${habitat.id}`, {
-        method: 'PUT',
-        headers:  
-        { 'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
+const handleUpdateHabitat = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError(null); 
 
-        body: JSON.stringify({
-          name: formData.name,
-          description: formData.description,
-          comment: formData.comment,
-        }),
-      });
+  try {
+    const token = sessionStorage.getItem('token');
+    const response = await fetch(`/api/habitats/update?id=${habitat.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        description: formData.description,
+        comment: formData.comment,
+      }),
+    });
 
-      const data = await response.json();
-      if (data.success) {
-        onUpdateSuccess();
-      } else {
-        console.error('Error updating habitat:', data.message);
-      }
-    } catch (error) {
-      console.error('Error updating habitat:', error);
+    const data = await response.json();
+    if (data.success) {
+      onUpdateSuccess();
+    } else {
+      setError(data.message || 'Erreur lors de la mise à jour de l\'habitat.');
     }
-  };
+  } catch (error:any) {
+    setError('Erreur de connexion à la base de données: ' + error.message);
+  }
+};
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
@@ -59,6 +61,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
           <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
         </div>
         <form onSubmit={handleUpdateHabitat} className="text-secondary">
+        {error && <p className="text-red-500 mb-4">{error}</p>}
           <div className="mb-4">
             <label className="block">Nom</label>
             <input

@@ -11,10 +11,10 @@ interface VetLog {
 interface FormUpdateProps {
   vetLog: VetLog | null;
   onUpdate: (formData: any) => void;
-  onclose: () => void; 
+  onClose: () => void;
 }
 
-const FormUpdate: React.FC<FormUpdateProps> = ({ vetLog, onUpdate, onclose }) => {
+const FormUpdate: React.FC<FormUpdateProps> = ({ vetLog, onUpdate, onClose }) => {
   const [formData, setFormData] = useState<VetLog>({
     id: vetLog?.id || 0,
     animalState: vetLog?.animalState || '',
@@ -23,16 +23,42 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ vetLog, onUpdate, onclose }) =>
     createdAt: vetLog ? new Date(vetLog.createdAt) : new Date(),
   });
 
+  const [error, setError] = useState<string | null>(null);
+
   const handleUpdateVetLog = async (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdate(formData);
-    onclose();
+    setError(null); // Réinitialiser les erreurs avant de valider
+
+    // Validation des contraintes
+    if (formData.animalState.length < 3 || formData.animalState.length > 100) {
+      setError('L\'état de l\'animal doit avoir entre 3 et 100 caractères.');
+      return;
+    }
+
+    if (formData.foodOffered.length < 3 || formData.foodOffered.length > 50) {
+      setError('La nourriture offerte doit avoir entre 3 et 50 caractères.');
+      return;
+    }
+
+    if (isNaN(formData.foodWeight) || formData.foodWeight <= 0) {
+      setError('Le poids de la nourriture doit être un nombre supérieur à zéro.');
+      return;
+    }
+
+    try {
+      // Simulation de l'appel API pour la mise à jour
+      await onUpdate(formData);
+      onClose();
+    } catch (err) {
+      setError('Une erreur est survenue lors de la mise à jour des données.');
+    }
   };
 
   return (
     <div className="w-full">
       <div className="p-6">
         <form onSubmit={handleUpdateVetLog} className="text-secondary">
+          {error && <p className="text-red-500 mb-4">{error}</p>}
           <div className="mb-4">
             <label className="block text-lg font-bold mb-2">État de l&apos;animal</label>
             <input
@@ -41,6 +67,8 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ vetLog, onUpdate, onclose }) =>
               placeholder="État de l'animal"
               value={formData.animalState}
               onChange={e => setFormData({ ...formData, animalState: e.target.value })}
+              minLength={3}
+              maxLength={50}
               required
             />
           </div>
@@ -52,6 +80,8 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ vetLog, onUpdate, onclose }) =>
               placeholder="Nourriture offerte"
               value={formData.foodOffered}
               onChange={e => setFormData({ ...formData, foodOffered: e.target.value })}
+              min="0"
+              step="INTEGER"
               required
             />
           </div>

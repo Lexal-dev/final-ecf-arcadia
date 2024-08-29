@@ -3,7 +3,7 @@ import Animal from '@/models/animal';
 import { UniqueConstraintError, ValidationError } from 'sequelize';
 import Specie from '@/models/specie';
 import Habitat from '@/models/habitat';
-import { validateRoleAccess } from '@/lib/security/validateUtils';
+import { isValidString, validateRoleAccess } from '@/lib/security/validateUtils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
       // extract Authorization
@@ -28,7 +28,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(400).json({ success: false, message: 'Name, specieId, habitatId, and state are required.' });
         return;
       }
-
+      if (!isValidString(name, 3, 30)) {
+        return res.status(400).json({ success: false, message: 'Le nom doit être compris entre 3 et 30 caractére.' });
+      } 
+      if (!isValidString(etat, 3, 100)) {
+        return res.status(400).json({ success: false, message: "L'etat doit être compris entre 3 et 100 caractére." });
+      } 
       // Check if the specieId and habitatId exist
       const specieExists = await Specie.findByPk(specieId);
       if (!specieExists) {

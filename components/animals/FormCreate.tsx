@@ -115,7 +115,6 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
             <div className="bg-foreground p-6 rounded shadow-md w-full md:w-1/2 text-secondary">
                 <div className='flex w-full justify-between mb-6'>
                     <h1 className='w-3/4 text-2xl sm:text-3xl font-bold'>Ajouter un Animal</h1>
-
                     <button onClick={onClose} className="w-1/4 flex justify-end text-red-500 hover:text-red-700"><MdClose size={36} /></button>
                 </div>
                     
@@ -129,6 +128,8 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
                             onChange={(e) => setName(e.target.value)}
                             className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
                             required
+                            minLength={3}
+                            maxLength={30}
                         />
                     </div>
                     <div className="mb-4">

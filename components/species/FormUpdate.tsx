@@ -14,7 +14,8 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ specie, onUpdateSuccess, onClos
   const [formData, setFormData] = useState({
     name: specie.name,
   });
-
+  const [error, setError] = useState<string | null>(null);
+  
   const handleUpdateHabitat = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -50,6 +51,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ specie, onUpdateSuccess, onClos
         </div>
 
         <form onSubmit={handleUpdateHabitat} className="text-secondary">
+        {error && (<div className="w-full text-center text-red-500"> {error}</div>)}
           <div className="mb-4">
             <label className="block">Nom</label>
             <input
@@ -57,6 +59,8 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ specie, onUpdateSuccess, onClos
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+              minLength={3}
+              maxLength={30}
               required
             />
           </div>

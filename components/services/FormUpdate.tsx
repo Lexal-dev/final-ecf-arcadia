@@ -20,8 +20,12 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ service, onUpdateSuccess, onClo
     description: service.description,
   });
 
+  const [serverError, setServerError] = useState<string | null>(null);
+
   const handleUpdateService = async (e: React.FormEvent) => {
     e.preventDefault();
+    setServerError(null); 
+
     try {
       const token = sessionStorage.getItem('token');
       const response = await fetch(`/api/services/update?id=${service.id}`, {
@@ -39,13 +43,13 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ service, onUpdateSuccess, onClo
       const data = await response.json();
       if (data.success) {
         onUpdateSuccess();
-        toast.success(`Le service ${formData.name} à été modifié avec succès`)
+        toast.success(`Le service ${formData.name} a été modifié avec succès`);
       } else {
-        console.error('Error updating service:', data.message);
-        console.error(`Le service n'a pas pu etre modifié. erreur :`, data.message)
+        setServerError(data.message);
       }
     } catch (error) {
-      console.error('Error updating service:', error)
+      console.error('Error updating service:', error);
+      setServerError('Une erreur est survenue lors de la mise à jour du service.');
     }
   };
 
@@ -57,6 +61,10 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ service, onUpdateSuccess, onClo
           <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>                
         </div>
         <form onSubmit={handleUpdateService} className="text-secondary">
+          {serverError && (
+            <p className='text-red-500 mb-4'>{serverError}</p>
+          )}
+
           <div className='mb-4'>
             <label className="block">Nom</label>
             <input
@@ -64,6 +72,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ service, onUpdateSuccess, onClo
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+              placeholder='Entrez le nom du service ..'
               required
             />             
           </div>

@@ -24,8 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             if (!isValidString(name, 3, 30)) {
                 return res.status(400).json({ success: false, message: 'Le nom doit être compris entre 3 et 30 caractére.' });
-            }
-
+              } 
 
             // Find the species and habitat IDs based on their names
             const specie = await Specie.findOne({ where: { id: specieName } });

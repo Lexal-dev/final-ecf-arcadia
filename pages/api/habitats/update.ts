@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Habitat from '@/models/habitat';
-import { validateRoleAccess } from '@/lib/security/validateUtils';
+import { isValidString, validateRoleAccess } from '@/lib/security/validateUtils';
 
 interface UpdateBody {
   name: string;
@@ -9,15 +9,14 @@ interface UpdateBody {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // extract Authorization
+  const token = req.headers.authorization?.split(' ')[1];
+  // role verification
+  if (!token || (!validateRoleAccess('ADMIN', token) && !validateRoleAccess('VETERINARIAN', token))) {
+      return res.status(403).json({ success: false, message: 'Access denied. Admins and VETERINARIAN only.' });
+  }
   if (req.method === 'PUT') {
 
-    // extract Authorization
-    const token = req.headers.authorization?.split(' ')[1];
-
-    // role verification
-    if (!token || (!validateRoleAccess('ADMIN', token) && !validateRoleAccess('VETERINARIAN', token))) {
-        return res.status(403).json({ success: false, message: 'Access denied. Admins and VETERINARIAN only.' });
-    }
     const { id } = req.query as { id: string };
     const { name, description, comment } = req.body as UpdateBody;
 
@@ -27,7 +26,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!habitat) {
         return res.status(404).json({ success: false, message: 'Habitat not found.' });
       }
-
+      if (!isValidString(name, 3, 30)) {
+        return res.status(400).json({ success: false, message: 'Le nom doit être compris entre 3 et 30 caractére.' });
+      } 
+      if (!isValidString(description, 3, 200)) {
+          return res.status(400).json({ success: false, message: 'Le description doit être compris entre 3 et 200 caractére.' });
+      }
+      if (!isValidString(comment, 3, 100)) {
+        return res.status(400).json({ success: false, message: 'Le commentaire doit être compris entre 3 et 100 caractére.' });
+      } 
       habitat.name = name;
       habitat.description = description;
       habitat.comment = comment;

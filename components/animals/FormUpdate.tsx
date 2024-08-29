@@ -36,7 +36,8 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
   });
   const [species, setSpecies] = useState<Specie[]>([]);
   const [habitats, setHabitats] = useState<Habitat[]>([]);
-
+  const [error, setError] = useState<string | null>(null);
+  
   useEffect(() => {
     const fetchSpecies = async (additionalParam: string) => {
       try {
@@ -47,6 +48,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
             setSpecies(data.species);
           } else {
             console.error('Echec de la récupération des données des espèces');
+            setError(error)
             setSpecies([]);
           }
         } else {
@@ -89,12 +91,15 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
   const handleUpdateAnimal = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Réinitialiser l'erreur avant de tenter la soumission
+    setError(null);
+  
     // Set default value for etat if it is empty
     const updatedData = {
       ...formData,
       etat: formData.etat || 'Bonne santé'
     };
-
+  
     try {
       const token = sessionStorage.getItem('token');
       const response = await fetch(`/api/animals/update?id=${animal.id}`, {
@@ -105,16 +110,19 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
         },
         body: JSON.stringify(updatedData),
       });
-
+  
       const data = await response.json();
-      if (data.success) {
+  
+      if (response.ok && data.success) {
         toast.success("Animal modifié avec succès");
         onUpdateSuccess();
       } else {
-        console.error('Error updating animal:', data.message);
+      
+        setError(data.message || "Une erreur est survenue lors de la mise à jour de l'animal.");
       }
-    } catch (error) {
-      console.error("Erreur de la modification de l'animal:", error);
+    } catch (error:any) {
+   
+      setError("Erreur de connexion à la base de données: " + error.message);
     }
   };
 
@@ -128,6 +136,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
           </button>
         </div>
         <form onSubmit={handleUpdateAnimal} className="text-secondary">
+        {error && <p className="text-red-500 mb-2">{error}</p>}
           <div className="mb-4">
             <label className="block">Nom</label>
             <input
@@ -136,6 +145,8 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
               required
+              minLength={3}
+              maxLength={50}
             />
           </div>
           <div className="mb-4">

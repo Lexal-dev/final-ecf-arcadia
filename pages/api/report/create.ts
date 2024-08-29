@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Report from '@/models/report';
-import { validateRoleAccess } from '@/lib/security/validateUtils';
+import { isValidString, validateRoleAccess, isValidPositiveNumber } from '@/lib/security/validateUtils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -17,6 +17,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!food || !quantity || !createdAt || !animalId) {
             return res.status(400).json({ success: false, message: "All fields are required to create a report." });
         }
+        if (!isValidString(food, 3, 50)) {
+            return res.status(400).json({ success: false, message: 'Le nom de la nourriture doit être compris entre 3 et 50 caractére.' });
+        }
+        if (!isValidPositiveNumber(quantity)) {
+            return res.status(400).json({ success: false, message: 'Le grammage doit être au dessus de 0 et un nombre entier' });
+        } 
 
         try {
             // Create new report

@@ -18,6 +18,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ hour, onClose, onUpdate }) => {
     close: hour.close,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null); // Ajout d'un état pour les erreurs
 
   useEffect(() => {
     setFormData({
@@ -35,6 +36,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ hour, onClose, onUpdate }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+    setServerError(null); // Réinitialiser les erreurs avant la soumission
 
     try {
       const token = sessionStorage.getItem('token');
@@ -53,9 +55,11 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ hour, onClose, onUpdate }) => {
         onUpdate(data.hour);
         onClose();
       } else {
+        setServerError(data.message); // Stocker le message d'erreur du serveur
         toast.error(`Erreur lors de la mise à jour de l'horaire: ${data.message}`);
       }
     } catch (error: any) {
+      setServerError(error.message); // Stocker le message d'erreur générique
       toast.error(`Erreur lors de la mise à jour de l'horaire: ${error.message}`);
     } finally {
       setIsLoading(false);
@@ -66,11 +70,14 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ hour, onClose, onUpdate }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
       <div className="w-full sm:w-1/2 bg-foreground p-6 rounded shadow-md text-secondary">
         <div className='flex w-full justify-between mb-6'>
-          <h1 className='w-full sm:text-3xl text-2xl font-bold'>Ajouter une heure</h1>
+          <h1 className='w-full sm:text-3xl text-2xl font-bold'>Modifier une heure</h1>
           <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
         </div>
         <form className="text-secondary" onSubmit={handleSubmit}>
-        
+          {serverError && (
+            <p className="text-red-500 mb-4">{serverError}</p> // Affichage de l'erreur
+          )}
+          
           <input
             type="text"
             name="days"

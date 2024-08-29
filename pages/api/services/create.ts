@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Service, { ServiceAttributes } from '@/models/service';
 import { ValidationError } from 'sequelize';
-import { validateRoleAccess } from '@/lib/security/validateUtils';
+import { isValidString, validateRoleAccess } from '@/lib/security/validateUtils';
 
 interface CreateBody {
   name: string;
@@ -9,14 +9,14 @@ interface CreateBody {
 }
 
 export default async function createService(req: NextApiRequest, res: NextApiResponse) {
+    // extract Authorization
+    const token = req.headers.authorization?.split(' ')[1]
+    // role verification
+    if (!token || (!validateRoleAccess('ADMIN', token))) {
+        return res.status(403).json({ success: false, message: 'Access denied. Admins and employees only.' });
+    }
   if (req.method === 'POST') {
-          // extract Authorization
-          const token = req.headers.authorization?.split(' ')[1];
-  
-          // role verification
-          if (!token || (!validateRoleAccess('ADMIN', token))) {
-              return res.status(403).json({ success: false, message: 'Access denied. Admins and employees only.' });
-          }
+
     try {
       await Service.sync({ alter: true }); 
 
@@ -27,12 +27,11 @@ export default async function createService(req: NextApiRequest, res: NextApiRes
         return res.status(400).json({ success: false, message: 'Name and description are required.' });
       }
 
-      if (name.length < 3 || name.length > 30) {
-        return res.status(400).json({ success: false, message: 'Name must be between 3 and 30 characters.' });
+      if (!isValidString(name, 3, 30)) {
+        return res.status(400).json({ success: false, message: 'Le nom de la nourriture doit être compris entre 3 et 50 caractére.' });
       }
-
-      if (description.length < 3 || description.length > 150) {
-        return res.status(400).json({ success: false, message: 'Description must be between 3 and 150 characters.' });
+      if (!isValidString(description, 3, 150)) {
+        return res.status(400).json({ success: false, message: 'La desicrption doit être compris entre 3 et 50 caractére.' });
       }
 
       // Create Service

@@ -1,22 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Avis, { AvisAttributes } from '@/models/avis';
 import { ValidationError } from 'sequelize';
+import { isValidString } from '@/lib/security/validateUtils';
 
 export default async function createAvis(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         try {
             const { pseudo, comment } = req.body;
 
-            if (!pseudo || pseudo.length < 3 || pseudo.length > 30) {
-                res.status(400).json({ success: false, message: 'The pseudonym must be between 3 and 30 characters long.' });
-                return;
-            }
-
-            if (!comment || comment.length < 3 || comment.length > 150) {
-                res.status(400).json({ success: false, message: 'The comment must be between 3 and 150 characters long.' });
-                return;
-            }
-
+            if (!isValidString(comment, 3, 150)) {
+                return res.status(400).json({ success: false, message: 'Le commentaire doit être compris entre 3 et 150 caractére.' });
+            } 
+            if (!isValidString(pseudo, 3, 30)) {
+                return res.status(400).json({ success: false, message: 'Le pseudo doit être compris entre 3 et 100 caractére.' });
+            } 
             const newAvis = await Avis.create({ pseudo, comment, isValid: false } as AvisAttributes);
 
             res.status(200).json({ success: true, message: 'Review created successfully.', avis: newAvis });

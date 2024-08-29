@@ -9,22 +9,22 @@ interface FormUpdateProps {
 }
 
 interface Animal {
-    id: number;
-    name: string;
-    etat: string;
-    specieId: string;
-    habitatId: string;
-    imageUrl: string[] ; 
-  }
+  id: number;
+  name: string;
+  etat: string;
+  specieId: string;
+  habitatId: string;
+  imageUrl: string[]; 
+}
 
 interface Specie {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 interface Habitat {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClose }) => {
@@ -43,15 +43,15 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
         const response = await fetch(`/api/species/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
         const data = await response.json();   
         if (response.ok) {
-            if (data.species) {
-                setSpecies(data.species);
-            } else {
-                console.error('Echec de la récupération des données des espèces');
-                setSpecies([]);
-            }
-        } else {
-            console.error('Echec de la récupération des données', data.error);
+          if (data.species) {
+            setSpecies(data.species);
+          } else {
+            console.error('Echec de la récupération des données des espèces');
             setSpecies([]);
+          }
+        } else {
+          console.error('Echec de la récupération des données', data.error);
+          setSpecies([]);
         }
       } catch (error) {
         console.error('Erreur de connexion à la base de données:', error);
@@ -65,13 +65,13 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
         const data = await response.json();
 
         if (response.ok) {
-            if (data.habitats) {
-                setHabitats(data.habitats);
-            } else {
-                console.error('Failed to fetch data: habitats not found');
-            }
+          if (data.habitats) {
+            setHabitats(data.habitats);
+          } else {
+            console.error('Failed to fetch data: habitats not found');
+          }
         } else {
-            console.error('Failed to fetch data:', data.error);
+          console.error('Failed to fetch data:', data.error);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -96,10 +96,12 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
     };
 
     try {
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`/api/animals/update?id=${animal.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(updatedData),
       });
@@ -109,12 +111,10 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
         toast.success("Animal modifié avec succès");
         onUpdateSuccess();
       } else {
-        console.error('Error updating habitat:', data.message);
-        toast.error('Erreur, animal non modifié.');
+        console.error('Error updating animal:', data.message);
       }
     } catch (error) {
       console.error("Erreur de la modification de l'animal:", error);
-      toast.error('Erreur, animal non modifié.');
     }
   };
 
@@ -138,34 +138,34 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
               required
             />
           </div>
-            <div className="mb-4">
-                <label className="block">Espèce</label>
-                
-                <select
-                    value={formData.specieId}
-                    onChange={(e) => setFormData({...formData, specieId: e.target.value})}
-                    className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
-                    required
-                >
-                    {species.map(specie => (
-                        <option key={specie.id} value={specie.id}>{specie.name}</option>
-                    ))}
-                </select>
-            </div>
-            <div className="mb-4">
-                <label className="block">Habitat</label>
-                <select
-                    value={formData.habitatId}
-                    onChange={(e) => setFormData({...formData, habitatId: e.target.value})}
-                    className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
-                    required
-                >
-                    {habitats.map(habitat => (
-                        <option key={habitat.id} value={habitat.id}>{habitat.name}</option>
-                    ))}
-                </select>
-
-            </div>
+          <div className="mb-4">
+            <label className="block">Espèce</label>
+            <select
+              value={formData.specieId}
+              onChange={(e) => setFormData({ ...formData, specieId: e.target.value })}
+              className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+              required
+            >
+              <option value="">Selectionnez une espèce</option>
+              {species.map(specie => (
+                <option key={specie.id} value={specie.id}>{specie.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block">Habitat</label>
+            <select
+              value={formData.habitatId}
+              onChange={(e) => setFormData({ ...formData, habitatId: e.target.value })}
+              className="w-full p-2 border rounded bg-muted hover:bg-background text-white"
+              required
+            >
+              <option value="">Selectionnez un habitat</option>
+              {habitats.map(habitat => (
+                <option key={habitat.id} value={habitat.id}>{habitat.name}</option>
+              ))}
+            </select>
+          </div>
           <button
             type="submit"
             className="w-full bg-muted hover:bg-background text-white py-2 px-4 rounded"

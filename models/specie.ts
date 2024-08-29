@@ -26,7 +26,7 @@ Specie.init(
             unique: true,
             validate: {
                 len: {
-                    args: [3, 50],
+                    args: [3, 30],
                     msg: "Le nom doit être compris entre 3 et 50 caractères",
                 },
             },

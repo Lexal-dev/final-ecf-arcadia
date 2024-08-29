@@ -20,12 +20,14 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
             setError('Le rôle sélectionné n\'est pas valide.');
             return;
         }
-
+        
+        const token = sessionStorage.getItem('token');
         const response = await fetch('/api/users/create', {
             method: 'POST',
-            headers: {
+            headers:    { 
                 'Content-Type': 'application/json',
-            },
+                'Authorization': `Bearer ${token}`,
+            },  
             body: JSON.stringify({ email, password, role }),
         });
 

@@ -3,8 +3,17 @@ import Animal from '@/models/animal';
 import Specie from '@/models/specie';
 import Habitat from '@/models/habitat';
 import { UniqueConstraintError, ValidationError } from 'sequelize';
+import { isValidString, validateRoleAccess } from '@/lib/security/validateUtils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    // extract Authorization
+    const token = req.headers.authorization?.split(' ')[1];
+
+    // role verification
+    if (!token || !validateRoleAccess('ADMIN', token)) {
+        return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+    }
+
     if (req.method === 'POST') {
         try {
             const { name, specieName, habitatName } = req.body;
@@ -13,6 +22,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(400).json({ success: false, message: 'Name, species name, habitat name, and state are required.' });
                 return;
             }
+            if (!isValidString(name, 3, 30)) {
+                return res.status(400).json({ success: false, message: 'Le nom doit être compris entre 3 et 30 caractére.' });
+            }
+
 
             // Find the species and habitat IDs based on their names
             const specie = await Specie.findOne({ where: { id: specieName } });

@@ -1,9 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Specie from '@/models/specie';
 import { ValidationError } from 'sequelize';
+import { validateRoleAccess } from '@/lib/security/validateUtils';
 
 export default async function createSpecie(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
+    // extract Authorization
+    const token = req.headers.authorization?.split(' ')[1];
+
+    // role verification
+    if (!token || !validateRoleAccess('ADMIN', token)) {
+        return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+    }        
         try {
             await Specie.sync({ alter: true });
 

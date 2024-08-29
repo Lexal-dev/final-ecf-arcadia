@@ -81,10 +81,12 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
         setLoading(true);
 
         try {
+            const token = sessionStorage.getItem('token');
             const response = await fetch('/api/animals/create', {
                 method: 'POST',
-                headers: {
+                headers:{ 
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ name, specieName, habitatName }),
             });

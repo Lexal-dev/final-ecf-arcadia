@@ -28,6 +28,7 @@ export default function ImageHabitatManager() {
     const [currentTableUrl, setCurrentTableUrl] = useState<string[]>([]);
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [images, setImages] = useState<ImageData[]>([]);
+    const token = sessionStorage.getItem('token');
 
     const fetchListAll = async () => {
         try {
@@ -46,7 +47,6 @@ export default function ImageHabitatManager() {
             console.error('Erreur lors de la récupération des fichiers :', error);
         }
     };
-    
     
     const fetchHabitats = async (additionalParam: string) => {
         try {
@@ -143,9 +143,11 @@ export default function ImageHabitatManager() {
         try {
             const response = await fetch(`/api/habitats/updateUrl?id=${habitatId}`, {
                 method: 'PUT',
-                headers: {
+                headers:  { 
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
+           
                 body: JSON.stringify({ imageUrl }),
             });
 
@@ -180,9 +182,10 @@ export default function ImageHabitatManager() {
 
             const response = await fetch(`/api/habitats/updateUrl?id=${habitatId}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
+                headers:  { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
+           
                 body: JSON.stringify({ imageUrl: updatedUrls }),
             });
 

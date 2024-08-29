@@ -39,11 +39,13 @@ const FormUpdate: React.FC<ServiceUpdateFormProps> = ({ service, onUpdateSuccess
     }
 
     try {
+      const token = sessionStorage.getItem('token')
       const response = await fetch(`/api/services/update?id=${service.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-        },
+          'Authorization': `Bearer ${token}`,
+      },
         body: JSON.stringify({
           name: formData.name,
           description: formData.description,

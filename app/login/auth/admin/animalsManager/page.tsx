@@ -28,6 +28,7 @@ const AnimalsManager: React.FC = () => {
   const [modalCreate, setModalCreate] = useState<boolean>(false);
   const [modalUpdate, setModalUpdate] = useState<boolean>(false);
   const router = useRouter();
+ 
 
   const fetchAnimals = async (additionalParam: string) => {
     try {
@@ -77,10 +78,14 @@ const AnimalsManager: React.FC = () => {
     }
   
     // Remove the animal from the database via the Next.js API
-    try {
+    try { 
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`/api/animals/delete?id=${animalId}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers:  { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+         },
       });
   
       if (response.ok || response.status === 404) {

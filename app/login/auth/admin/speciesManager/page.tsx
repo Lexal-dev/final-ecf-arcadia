@@ -47,11 +47,12 @@ export default function SpeciesManager() {
 
     const handleDelete  = async (specie : Specie) => {
         const specieId = Number(specie.id);
-
+        const token = sessionStorage.getItem('token')
         const response = await fetch(`/api/species/delete?id=${specieId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
         });
 

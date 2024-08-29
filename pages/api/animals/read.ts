@@ -4,7 +4,7 @@ import Specie from '@/models/specie';
 import Report from '@/models/report';
 import Habitat from '@/models/habitat';
 import VetLog from '@/models/vetLogs';
-import { redirectIfNeeded } from '@/lib/security/redirectApi';
+import { redirectIfNeeded } from '@/lib/security/validateUtils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 

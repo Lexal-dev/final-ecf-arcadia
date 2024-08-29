@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Hour from '@/models/hour';
 import FormUpdate from '@/components/hours/FormUpdate'; 
-import FormCreate from '@/components/hours/FormCreate'; 
+// import FormCreate from '@/components/hours/FormCreate'; 
 import { MdEdit } from 'react-icons/md';
 
 import Loading from '@/components/Loading'; 
@@ -10,7 +10,7 @@ import Loading from '@/components/Loading';
 export default function HoursManager() {
     const [hours, setHours] = useState<Hour[]>([]);
     const [selectedHour, setSelectedHour] = useState<Hour | null>(null);
-    const [isCreateOpen, setIsCreateOpen] = useState(false);
+//    const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [loading, setLoading] = useState(true)
 
     const fetchHours = async (additionalParam: string | number) => {
@@ -51,7 +51,6 @@ export default function HoursManager() {
 
     const handleClose = () => {
         setSelectedHour(null);
-        setIsCreateOpen(false);
     };
 
     return (

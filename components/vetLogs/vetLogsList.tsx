@@ -22,6 +22,7 @@ export default function VetLogsList() {
   const [updateModal, setUpdateModal] = useState<boolean>(false); 
   const [updatedVetLog, setUpdatedVetLog] = useState<VetLog | null>(null);
   const [loading, setLoading] = useState<boolean>(true)
+  const token = sessionStorage.getItem('token');
 
   const fetchAnimal = async (additionalParam: string | number) => {
     setLoading(true); 
@@ -58,6 +59,7 @@ export default function VetLogsList() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
@@ -89,16 +91,16 @@ export default function VetLogsList() {
   };
 
   const onClose = () => {
-    console.log("test")
     setShowCreateForm(false)
   };
 
   const handleCreateVetLog = (formData: any) => {
     fetch('/api/vetLogs/create', {
       method: 'POST',
-      headers: {
+      headers:  { 
         'Content-Type': 'application/json',
-      },
+        'Authorization': `Bearer ${token}`,
+        },
       body: JSON.stringify(formData),
     })
       .then(response => response.json())
@@ -118,6 +120,9 @@ export default function VetLogsList() {
     try {
       const response = await fetch(`/api/vetLogs/delete?id=${id}`, {
         method: 'DELETE',
+        headers:  { 
+          'Authorization': `Bearer ${token}`,
+          },
       });
       const data = await response.json();
       if (data.success) {

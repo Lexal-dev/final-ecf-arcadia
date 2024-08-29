@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Service from '@/models/service';
-import { redirectIfNeeded } from '@/lib/security/redirectApi';
+import { redirectIfNeeded } from '@/lib/security/validateUtils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const additionalParam = req.query.additionalParam;
+    const additionalParam = req.query.additionalParam as string;
+
     if (additionalParam !== 'services') {
         if (redirectIfNeeded(req, res, '/api/services/read', '/services')) {
             return;

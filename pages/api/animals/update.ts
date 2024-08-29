@@ -3,8 +3,16 @@ import Animal from '@/models/animal';
 import { UniqueConstraintError, ValidationError } from 'sequelize';
 import Specie from '@/models/specie';
 import Habitat from '@/models/habitat';
+import { validateRoleAccess } from '@/lib/security/validateUtils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+      // extract Authorization
+      const token = req.headers.authorization?.split(' ')[1];
+
+      // role verification
+      if (!token || !validateRoleAccess('ADMIN', token)) {
+          return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+      }
   const id = typeof req.query.id === 'string' ? req.query.id : undefined;
 
   if (!id) {

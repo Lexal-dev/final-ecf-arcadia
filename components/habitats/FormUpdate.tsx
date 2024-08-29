@@ -25,11 +25,14 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
   const handleUpdateHabitat = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`/api/habitats/update?id=${habitat.id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+        headers:  
+        { 'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
+
         body: JSON.stringify({
           name: formData.name,
           description: formData.description,

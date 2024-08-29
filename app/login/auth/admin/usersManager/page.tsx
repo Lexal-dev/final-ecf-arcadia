@@ -14,20 +14,29 @@ export default function UsersManager() {
     const [showForm, setShowForm] = useState<boolean>(false);
     const [showUpdateForm, setShowUpdateForm] = useState<boolean>(false); 
     const [selectedUser, setSelectedUser] = useState<User | null>(null); 
+    const token = sessionStorage.getItem('token');
 
     const fetchUsers = async (additionalParam: string | number) => {
         try {
-            const response = await fetch(`/api/users/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`)
+            const response = await fetch(`/api/users/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`, {
+                method: 'GET',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+    
             const data = await response.json();
+    
             if (data.success) {
-                // Filter users to exclude administrators
+                // Filtrer les utilisateurs pour exclure les administrateurs
                 const filteredUsers = data.users.filter((user: User) => user.role !== 'ADMIN');
                 setUsers(filteredUsers);
             } else {
-                console.error(data.message || 'Failed to fetch users');
+                console.error(data.message || 'Échec de la récupération des utilisateurs');
             }
         } catch (error) {
-            console.error('Error fetching users:', error);
+            console.error('Erreur lors de la récupération des utilisateurs:', error);
         } finally {
             setLoading(false);
         }
@@ -42,6 +51,10 @@ export default function UsersManager() {
         try {
             const response = await fetch(`/api/users/delete?id=${id}`, {
                 method: 'DELETE',
+                headers:    { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },            
             });
             const data = await response.json();
             if (data.success) {
@@ -79,7 +92,7 @@ export default function UsersManager() {
     };
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200x]'>
+        <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
             <Loading loading={loading}>
                 <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire Utilisateurs</h1>
                 <button

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { redirectIfNeeded } from '@/lib/security/redirectApi';
+import { redirectIfNeeded } from '@/lib/security/validateUtils';
 import Habitat from '@/models/habitat';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

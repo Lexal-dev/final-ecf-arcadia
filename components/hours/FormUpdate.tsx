@@ -37,10 +37,12 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ hour, onClose, onUpdate }) => {
     setIsLoading(true);
 
     try {
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`/api/hours/update`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });

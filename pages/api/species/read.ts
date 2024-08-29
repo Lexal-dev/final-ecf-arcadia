@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Specie from '@/models/specie';
-import { redirectIfNeeded } from '@/lib/security/redirectApi';
+import { redirectIfNeeded } from '@/lib/security/validateUtils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     

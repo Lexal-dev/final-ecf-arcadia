@@ -1,11 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Animal from '@/models/animal';
+import { validateRoleAccess } from '@/lib/security/validateUtils';
 
 interface UpdateUrlBody {
     imageUrl: string[];
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+        // extract Authorization
+        const token = req.headers.authorization?.split(' ')[1];
+
+        // role verification
+        if (!token || !validateRoleAccess('ADMIN', token)) {
+            return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+        }
   if (req.method === 'PUT') {
       const { id } = req.query as { id: string };
       const { imageUrl } = req.body as UpdateUrlBody;

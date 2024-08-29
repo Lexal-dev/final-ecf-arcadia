@@ -15,7 +15,8 @@ export default function AvisManager() {
     const [avisList, setAvisList] = useState<Avis[]>([]);
     const [filter, setFilter] = useState<'all' | 'valid' | 'invalid'>('all');
     const [loading, setLoading] = useState<boolean>(true)
-
+    const token = sessionStorage.getItem('token');
+    
     const fetchAvis = async (additionalParam: string | number) => {
         setLoading(true);
         try {
@@ -58,6 +59,7 @@ export default function AvisManager() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ isValid: !avis.isValid }),
             });
@@ -79,6 +81,9 @@ export default function AvisManager() {
         try {
             const response = await fetch(`/api/avis/delete?id=${avis.id}`, {
                 method: 'DELETE',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                },
             });
 
             const data = await response.json();

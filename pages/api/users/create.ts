@@ -2,16 +2,14 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 import User from '@/models/user';
 import { hashPassword } from '@/lib/security/passwordUtils';
+import { validateRoleAccess } from '@/lib/security/validateUtils';
 
 async function sendWelcomeEmail(email: string, username: string) {
     try {
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: parseInt(process.env.SMTP_PORT || '587'),
-            secure: false,
-            tls: {
-                ciphers: 'SSLv3',
-            },
+            secure: process.env.SMTP_PORT === '465', // True if port is 465, else false
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS,
@@ -37,6 +35,13 @@ async function sendWelcomeEmail(email: string, username: string) {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
+        // extract Authorization
+        const token = req.headers.authorization?.split(' ')[1];
+
+        // role verification
+        if (!token || !validateRoleAccess('ADMIN', token)) {
+            return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+        }
         const { email, password, role } = req.body;
 
         if (!email || !password || !role) {

@@ -25,11 +25,14 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ user, onUpdateSuccess, onClose 
   const handleUpdateUser = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const token = sessionStorage.getItem('token');
       const response = await fetch(`/api/users/update?id=${user.id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        
+        headers:    { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+        },   
         body: JSON.stringify({
           email: formData.email,
           role: formData.role,

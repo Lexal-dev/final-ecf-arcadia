@@ -18,10 +18,12 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ specie, onUpdateSuccess, onClos
   const handleUpdateHabitat = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const token = sessionStorage.getItem('token')
       const response = await fetch(`/api/species/update?id=${specie.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: formData.name,

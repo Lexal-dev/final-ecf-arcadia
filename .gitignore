@@ -46,3 +46,6 @@ lib/db/postgreeSQL
 
 # Ignorer le fichier config/config.json
 /config/config.json
+
+/pages/api/hours/create.ts
+/page/api/hours/delete.ts

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Habitat from '@/models/habitat';
+import { validateRoleAccess } from '@/lib/security/validateUtils';
 
 interface UpdateBody {
   name: string;
@@ -9,6 +10,14 @@ interface UpdateBody {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'PUT') {
+
+    // extract Authorization
+    const token = req.headers.authorization?.split(' ')[1];
+
+    // role verification
+    if (!token || (!validateRoleAccess('ADMIN', token) && !validateRoleAccess('VETERINARIAN', token))) {
+        return res.status(403).json({ success: false, message: 'Access denied. Admins and VETERINARIAN only.' });
+    }
     const { id } = req.query as { id: string };
     const { name, description, comment } = req.body as UpdateBody;
 

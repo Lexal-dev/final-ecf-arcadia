@@ -72,9 +72,13 @@ const HabitatsManager: React.FC = () => {
       
         // Delete habitat from database via Next.js API
         try {
+          const token = sessionStorage.getItem('token');
           const response = await fetch(`/api/habitats/delete?id=${habitatId}`, {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
+            headers:  { 'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+     
           });
       
           if (response.ok || response.status === 404) {

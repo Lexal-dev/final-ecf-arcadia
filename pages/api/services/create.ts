@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Service, { ServiceAttributes } from '@/models/service';
 import { ValidationError } from 'sequelize';
+import { validateRoleAccess } from '@/lib/security/validateUtils';
 
 interface CreateBody {
   name: string;
@@ -9,6 +10,13 @@ interface CreateBody {
 
 export default async function createService(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
+          // extract Authorization
+          const token = req.headers.authorization?.split(' ')[1];
+  
+          // role verification
+          if (!token || (!validateRoleAccess('ADMIN', token))) {
+              return res.status(403).json({ success: false, message: 'Access denied. Admins and employees only.' });
+          }
     try {
       await Service.sync({ alter: true }); 
 

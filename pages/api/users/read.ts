@@ -1,11 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Op } from 'sequelize';
-import { redirectIfNeeded } from '@/lib/security/redirectApi';
+import { redirectIfNeeded, validateRoleAccess } from '@/lib/security/validateUtils';
 import User from '@/models/user';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const additionalParam = req.query.additionalParam;
+    // extract Authorization
+    const token = req.headers.authorization?.split(' ')[1];
 
+    // role verification
+    if (!token || !validateRoleAccess('ADMIN', token)) {
+        return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+    }
     if (additionalParam !== 'users') {
         if (redirectIfNeeded(req, res, '/api/users/read', '/')) {
             return;

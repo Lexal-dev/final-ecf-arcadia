@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Avis from '@/models/avis';
 import { ValidationError } from 'sequelize';
+import { validateRoleAccess } from '@/lib/security/validateUtils';
 
 interface UpdateBody {
     isValid: boolean;
@@ -8,6 +9,13 @@ interface UpdateBody {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'PUT') {
+        // extract Authorization
+        const token = req.headers.authorization?.split(' ')[1];
+
+        // role verification
+        if (!token || (!validateRoleAccess('ADMIN', token) && !validateRoleAccess('EMPLOYEE', token))) {
+            return res.status(403).json({ success: false, message: 'Access denied. Admins and employees only.' });
+        }
         const { id } = req.query as { id: string };
         const { isValid } = req.body as UpdateBody;
 

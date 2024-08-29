@@ -62,10 +62,13 @@ export default function  FoodConsumptionManager(){
     const createdAt = new Date().toISOString();
 
     try {
+      const token = sessionStorage.getItem('token');
       const response = await fetch('/api/report/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+              
         },
         body: JSON.stringify({
           food,

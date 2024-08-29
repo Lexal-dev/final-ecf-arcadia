@@ -7,7 +7,6 @@ const CheckPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log('Redirection vers /home');
     router.replace('/home');
   }, [router]);
 

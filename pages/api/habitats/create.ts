@@ -1,10 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Habitat from '@/models/habitat';
 import { ValidationError } from 'sequelize';
+import { validateRoleAccess } from '@/lib/security/validateUtils';
 
 export default async function createHabitat(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
+            // extract Authorization
+            const token = req.headers.authorization?.split(' ')[1];
+            // role verification
+            if (!token || !validateRoleAccess('ADMIN', token)) {
+                return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+            }
         try {
+            
             await Habitat.sync({ alter: true }); // Synchronize the model with the database if needed
 
             const { name, description, comment } = req.body;

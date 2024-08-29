@@ -29,7 +29,7 @@ export default function ImageAnimalsManager() {
     const [currentTableUrl, setCurrentTableUrl] = useState<string[]>([]);
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [images, setImages] = useState<ImageData[]>([]);
-
+    const token = sessionStorage.getItem('token');
 
     const fetchListAll = async () => {
         try {
@@ -148,6 +148,7 @@ export default function ImageAnimalsManager() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ imageUrl: selectedImage}),
             });
@@ -183,6 +184,7 @@ export default function ImageAnimalsManager() {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,   
                 },
                 body: JSON.stringify({ imageUrl: updatedUrls }),
             });
@@ -196,7 +198,7 @@ export default function ImageAnimalsManager() {
                 throw new Error(data.message || 'Failed to update image URL');
             }
         } catch (error) {
-            console.error('Erreur lors de la suppression de l\'image :', error);
+            console.error('Failed to delete image :', error);
         }
     };
 

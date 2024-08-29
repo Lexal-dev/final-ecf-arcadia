@@ -14,10 +14,12 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
+        const token = sessionStorage.getItem('token')
         const response = await fetch('/api/species/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({ name }),
         });

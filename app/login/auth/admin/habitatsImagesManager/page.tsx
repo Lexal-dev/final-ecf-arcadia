@@ -211,7 +211,7 @@ export default function ImageHabitatManager() {
     return (
         <main className='flex flex-col items-center py-12 px-2 min-h-[200x]'>
             <Loading loading={loading}>
-                <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire des images : habitats</h1>
+                <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Gestion des images : habitats</h1>
                 <div className='overflow-x-auto w-full flex flex-col items-center'>
                 <table className='w-full md:w-2/3'>
                     <thead className='bg-muted-foreground'>

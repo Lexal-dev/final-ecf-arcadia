@@ -9,8 +9,8 @@
     "lint": "next lint",
     "drop-db": "node lib/db/mySQL/deleteDb.mjs",
     "create-db": "node lib/db/mySQL/createDb.mjs",
-    "insert-data": "node lib/db/mySQL/insertData.mjs"
-    
+    "insert-data": "node lib/db/mySQL/insertData.mjs",
+    "insert-migra": "npx sequelize-cli db:migrate"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

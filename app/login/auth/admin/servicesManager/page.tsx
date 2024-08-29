@@ -78,7 +78,7 @@ export default function ServicesManager() {
     return (
         <main className='flex flex-col items-center w-full py-12 px-1'>
             <Loading loading={loading}>
-                <h1 className='text-2xl mb-6 font-bold'>Gestionnaire Services</h1>
+                <h1 className='text-2xl mb-6 font-caption font-bold'>Gestion des Services</h1>
                 <button onClick={openCreateForm} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
                     Ajouter un Service
                 </button>

@@ -45,24 +45,29 @@ const SpaceNav: React.FC = () => {
             // Route Admin 
             { name: "Dashboard", path: "/login/auth/admin/dashboard", roles: ["ADMIN"], active: false },
             { name: "Utilisateurs", path: "/login/auth/admin/usersManager", roles: ["ADMIN"], active: false },
+            { name: "Services", path: "/login/auth/admin/servicesManager", roles: ["ADMIN"], active: false },
+
             { name: "Animaux", path: "/login/auth/admin/animalsManager", roles: ["ADMIN"], active: false },
             { name: "Animaux-Images", path: "/login/auth/admin/animalsImagesManager", roles: ["ADMIN"], active: false },
-            { name: "Rapports-Vétérinaire", path: "/login/auth/admin/showVetLogs", roles: ["ADMIN"], active: false },
+            { name: "Rapports vétérinaire", path: "/login/auth/admin/showVetLogs", roles: ["ADMIN"], active: false },
+
             { name: "Habitats", path: "/login/auth/admin/habitatsManager", roles: ["ADMIN"], active: false },
             { name: "Habitats-Images", path: "/login/auth/admin/habitatsImagesManager", roles: ["ADMIN"], active: false },
-            { name: "Services-Manager", path: "/login/auth/admin/servicesManager", roles: ["ADMIN"], active: false },
-            { name: "Horraires", path: "/login/auth/admin/hoursManager", roles: ["ADMIN"], active: false },
             { name: "Espèces", path: "/login/auth/admin/speciesManager", roles: ["ADMIN"], active: false },
 
+            { name: "Horraires", path: "/login/auth/admin/hoursManager", roles: ["ADMIN"], active: false },
+            
+
             // Route Employee 
+            { name: "Rapports-Nourritures", path: "/login/auth/employee/foodConsumptionManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
             { name: "Avis", path: "/login/auth/employee/avisManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
             { name: "Services", path: "/login/auth/employee/servicesManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
-            { name: "Rapports-Nourritures", path: "/login/auth/employee/foodConsumptionManager", roles: ["EMPLOYEE", "ADMIN"], active: false },
+           
 
             // Route Veterinarian
-            { name: "Rapports-Animalié", path: "/login/auth/veterinarian/vetLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
+            { name: "Rapports", path: "/login/auth/veterinarian/vetLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
             { name: "Rapports-Employés", path: "/login/auth/veterinarian/employLogsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
-            { name: "Habitats-Commentaire", path: "/login/auth/veterinarian/habCommentsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
+            { name: "Commentaire habitat", path: "/login/auth/veterinarian/habCommentsManager", roles: ["VETERINARIAN", "ADMIN"], active: false },
         ];
 
         const updateNavItems = spaceNav.map(item => ({
@@ -120,9 +125,9 @@ const SpaceNav: React.FC = () => {
                                         )}
                                     </h3>
                                     {expandedSection === role && (
-                                        <ul className="flex flex-wrap items-center justify-center md:justify-between gap-4 pt-2 w-full md:w-3/4 mb-6">
+                                        <ul className="flex flex-wrap justify-between gap-4 pt-2 w-full px-6">
                                             {groupedNavItems[role].map((navItem, index) => (
-                                                <li key={index} className="w-1/3 md:w-1/4 p-2 text-sm md:text-lg font-semibold hover:text-secondary">
+                                                <li key={index} className="w-1/3 md:w-1/4 p-2 text-sm md:text-lg font-semibold hover:text-secondary text-center">
                                                     <Link href={navItem.path} className={`block ${navItem.active ? 'text-secondary' : ''}`}>
                                                         {navItem.name}
                                                     </Link>

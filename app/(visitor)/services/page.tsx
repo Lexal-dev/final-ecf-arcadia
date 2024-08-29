@@ -71,7 +71,7 @@ const ServicePage: React.FC = () => {
 
     return (
         <main className='flex flex-col items-center py-12 px-1 md:p-12 gap-6 min-h-[300px]'>
-            <h1 className='text-4xl font-bold mb-10 text-center'>Services disponibles</h1>
+            <h1 className='text-4xl font-bold font-caption mb-10 text-center'>Nos services disponibles</h1>
             <Loading loading={loading}>
             
             <section className='bg-muted p-6 rounded-lg border border-slate-200'>

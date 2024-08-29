@@ -62,7 +62,7 @@ export default function Header() {
           <FaRegUserCircle size="32px" className="hover:text-yellow-300" />
         </Link>
       </nav>
-      <h1 className="font-bold text-white text-4xl text-center">Arcadia</h1>
+      <h1 className="font-bold text-white text-4xl text-center">ARCADIA</h1>
     </header>
   );
 }

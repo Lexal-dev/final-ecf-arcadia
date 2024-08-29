@@ -165,7 +165,7 @@ const HabitatsManager: React.FC = () => {
     return (
         <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
                 <Loading loading={loading}>
-                <h1 className='text-3xl mb-4 font-bold'>Gestionnaire des habitats</h1>
+                <h1 className='text-3xl mb-4 font-caption font-bold'>Gestion des habitats</h1>
                 <button onClick={()=> {setModalCreate(true)}} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>Ajouter un habitat</button>
                 <div className='overflow-x-auto w-full flex flex-col items-center'>
                    

@@ -92,7 +92,7 @@ export default function ShowAnimals() {
   return (
     <div className='min-h-[250px] w-full flex flex-col items-center'>
       <Loading loading={loading}>
-        <h2 className='text-3xl font-bold mb-6 text-center'>Liste des animaux</h2>
+        <h2 className='text-3xl font-bold font-caption mb-6 text-center'>Liste des animaux</h2>
         <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
           <option value=''>Sélectionnez un habitat</option>
           {habitatIds.map((habitatId) => (

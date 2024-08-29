@@ -162,7 +162,7 @@ const AnimalsManager: React.FC = () => {
     
       <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
         <Loading loading={loading}>
-        <h1 className=' sm:text-3xl text-2xl mb-4 font-bold'>Gestionnaire des animaux</h1>
+        <h1 className=' sm:text-3xl text-2xl mb-4 font-caption font-bold'>Gestion des animaux</h1>
           <button onClick={() => setModalCreate(true)} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
             Ajouter un animal
           </button>

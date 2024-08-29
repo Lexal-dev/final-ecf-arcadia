@@ -166,7 +166,7 @@ export default function VetLogsList() {
   return (
     <main className="w-full flex flex-col items-center ">
       <Loading loading={loading}>
-      <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Rapport vétérinaire par animaux</h1>
+      <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Rapports vétérinaire</h1>
       <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
         <option value="">Sélectionnez un habitat</option>
         {habitats.map(habitat => (

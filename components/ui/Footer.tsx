@@ -41,7 +41,9 @@ export default function Footer() {
 
     return (
         <footer className="flex flex-col items-center gap-3 p-3 w-full bg-gray-800 text-white bottom-0 min-h-[400px]">
+            <h6 className='text-3xl font-bold font-caption'>Horraires</h6>
             <div className="flex justify-center overflow-x-auto w-full">
+                
                 <table className="w-full lg:w-2/3 border-gray-200 shadow-md">
                     <thead>
                         <tr className="border bg-gray-900">

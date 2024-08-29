@@ -103,7 +103,7 @@ export default function FoodConsumptionManager() {
   return (
     <main className='w-full flex flex-col justify-center px-2 items-center py-6'>
       <Loading loading={loading}>
-        <h1 className='sm:text-3xl text-2xl mb-4 font-bold'>Rapport de nourriture par animal</h1>
+        <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Rapport de nourriture par animal</h1>
 
         <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
           <option value="">Tous les habitats</option>

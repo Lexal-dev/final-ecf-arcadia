@@ -124,7 +124,7 @@ export default function VetLogsAdminList() {
   return (
     <div className=''>
       <Loading loading={loading}>
-        <h1 className="sm:text-3xl text-2xl font-bold mb-12 text-center">Rapports vétérinaires</h1>
+        <h1 className="sm:text-3xl text-2xl font-caption font-bold mb-12 text-center">Rapports vétérinaires</h1>
         <div className="w-full flex flex-col md:flex-row gap-x-6">
           <div className="w-full flex flex-col items-center md:items-start mb-6 md:mb-0 items-start md:w-1/4">
             <div className="flex flex-col items-start">
@@ -160,7 +160,6 @@ export default function VetLogsAdminList() {
 
           <div className="w-full md:w-3/4">
             <div className="flex flex-col items-center">
-              <h2 className="sm:text-xl text-lg font-bold mb-2">RAPPORTS</h2>
               <input
                 type="date"
                 className="p-2 border rounded-md bg-gray-100 shadow-md mb-2 text-secondary"

@@ -1,7 +1,8 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { MdClose } from 'react-icons/md';
+
 interface FormUpdateProps {
   habitat: Habitat; 
   onUpdateSuccess: () => void; 
@@ -16,15 +17,19 @@ interface Habitat {
 }
 
 const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClose }) => {
+  
   const [formData, setFormData] = useState({
     name: habitat.name,
     description: habitat.description,
     comment: habitat.comment,
   });
+
   const [error, setError] = useState<string | null>(null);
 
   const handleUpdateHabitat = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); // Réinitialiser les erreurs avant la validation
+
     try {
       const token = sessionStorage.getItem('token');
       const response = await fetch(`/api/habitats/update?id=${habitat.id}`, {
@@ -39,36 +44,33 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
             comment: formData.comment,
         }),
       });
-
       const data = await response.json();
       if (data.success) {
         onUpdateSuccess(); 
-        toast.success(`Commentaire sur l'habitat ${formData.name} modifié avec succés`)
+        toast.success(`Commentaire sur l'habitat ${formData.name} modifié avec succès`);
       } else {
-        setError(data.message || 'Une erreur est survenue lors de la modification ducommentaire.');
+        setError(data.message || 'Une erreur est survenue lors de la mise à jour.');
       }
     } catch (error) {
-      setError('Erreur lors de la création de l\'avis. Veuillez réessayer plus tard.');
-      console.error('Error updating comment:', error);
+      setError('Une erreur est survenue lors de la mise à jour.');
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-1">
-      <div className="w-full sm:w-1/2 bg-foreground p-6 rounded shadow-md  text-secondary">
+      <div className="w-full sm:w-1/2 bg-foreground p-6 rounded shadow-md text-secondary">
         <div className='flex w-full justify-between mb-6'>
           <h1 className='w-full sm:text-3xl text-2xl font-bold'>Ajouter un commentaire</h1>
           <button onClick={onClose} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
         </div>
 
-
         <form onSubmit={handleUpdateHabitat} className="flex flex-col justify-between h-full">
-        {error && (<div className="w-full text-center text-red-500"> {error}</div>)}
+          {error && <p className="text-red-500 mb-4">{error}</p>}
           <div className="mb-4 w-full">
-            <div defaultValue={formData.name} className="w-full bg-muted hover:bg-background text-white p-2 border rounded mb-4">{formData.name}</div>
+            <div className="w-full bg-muted hover:bg-background text-white p-2 border rounded mb-4">{formData.name}</div>
           </div>
           <div className="mb-4 w-full">
-            <div defaultValue={formData.description} className="w-full bg-muted hover:bg-background text-white p-2 border rounded mb-4">{formData.description}</div>
+            <div className="w-full bg-muted hover:bg-background text-white p-2 border rounded mb-4">{formData.description}</div>
           </div>
 
           <div className="mb-4">
@@ -88,7 +90,6 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
             Mettre à Jour
           </button>
         </form>
-        
       </div>
     </div>
   );

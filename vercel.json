@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; connect-src 'self' https://firebasestorage.googleapis.com https://firestore.googleapis.com; script-src 'self' 'unsafe-inline' https://trusted.cdn.com; style-src 'self' 'unsafe-inline';"
+         "value": "default-src 'self'; connect-src 'self' https://firebasestorage.googleapis.com https://firestore.googleapis.com; script-src 'self' 'unsafe-inline' https://trusted.cdn.com https://vercel.live; style-src 'self' 'unsafe-inline';"
         },
         {
           "key": "Strict-Transport-Security",

@@ -19,7 +19,7 @@ export const isValidPositiveNumber = (value: number): boolean => {
     return typeof value === 'number' && Number.isInteger(value) && value > 0;
 };
 
-// Vérifie si le rôle de l'utilisateur est valide
+// Vérify role access
 export const validateRoleAccess = (requiredRole: string, token:any): boolean => {
 
     if (token) {

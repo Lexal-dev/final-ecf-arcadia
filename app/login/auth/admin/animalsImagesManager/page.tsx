@@ -101,20 +101,30 @@ export default function ImageAnimalsManager() {
         setModal(true);
     };
 
-    const onCloseModal = () => {
+    const onCloseManualModal = async () => {
+        setModal(false)
+    }
+    const onCloseModal = async () => {
         setModal(false);
+        setLoading(true);
+        
+        await fetchListAll();
+        await fetchAnimals('animals');
+        
+        
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000)
+        
         setSelectedAnimal(null);
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
-        fetchAnimals('animals');
-        fetchListAll().finally(() => setLoading(false))
-
     };
 
-    const updateImage = (url: string) => {
+    const updateImage = async (url: string) => {
         if (selectedAnimal) {
             let updatedUrls: string[] = [];
-
+        
             if (typeof selectedAnimal.imageUrl === 'string') {
                 try {
                     updatedUrls = JSON.parse(selectedAnimal.imageUrl);
@@ -125,45 +135,45 @@ export default function ImageAnimalsManager() {
             } else if (Array.isArray(selectedAnimal.imageUrl)) {
                 updatedUrls = [...selectedAnimal.imageUrl];
             }
-
+        
             updatedUrls.push(url);
-
+        
             const updateAnimal: Animal = {
                 ...selectedAnimal,
                 imageUrl: updatedUrls,
             };
-
+        
             setSelectedAnimal(updateAnimal);
+            setCurrentTableUrl(updatedUrls);
+        
 
-            updateImageUrl(selectedAnimal.id, updateAnimal.imageUrl)
-                .catch((error) => {
-                    console.error("Erreur, l'image URL n'a pas pu être ajoutée.", error);
-                });
+            try {
+                await updateImageUrl(selectedAnimal.id, updatedUrls);
+                toast.success("L'image a bien été ajoutée");
+    
+         
+                await fetchListAll();
+            } catch (error) {
+                console.error("Erreur, l'image URL n'a pas pu être ajoutée.", error);
+            }
         }
     };
-
-    const updateImageUrl = async (animalId: number, selectedImage: string[]) => {
-        try {
-            const response = await fetch(`/api/animals/updateUrl?id=${animalId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ imageUrl: selectedImage}),
-            });
     
-            const data = await response.json();
-            if (response.ok) {
-                toast.success("L'image a bien été ajoutée");
-                return data.animal;
-            } else {
-                throw new Error(data.message || 'Failed to update image URL');
-            }
-        } catch (error: any) {
-            console.error('Failed to update image URL:', error);
-            throw new Error(error.message || 'Failed to update image URL');
+    const updateImageUrl = async (animalId: number, selectedImage: string[]) => {
+        const response = await fetch(`/api/animals/updateUrl?id=${animalId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ imageUrl: selectedImage }),
+        });
+    
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to update image URL');
         }
+        return data.animal;
     };
 
     const handleImageSelect = (imageUrl: string) => {
@@ -191,6 +201,7 @@ export default function ImageAnimalsManager() {
 
             const data = await response.json();
             if (response.ok) {
+                setLoading(true)
                 setCurrentTableUrl(updatedUrls); 
                 toast.success("L'image a bien été supprimée");
                 onCloseModal();
@@ -242,7 +253,7 @@ export default function ImageAnimalsManager() {
                             <div className='flex flex-col justify-between sm:w-2/3 w-full h-[75%] bg-white rounded-lg overflow-y-auto'>
                                 <div>
                                     <div className='w-full flex justify-end mb-2 p-2'>
-                                        <button className='text-red-400 hover:text-red-500' onClick={onCloseModal}>Fermer</button>
+                                        <button className='text-red-400 hover:text-red-500' onClick={onCloseManualModal}>Fermer</button>
                                     </div>
                                     {selectedAnimal && (
                                     <div className='flex flex-col w-full items-center'>
@@ -267,8 +278,8 @@ export default function ImageAnimalsManager() {
                                                 <div className='relative w-full h-48'>
                                                     <Image
                                                         src={selectedImageUrl}
-                                                        layout="fill"
-                                                        objectFit="cover"
+                                                        fill
+                                                        style={{ objectFit: 'cover' }}
                                                         alt='Animal Image'
                                                     />
                                                 </div>

@@ -69,7 +69,7 @@ export default function ImageHabitatManager() {
 
     useEffect(() => {
         onCloseModal()
-    }, [loading]);
+    }, []);
 
     useEffect(() => {
         if (selectedHabitat) {
@@ -97,17 +97,27 @@ export default function ImageHabitatManager() {
         setSelectedImageUrl(null); // Reset selected image URL
         setModal(true);
     };
-
-    const onCloseModal = () => {
+    const onCloseManualModal = async () => {
+        setModal(false)
+    }
+    const onCloseModal = async () => {
         setModal(false);
+        setLoading(true);
+
+        await fetchListAll()
+        await fetchHabitats('habitats'); // Re-fetch habitats after modal close
+        
+    
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000)
+
         setSelectedHabitat(null);
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
-        fetchHabitats('habitats'); // Re-fetch habitats after modal close
-        fetchListAll().finally(() => setLoading(false));
     };
 
-    const updateImage = (url: string) => {
+    const updateImage = async (url: string) => {
         if (selectedHabitat) {
             let updatedUrls: string[] = [];
 
@@ -130,38 +140,35 @@ export default function ImageHabitatManager() {
             };
 
             setSelectedHabitat(updatedHabitat);
+            setCurrentTableUrl(updatedUrls);
 
-            updateImageUrl(selectedHabitat.id, updatedHabitat.imageUrl)
-                .catch((error) => {
-                    console.error("Erreur, l'image url n'a pas pu être ajouté.", error);
-                });
+            try {
+                await updateImageUrl(selectedHabitat.id, updatedUrls)
+                toast.success("L'image a bien été ajoutée");
+                
+                await fetchListAll();
+            } catch(error) {
+                console.error("Erreur, l'image URL n'a pas pu être ajoutée.", error);
+            }
+
         }
-        setLoading(true);
     };
 
     const updateImageUrl = async (habitatId: number, imageUrl: string[]) => {
-        try {
             const response = await fetch(`/api/habitats/updateUrl?id=${habitatId}`, {
                 method: 'PUT',
                 headers:  { 
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-           
                 body: JSON.stringify({ imageUrl }),
             });
 
             const data = await response.json();
-            if (response.ok) {
-                toast.success("L'image a bien été ajoutée");
-                return data.habitat;
-            } else {
+            if (!response.ok) {
                 throw new Error(data.message || 'Failed to update image URL');
             }
-        } catch (error : any) {
-            console.error('Failed to update image URL:', error);
-            throw new Error(error.message || 'Failed to update image URL');
-        }
+            return data.habitat;
     };
 
     const handleImageSelect = (imageUrl: string) => {
@@ -191,7 +198,7 @@ export default function ImageHabitatManager() {
 
             const data = await response.json();
             if (response.ok) {
-                // Update the state with the updated URLs
+                setLoading(true)
                 setCurrentTableUrl(updatedUrls);
                 toast.success("L'image a bien été supprimée");
                 onCloseModal();
@@ -244,7 +251,7 @@ export default function ImageHabitatManager() {
                             <div className='flex flex-col justify-between sm:w-2/3 w-full h-[75%] bg-white rounded-lg overflow-y-auto'>
                                 <div>
                                     <div className='w-full flex justify-end mb-2 p-2'>
-                                        <button className='text-red-400 hover:text-red-500' onClick={onCloseModal}>Fermer</button>
+                                        <button className='text-red-400 hover:text-red-500' onClick={onCloseManualModal}>Fermer</button>
                                     </div>
                                     {selectedHabitat != null && (
                                         <div className='flex flex-col w-full items-center'>
@@ -270,8 +277,8 @@ export default function ImageHabitatManager() {
                                                     <div className='relative w-full h-48'>
                                                         <Image 
                                                             src={selectedImageUrl} 
-                                                            layout="fill"
-                                                            objectFit="cover" 
+                                                            fill
+                                                            style={{ objectFit: 'cover' }}
                                                             alt='Habitat Image' />
                                                     </div>
                                                     <button onClick={handleDeleteImage(selectedHabitat.id, selectedImageUrl)} className='w-[200px] bg-red-500 text-white px-4 py-2 hover:bg-red-600'>

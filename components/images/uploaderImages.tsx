@@ -73,7 +73,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ folderName, onClose, onUp
 
             // Get the download URL from the snapshot
             const url = await getDownloadURL(snapshot.ref);
-            console.log('Image uploaded successfully:', url);
             return url;
         } catch (error) {
             console.error('Error uploading image:', error);

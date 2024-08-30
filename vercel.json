@@ -5,38 +5,31 @@
         "headers": [
           {
             "key": "Content-Security-Policy",
-            "value": "default-src 'self'; img-src *; script-src 'self' https://trusted.cdn.com",
-            "description": "Content-Security-Policy (CSP) helps prevent various attacks like Cross-Site Scripting (XSS) and data injection attacks by specifying which sources of content are allowed to be loaded. This policy restricts sources to 'self' for scripts and specifies a trusted CDN for additional scripts, while allowing images from any source."
+            "value": "default-src 'self'; img-src *; script-src 'self' https://trusted.cdn.com"
           },
           {
             "key": "Strict-Transport-Security",
-            "value": "max-age=31536000; includeSubDomains",
-            "description": "Strict-Transport-Security (HSTS) instructs browsers to only communicate with the server over HTTPS for the specified duration (1 year in this case). This helps prevent man-in-the-middle attacks and ensures secure connections to your site."
+            "value": "max-age=31536000; includeSubDomains"
           },
           {
             "key": "X-Content-Type-Options",
-            "value": "nosniff",
-            "description": "X-Content-Type-Options prevents browsers from interpreting files as a different MIME type than specified. This helps mitigate attacks that rely on MIME-type sniffing, such as serving malicious content."
+            "value": "nosniff"
           },
           {
             "key": "X-Frame-Options",
-            "value": "DENY",
-            "description": "X-Frame-Options prevents your site from being embedded in an iframe. This helps protect against clickjacking attacks, where malicious sites trick users into interacting with hidden elements on your page."
+            "value": "DENY"
           },
           {
             "key": "X-XSS-Protection",
-            "value": "1; mode=block",
-            "description": "X-XSS-Protection enables the browser's built-in Cross-Site Scripting (XSS) filter, which helps to detect and block XSS attacks. Setting it to 'block' ensures that any detected attacks are not executed."
+            "value": "1; mode=block"
           },
           {
             "key": "Referrer-Policy",
-            "value": "no-referrer",
-            "description": "Referrer-Policy controls how much referrer information is sent with requests. 'no-referrer' ensures that no referrer information is sent, enhancing user privacy."
+            "value": "no-referrer"
           },
           {
             "key": "Permissions-Policy",
-            "value": "geolocation=(self), camera=()",
-            "description": "Permissions-Policy (formerly Feature-Policy) restricts the use of certain browser features like geolocation and camera. Setting 'geolocation=(self)' allows only your site to access geolocation data, while 'camera=()' disallows camera access entirely, reducing the risk of unauthorized data access."
+            "value": "geolocation=(self), camera=()"
           }
         ]
       }

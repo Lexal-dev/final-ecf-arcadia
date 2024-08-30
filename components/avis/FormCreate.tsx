@@ -48,6 +48,7 @@ export default function FormCreate() {
             <input
               type="text"
               value={pseudo}
+              onChange={(e) => setPseudo(e.target.value)}
               required
               minLength={3}
               maxLength={30}
@@ -59,6 +60,7 @@ export default function FormCreate() {
           <div className='w-full flex-col'>
             <textarea
               value={comment}
+              onChange={(e) => setComment(e.target.value)}
               required
               minLength={3}
               maxLength={150}

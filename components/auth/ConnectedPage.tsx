@@ -57,7 +57,7 @@ const ConnectedPage: React.FC = () => {
             </div>
           </div>
 
-          <button className="w-[175px] h-[175px] rounded-full border-4 border-red-400 hover:border-red-600 text-xl font-bold text-red-400 hover:text-red-600 " onClick={handleLogout}>
+          <button className="w-[175px] h-[175px] rounded-full border-4 border-red-400 hover:border-red-600 text-xl font-bold text-red-400 hover:text-red-600 bg-background hover:bg-muted" onClick={handleLogout}>
               <p className='text-2xl font-bold'>deconnexion</p>
           </button>
           

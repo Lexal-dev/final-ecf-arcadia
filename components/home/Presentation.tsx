@@ -90,13 +90,12 @@ export default function Presentation({ animals, error, loadingImage }: Presentat
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, type: 'tween' }}
             >
-              <Image
-                src={imageUrls[currentIndex]}
-                layout="fill"
-                objectFit="cover"
-                alt={`Image ${currentIndex}`}
-                className="object-center object-cover"
-              />
+            <Image
+              src={imageUrls[currentIndex] || '/images/Pasdimage.jpg'}
+              fill
+              alt={`Image ${currentIndex}`}
+              className="object-center object-cover"
+            />
             </motion.div>
           </motion.div>
 

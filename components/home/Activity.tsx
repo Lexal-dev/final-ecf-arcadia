@@ -12,7 +12,7 @@ export default function Activity() {
   const [imagesAnimals, setImagesAnimals] = useState<ImageData[]>([]);
   const [shuffleTab, setShuffleTab] = useState<ImageData[]>([]);
 
-  const isMobile = useIsMobile();  // Utiliser le hook ici
+  const isMobile = useIsMobile(); 
 
   const fetchListAll = async () => {
     try {
@@ -104,8 +104,8 @@ export default function Activity() {
                 <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
                   <Image
                     src={getUrlAtIndex(0) || '/images/Pasdimage.jpg'}
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    style={{ objectFit: 'cover' }}
                     alt={`habitats&animaux 0`}
                   />
                 </div>
@@ -117,8 +117,8 @@ export default function Activity() {
                   <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
                     <Image
                       src={getUrlAtIndex(index) || '/images/Pasdimage.jpg'}
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      style={{ objectFit: 'cover' }}
                       alt={`habitats&animaux ${index}`}
                     />
                   </div>
@@ -144,8 +144,8 @@ export default function Activity() {
                 <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
                   <Image
                     src={serviceImages[0]}  // Use the first image
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    style={{ objectFit: 'cover' }}
                     alt={`services 0`}
                   />
                 </div>
@@ -157,8 +157,8 @@ export default function Activity() {
                   <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
                     <Image
                       src={src}
-                      layout="fill"
-                      objectFit="cover"
+                      fill
+                      style={{ objectFit: 'cover' }}
                       alt={`services ${index}`}
                     />
                   </div>

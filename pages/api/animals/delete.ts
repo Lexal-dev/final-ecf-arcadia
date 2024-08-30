@@ -3,16 +3,10 @@ import Animal from '@/models/animal';
 import Report from '@/models/report';
 import VetLog from '@/models/vetLogs';
 import { validateRoleAccess } from '@/lib/security/validateUtils';
+import { checkRateLimit } from '@/lib/security/rateLimiter';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
-    // extract Authorization
-    const token = req.headers.authorization?.split(' ')[1];
-    
-    // role verification
-    if (!token || !validateRoleAccess('ADMIN', token)) {
-        return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
-    }
 
     const id = typeof req.query.id === 'string' ? req.query.id : undefined;
 
@@ -23,6 +17,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method === 'DELETE') {
         try {
+            // extract Authorization
+            const token = req.headers.authorization?.split(' ')[1];
+            // role verification
+            if (!token || !validateRoleAccess('ADMIN', token)) {
+                return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+            }
+
+            // Extract ip of the request
+            const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || '';
+            // Vérify limit rate
+            if (!checkRateLimit(ip, 15)) {
+            return res.status(429).json({ success: false, message: 'Trop de requêtes. Veuillez réessayer après 15 minutes.' });
+            } 
+
             const animal = await Animal.findByPk(Number(id));
             if (!animal) {
                 res.status(404).json({ success: false, message: 'Animal not found' });

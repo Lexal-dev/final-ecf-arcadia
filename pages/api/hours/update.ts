@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Hours from '@/models/hour';
 import { validateRoleAccess } from '@/lib/security/validateUtils';
+import { checkRateLimit } from '@/lib/security/rateLimiter';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'PUT') {
@@ -10,6 +11,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!token || !validateRoleAccess('ADMIN', token)) {
             return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
         }
+
+        // Extract ip of the request
+        const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || '';
+        // Vérify limit rate
+        if (!checkRateLimit(ip, 15)) {
+          return res.status(429).json({ success: false, message: 'Trop de requêtes. Veuillez réessayer après 15 minutes.' });
+        } 
         const { id, days, open, close } = req.body;
 
         // Validate the types of data

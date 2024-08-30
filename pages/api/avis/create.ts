@@ -2,11 +2,19 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Avis, { AvisAttributes } from '@/models/avis';
 import { ValidationError } from 'sequelize';
 import { isValidString } from '@/lib/security/validateUtils';
+import { checkRateLimit } from '@/lib/security/rateLimiter';
 
 export default async function createAvis(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         try {
             const { pseudo, comment } = req.body;
+
+            // Extract ip of the request
+            const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || '';
+            // Vérify limit rate
+            if (!checkRateLimit(ip, 2)) {
+            return res.status(429).json({ success: false, message: 'Trop de requêtes. Veuillez réessayer après 15 minutes.' });
+            }             
 
             if (!isValidString(comment, 3, 150)) {
                 return res.status(400).json({ success: false, message: 'Le commentaire doit être compris entre 3 et 150 caractére.' });

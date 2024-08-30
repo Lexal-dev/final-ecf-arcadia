@@ -4,15 +4,10 @@ import { UniqueConstraintError, ValidationError } from 'sequelize';
 import Specie from '@/models/specie';
 import Habitat from '@/models/habitat';
 import { isValidString, validateRoleAccess } from '@/lib/security/validateUtils';
+import { checkRateLimit } from '@/lib/security/rateLimiter';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-      // extract Authorization
-      const token = req.headers.authorization?.split(' ')[1];
-
-      // role verification
-      if (!token || !validateRoleAccess('ADMIN', token)) {
-          return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
-      }
+   
   const id = typeof req.query.id === 'string' ? req.query.id : undefined;
 
   if (!id) {
@@ -21,6 +16,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method === 'PUT') {
+    // extract Authorization
+    const token = req.headers.authorization?.split(' ')[1];
+    // role verification
+    if (!token || !validateRoleAccess('ADMIN', token)) {
+        return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+    }
+    // Extract ip of the request
+    const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || '';
+    // Vérify limit rate
+    if (!checkRateLimit(ip, 15)) {
+    return res.status(429).json({ success: false, message: 'Trop de requêtes. Veuillez réessayer après 15 minutes.' });
+    } 
     try {
       const { name, habitatId, specieId, etat } = req.body;
 

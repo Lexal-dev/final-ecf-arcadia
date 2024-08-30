@@ -1,3 +1,4 @@
+import { checkRateLimit } from '@/lib/security/rateLimiter';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 
@@ -20,6 +21,12 @@ const transporter = nodemailer.createTransport({
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
+    // Extract ip of the request
+    const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || '';
+    // Vérify limit rate
+    if (!checkRateLimit(ip, 1)) {
+      return res.status(429).json({ success: false, message: 'Trop de requêtes. Veuillez réessayer après 15 minutes.' });
+    } 
     const { email, title, message } = req.body;
 
     // Validate input data

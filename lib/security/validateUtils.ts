@@ -25,11 +25,9 @@ export const validateRoleAccess = (requiredRole: string, token:any): boolean => 
     if (token) {
         const decoded = decodeToken(token);
         if (decoded && decoded.userRole === requiredRole) {
-            console.log("valide token")
             return true;
         }
     }
-    console.log("invalide token")
     return false;
 };
 

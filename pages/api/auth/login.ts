@@ -15,7 +15,7 @@ if (!JWT_SECRET) {
 
 // Generate JWT token
 const generateToken = (userId: string, userRole: string, userEmail: string) => {
-    return jwt.sign({ userId, userRole, userEmail }, JWT_SECRET, { expiresIn: '1h' });
+    return jwt.sign({ userId, userRole, userEmail }, JWT_SECRET, { expiresIn: '2m' }); 
 };
 
 
@@ -98,7 +98,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Reset login attempts
             resetLoginAttempts(email);
 
-            // Generate JWT token
+            // create JWT token
             const userIdAsString = user.id.toString();
             const token = generateToken(userIdAsString, user.role, user.email);
 

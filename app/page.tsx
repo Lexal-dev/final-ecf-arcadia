@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { FaSpinner } from 'react-icons/fa';
 
 const CheckPage = () => {
   const router = useRouter();
@@ -11,10 +11,11 @@ const CheckPage = () => {
   }, [router]);
 
   return (
-    <main className='flex flex-col items-center py-12'>
-      <p>Redirection en cours...</p>
-      <p>Probleme de redirection click <Link href="/home" className="hover:text-red-200">ICI</Link></p>
+    <main className='w-full flex justify-center items-center text-center min-h-[500px]'>
+      <p className='text-xl font-bold font-caption'>Chargement des données</p>
+      <FaSpinner className='animate-spin mr-2' size={36}/>
     </main>
+
   );
 };
 

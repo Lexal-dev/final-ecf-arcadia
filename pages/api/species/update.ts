@@ -2,15 +2,25 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Specie from '@/models/specie';
 import { ValidationError } from 'sequelize';
 import { isValidString, validateRoleAccess } from '@/lib/security/validateUtils';
+import { checkRateLimit } from '@/lib/security/rateLimiter';
 
 export default async function updateSpecie(req: NextApiRequest, res: NextApiResponse) {
-    // extract Authorization
-    const token = req.headers.authorization?.split(' ')[1];
-    // role verification
-    if (!token || !validateRoleAccess('ADMIN', token)) {
-        return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
-    }    
+ 
     if (req.method === 'PUT') {
+
+        // extract Authorization
+        const token = req.headers.authorization?.split(' ')[1];
+        // role verification
+        if (!token || !validateRoleAccess('ADMIN', token)) {
+            return res.status(403).json({ success: false, message: 'Access denied. Admins only.' });
+        }
+        // Extract ip of the request
+        const ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress || '';
+        // Vérify limit rate
+        if (!checkRateLimit(ip, 15)) {
+          return res.status(429).json({ success: false, message: 'Trop de requêtes. Veuillez réessayer après 15 minutes.' });
+        }  
+        
         const { id } = req.query as { id: string };
         const { name } = req.body;
 

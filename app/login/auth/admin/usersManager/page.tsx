@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import FormCreate from '@/components/users/FormCreate';
 import FormUpdate from '@/components/users/FormUpdate';
 import User from '@/models/user';
@@ -7,16 +7,15 @@ import { MdDelete, MdEdit } from 'react-icons/md';
 import { toast } from 'react-toastify';
 import Loading from '@/components/Loading';
 
-
 export default function UsersManager() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [showForm, setShowForm] = useState<boolean>(false);
-    const [showUpdateForm, setShowUpdateForm] = useState<boolean>(false); 
-    const [selectedUser, setSelectedUser] = useState<User | null>(null); 
+    const [showUpdateForm, setShowUpdateForm] = useState<boolean>(false);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const token = sessionStorage.getItem('token');
 
-    const fetchUsers = async (additionalParam: string | number) => {
+    const fetchUsers = useCallback(async (additionalParam: string | number) => {
         try {
             const response = await fetch(`/api/users/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`, {
                 method: 'GET',
@@ -25,9 +24,9 @@ export default function UsersManager() {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-    
+
             const data = await response.json();
-    
+
             if (data.success) {
                 // Filtrer les utilisateurs pour exclure les administrateurs
                 const filteredUsers = data.users.filter((user: User) => user.role !== 'ADMIN');
@@ -40,18 +39,18 @@ export default function UsersManager() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [token]);
 
     useEffect(() => {
         fetchUsers('users');
-    }, []);
+    }, [fetchUsers]);
 
     // Function to delete a user
     const handleUserDelete = async (id: number) => {
         try {
             const response = await fetch(`/api/users/delete?id=${id}`, {
                 method: 'DELETE',
-                headers:    { 
+                headers: { 
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },            
@@ -92,7 +91,7 @@ export default function UsersManager() {
     };
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
+        <main className='flex flex-col items-center py-12 min-h-[200px] px-2'>
             <Loading loading={loading}>
                 <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Gestion des Utilisateurs</h1>
                 <button

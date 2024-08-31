@@ -48,16 +48,16 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
             setSpecies(data.species);
           } else {
             console.error('Echec de la récupération des données des espèces');
-            setError(error)
+            setError('Aucune espèce trouvée.');
             setSpecies([]);
           }
         } else {
           console.error('Echec de la récupération des données', data.error);
-          setSpecies([]);
+          setError('Erreur lors de la récupération des espèces.');
         }
       } catch (error) {
         console.error('Erreur de connexion à la base de données:', error);
-        setSpecies([]);
+        setError('Erreur de connexion à la base de données.');
       }
     };
 
@@ -71,12 +71,15 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
             setHabitats(data.habitats);
           } else {
             console.error('Failed to fetch data: habitats not found');
+            setError('Aucun habitat trouvé.');
           }
         } else {
           console.error('Failed to fetch data:', data.error);
+          setError('Erreur lors de la récupération des habitats.');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
+        setError('Erreur de connexion à la base de données.');
       }
     };
 
@@ -86,7 +89,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
     };
 
     fetchSpeciesAndHabitats();
-  }, []);
+  }, []); // Pas besoin d'ajouter 'error' comme dépendance ici
 
   const handleUpdateAnimal = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -117,11 +120,9 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
         toast.success("Animal modifié avec succès");
         onUpdateSuccess();
       } else {
-      
         setError(data.message || "Une erreur est survenue lors de la mise à jour de l'animal.");
       }
     } catch (error:any) {
-   
       setError("Erreur de connexion à la base de données: " + error.message);
     }
   };

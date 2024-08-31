@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { ref, deleteObject } from 'firebase/storage';
@@ -32,7 +32,7 @@ const AnimalsManager: React.FC = () => {
   const router = useRouter();
  
 
-  const fetchAnimals = async (additionalParam: string) => {
+  const fetchAnimals = useCallback(async (additionalParam: string) => {
     try {
       const response = await fetch(`/api/animals/read?additionalParam=${encodeURIComponent(additionalParam)}`);
       const data = await response.json();
@@ -40,7 +40,7 @@ const AnimalsManager: React.FC = () => {
       if (response.ok) {
         if (data.animals) {
           setAnimals(data.animals);
-          sessionStorage.setItem('animals', JSON.stringify(data.animals))
+          sessionStorage.setItem('animals', JSON.stringify(data.animals));
         } else {
           console.error('Échec de la récupération des données des animaux');
           setAnimals([]);
@@ -53,15 +53,15 @@ const AnimalsManager: React.FC = () => {
       console.error('Erreur de connexion à la base de données:', error);
       setAnimals([]);
     }
-  };
+  }, []);
 
-  const initFetch = async () => {
+  const initFetch = useCallback(async () => {
     await fetchAnimals('animals');
-  };
+  }, [fetchAnimals]);
 
   useEffect(() => {
-    initFetch().finally(() => setLoading(false));
-  }, [loading]);
+      initFetch().finally(() => setLoading(false));
+  }, [initFetch]); // Ajoutez `initFetch` dans les dépendances
 
   const handleDelete = async (animal: Animal) => {
     const animalId = Number(animal.id);

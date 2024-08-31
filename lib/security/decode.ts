@@ -11,9 +11,6 @@ export const decodeToken = (token: string): DecodedToken | null => {
         const decoded = jwt.decode(token) as DecodedToken;
         
         if (decoded) {
-            
-            // Affichez les informations du token dans la console
-            console.log("decode User Email:", decoded.userEmail);
             return decoded;
         } else {
             throw new Error('Token décodé est null');

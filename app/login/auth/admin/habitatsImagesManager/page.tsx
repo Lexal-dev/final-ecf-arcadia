@@ -1,6 +1,6 @@
 "use client"
 import { ref, listAll, getDownloadURL, deleteObject } from 'firebase/storage';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ImageUploader from '@/components/images/uploaderImages';
 import { storage } from "@/lib/db/firebaseConfig.mjs";
 import { toast } from 'react-toastify';
@@ -67,9 +67,15 @@ export default function ImageHabitatManager() {
         }
     };
 
+    const init = useCallback(async () => {
+        await fetchListAll();
+        await fetchHabitats('habitats');
+        setLoading(false);
+    }, []); // Ajoutez les dépendances si `fetchListAll` ou `fetchAnimals` changent
+    
     useEffect(() => {
-        onCloseModal()
-    }, []);
+        init();
+    }, [init]);
 
     useEffect(() => {
         if (selectedHabitat) {
@@ -107,14 +113,11 @@ export default function ImageHabitatManager() {
         await fetchListAll()
         await fetchHabitats('habitats'); // Re-fetch habitats after modal close
         
-    
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000)
 
         setSelectedHabitat(null);
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
+        setLoading(false);
     };
 
     const updateImage = async (url: string) => {

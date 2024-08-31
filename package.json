@@ -10,6 +10,9 @@
     "drop-db": "node lib/db/mySQL/deleteDb.mjs",
     "create-db": "node lib/db/mySQL/createDb.mjs",
     "insert-data": "node lib/db/mySQL/insertData.mjs",
+    "p-drop-db": "node lib/db/postgreeSQL/deleteDb.mjs",
+    "p-create-db": "node lib/db/postgreeSQL/createDb.mjs",
+    "p-insert-data": "node lib/db/postgreeSQL/insertData.mjs",
     "insert-migra": "npx sequelize-cli db:migrate"
   },
   "dependencies": {

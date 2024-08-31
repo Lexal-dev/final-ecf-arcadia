@@ -47,8 +47,8 @@ export default function LoginPage() {
             
             <form onSubmit={handleSubmit} className='flex flex-col justify-around w-full  md:max-w-[500px] min-h-[350px]  p-4 rounded-lg gap-3 bg-foreground text-secondary shadow-md'>
                 <h3 className='text-3xl font-bold font-caption text-center'>Connexion</h3>
-                <input type="email" id="email" placeholder='Entrez votre adresse e-mail..' className='w-full  text-white p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200' value={email} onChange={(e) => setEmail(e.target.value)} required />
-                <input type="password" id="password" placeholder='Entrez votre mot de passe..'  className='w-full  text-white p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200'value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <input type="email" id="email"  name="email" placeholder='Entrez votre adresse e-mail..' className='w-full  text-white p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200' value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <input type="password" id="password"  name="password" placeholder='Entrez votre mot de passe..'  className='w-full  text-white p-2 rounded-md bg-muted hover:bg-background placeholder-slate-200'value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <button type="submit" className='w-full bg-muted hover:bg-background text-white p-2'>Se connecter</button>
       
             </form>

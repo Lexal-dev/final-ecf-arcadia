@@ -1,6 +1,6 @@
 "use client";
 import { ref, listAll, getDownloadURL, deleteObject } from 'firebase/storage';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ImageUploader from '@/components/images/uploaderImages';
 import { storage } from "@/lib/db/firebaseConfig.mjs";
 import { toast } from 'react-toastify';
@@ -30,7 +30,7 @@ export default function ImageAnimalsManager() {
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [images, setImages] = useState<ImageData[]>([]);
     const token = sessionStorage.getItem('token');
-
+    
     const fetchListAll = async () => {
         try {
             const res = await listAll(ref(storage, 'images/animals'));
@@ -69,9 +69,15 @@ export default function ImageAnimalsManager() {
         }
     };
 
+    const init = useCallback(async () => {
+        await fetchListAll();
+        await fetchAnimals('animals');
+        setLoading(false);
+    }, []); // Ajoutez les dépendances si `fetchListAll` ou `fetchAnimals` changent
+    
     useEffect(() => {
-        onCloseModal()
-    }, []); 
+        init();
+    }, [init]);
 
     useEffect(() => {
         if (selectedAnimal) {
@@ -92,18 +98,18 @@ export default function ImageAnimalsManager() {
     }, [selectedAnimal]);
 
     const selectAnimal = (animal: Animal) => {
+
         setSelectedAnimal({
             ...animal,
             imageUrl: animal.imageUrl || [],
         });
-
-        setSelectedImageUrl(null); // Reset selected image URL
         setModal(true);
     };
 
     const onCloseManualModal = async () => {
         setModal(false)
     }
+
     const onCloseModal = async () => {
         setModal(false);
         setLoading(true);
@@ -111,14 +117,11 @@ export default function ImageAnimalsManager() {
         await fetchListAll();
         await fetchAnimals('animals');
         
-        
-        setTimeout(() => {
-            setLoading(false);
-        }, 2000)
-        
+
         setSelectedAnimal(null);
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
+        setLoading(false);
     };
 
     const updateImage = async (url: string) => {
@@ -226,7 +229,7 @@ export default function ImageAnimalsManager() {
                         <thead className='bg-muted-foreground'>
                             <tr>
                                 <th className='border border-background px-4 py-2 text-left'>Name</th>
-                                <th className='border border-background px-4 py-2 text-center'>Actions</th>
+                                <th className='border border-background px-4 py-2 text-center'>URL</th>
                             </tr>
                         </thead>
                         <tbody>

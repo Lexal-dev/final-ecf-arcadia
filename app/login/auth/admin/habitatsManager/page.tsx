@@ -1,11 +1,8 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-
 import { ref, deleteObject } from 'firebase/storage';
 import { storage } from "@/lib/db/firebaseConfig.mjs";
-
-
 import FormCreate from '@/components/habitats/FormCreate';
 import FormUpdate from '@/components/habitats/FormUpdate';
 import { MdDelete, MdEdit } from 'react-icons/md';
@@ -17,19 +14,19 @@ interface Habitat {
     name: string;
     description: string;
     comment: string;
-    imageUrl: string[] ; 
+    imageUrl: string[]; 
 }
 
 const HabitatsManager: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [habitats, setHabitats] = useState<Habitat[]>([]);
-    const [selectedHabitat, setSelectedHabitat] = useState<Habitat | null>(null)
-    const [modalCreate, setModalCreate] = useState<boolean>(false)
-    const [modalUpdate, setModalUpdate] = useState<boolean>(false)
+    const [selectedHabitat, setSelectedHabitat] = useState<Habitat | null>(null);
+    const [modalCreate, setModalCreate] = useState<boolean>(false);
+    const [modalUpdate, setModalUpdate] = useState<boolean>(false);
     const router = useRouter();
 
     // Function to fetch habitats data from API
-    const fetchHabitats = async (additionalParam: string) => {
+    const fetchHabitats = useCallback(async (additionalParam: string) => {
         try {
             const response = await fetch(`/api/habitats/read?additionalParam=${encodeURIComponent(additionalParam.toString())}`);
             const data = await response.json();
@@ -46,129 +43,123 @@ const HabitatsManager: React.FC = () => {
         } catch (error) {
             console.error('Error fetching data:', error);
         }
-    };
+    }, []);
 
     // Initial fetch of habitats data
-    const initFetch = async () => {
-        fetchHabitats('habitats');
-    };
-        
+    const initFetch = useCallback(async () => {
+        await fetchHabitats('habitats');
+    }, [fetchHabitats]);
+
     // Function to handle deletion of a habitat
     const handleDelete = async (habitat: Habitat) => {
         const habitatId = Number(habitat.id);
         let habitatUrls: string[] = [];
       
-        // Check imageUrl type and convert to array if necessary
         if (typeof habitat.imageUrl === 'string') {
-          try {
-            habitatUrls = JSON.parse(habitat.imageUrl);
-          } catch (error) {
-            console.error('Error parsing imageUrl:', error);
-            habitatUrls = [];
-          }
-        } else if (Array.isArray(habitat.imageUrl)) {
-          habitatUrls = [...habitat.imageUrl];
-        }
-      
-        // Delete habitat from database via Next.js API
-        try {
-          const token = sessionStorage.getItem('token');
-          const response = await fetch(`/api/habitats/delete?id=${habitatId}`, {
-            method: 'DELETE',
-            headers:  { 'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-     
-          });
-      
-          if (response.ok || response.status === 404) {
-    
-            // Delete images from Firebase storage
-            for (const url of habitatUrls) {
-              const storageRef = ref(storage, url);
-              try {
-                await deleteObject(storageRef);
-              } catch (error) {
-                console.error(`Error deleting image ${url}:`, error);
-              }
-            }
-            toast.success('Habitat effacé avec succés')
-            setLoading(true); // Refresh habitat list after deletion
-            
-            await initFetch();
-            router.push('/login/auth/admin/habitatsManager');
-          } else {
-            throw new Error('Failed to delete habitat');
-          }
-        } catch (error) {
-          console.error('Error deleting habitat:', error);
-      
-          // Delete images from Firebase storage even if habitat deletion fails
-          for (const url of habitatUrls) {
-            const storageRef = ref(storage, url);
             try {
-              await deleteObject(storageRef);
+                habitatUrls = JSON.parse(habitat.imageUrl);
             } catch (error) {
-              console.error(`Error deleting image ${url}:`, error);
+                console.error('Error parsing imageUrl:', error);
+                habitatUrls = [];
             }
-          }
+        } else if (Array.isArray(habitat.imageUrl)) {
+            habitatUrls = [...habitat.imageUrl];
         }
-      };
+      
+        try {
+            const token = sessionStorage.getItem('token');
+            const response = await fetch(`/api/habitats/delete?id=${habitatId}`, {
+                method: 'DELETE',
+                headers:  { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+      
+            if (response.ok || response.status === 404) {
+                for (const url of habitatUrls) {
+                    const storageRef = ref(storage, url);
+                    try {
+                        await deleteObject(storageRef);
+                    } catch (error) {
+                        console.error(`Error deleting image ${url}:`, error);
+                    }
+                }
+                toast.success('Habitat effacé avec succès');
+                setLoading(true);
+                await initFetch();
+                router.push('/login/auth/admin/habitatsManager');
+            } else {
+                throw new Error('Failed to delete habitat');
+            }
+        } catch (error) {
+            console.error('Error deleting habitat:', error);
+      
+            for (const url of habitatUrls) {
+                const storageRef = ref(storage, url);
+                try {
+                    await deleteObject(storageRef);
+                } catch (error) {
+                    console.error(`Error deleting image ${url}:`, error);
+                }
+            }
+        }
+    };
 
     // Function to handle creation success of habitat
     const onCreateSuccess = async () => {
         setLoading(true);
         await initFetch();
         onClose();
-        toast.success("Habitat enregistré avec succés")
+        toast.success("Habitat enregistré avec succès");
     };
 
     // Function to handle update success of habitat
     const onUpdateSuccess = async () => {
         setLoading(true);
+        await initFetch();
         onClose();
-        toast.success("Habitat modifié avec succés")
+        toast.success("Habitat modifié avec succès");
     };
 
     // Function to open update modal and set selected habitat
     const handleUpdateModalOpen = (habitat: Habitat) => {
         setModalUpdate(true);
-        setSelectedHabitat(habitat)
-    }
+        setSelectedHabitat(habitat);
+    };
 
     // Function to close modals and reset selected habitat
     const onClose = () => {
-        setModalCreate(false)
-        setModalUpdate(false)
-        setSelectedHabitat(null)
+        setModalCreate(false);
+        setModalUpdate(false);
+        setSelectedHabitat(null);
     };
 
     useEffect(() => {
         initFetch().finally(() => {
             setLoading(false);
         });
-    }, [loading]);
+    }, [initFetch]);
 
     // Effect to ensure only one modal is open at a time
     useEffect(() => {
-        if(modalCreate === true)
-        {
-            setModalUpdate(false)
+        if (modalCreate) {
+            setModalUpdate(false);
         }
 
-        if(modalUpdate === true)
-        {
-            setModalCreate(false)
+        if (modalUpdate) {
+            setModalCreate(false);
         }
-    }, [modalCreate, modalUpdate])
+    }, [modalCreate, modalUpdate]);
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
-                <Loading loading={loading}>
+        <main className='flex flex-col items-center py-12 min-h-[200px] px-2'>
+            <Loading loading={loading}>
                 <h1 className='text-3xl mb-4 font-caption font-bold'>Gestion des habitats</h1>
-                <button onClick={()=> {setModalCreate(true)}} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>Ajouter un habitat</button>
+                <button onClick={() => setModalCreate(true)} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
+                    Ajouter un habitat
+                </button>
                 <div className='overflow-x-auto w-full flex flex-col items-center'>
-                   
                     <table className="w-full md:w-2/3">
                         <thead className='bg-muted-foreground'>
                             <tr>
@@ -195,16 +186,13 @@ const HabitatsManager: React.FC = () => {
                                         </div>
                                     </td>      
                                 </tr>
-                                
                             ))}
                         </tbody>
-                    </table>                      
-                    
+                    </table>
                 </div>
-
-            {modalCreate &&  <FormCreate onCreateSuccess={onCreateSuccess} onClose={onClose} />}
-            {modalUpdate && selectedHabitat &&  <FormUpdate habitat={selectedHabitat} onUpdateSuccess={onUpdateSuccess} onClose={onClose} />}
-           </Loading>
+                {modalCreate && <FormCreate onCreateSuccess={onCreateSuccess} onClose={onClose} />}
+                {modalUpdate && selectedHabitat && <FormUpdate habitat={selectedHabitat} onUpdateSuccess={onUpdateSuccess} onClose={onClose} />}
+            </Loading>
         </main>
     );
 };

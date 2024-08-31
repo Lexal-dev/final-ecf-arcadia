@@ -5,51 +5,66 @@ import { motion } from 'framer-motion';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { Animal } from "@/lib/types/types";
 
-type PresentationProps = {
-  animals: Animal[];
-  error: string;
-  loadingImage: boolean;
-};
+import { storage } from '@/lib/db/firebaseConfig.mjs'; // Import Firebase config
+import { getDownloadURL, listAll, ref } from 'firebase/storage';
 
-export default function Presentation({ animals, error, loadingImage }: PresentationProps) {
+export default function Presentation() {
+  const [animals, setAnimals] = useState<Animal[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
+  const [error, setError] = useState<string>('');
+  const [loadingImage, setLoadingImage] = useState<boolean>(true);
 
   useEffect(() => {
-    let urls: string[] = [];
-
-    animals.forEach((animal) => {
-      if (animal.imageUrl) {
-        try {
-          const parsedUrls = JSON.parse(animal.imageUrl);
-          urls = urls.concat(parsedUrls.filter((url: string) => url)); // Filter out empty values
-        } catch (error) {
-          console.error(`Error parsing imageUrl for animal ID ${animal.id}:`, error);
+    const fetchAnimalsAndImages = async () => {
+      setLoadingImage(true);
+      try {
+        const cachedAnimals = sessionStorage.getItem('animals');
+        if (cachedAnimals) {
+          setAnimals(JSON.parse(cachedAnimals));
+        } else {
+          const response = await fetch('/api/animals/read?additionalParam=animals');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const data = await response.json();
+          setAnimals(data.animals);
+          sessionStorage.setItem('animals', JSON.stringify(data.animals));
         }
+
+        const imagesRef = ref(storage, 'images/animals'); // Assurez-vous que le chemin est correct
+        const imageList = await listAll(imagesRef);
+
+        if (imageList.items.length === 0) {
+          throw new Error('Aucune image trouvée dans Firebase Storage.');
+        }
+
+        const urls = await Promise.all(
+          imageList.items.map(item => getDownloadURL(item))
+        );
+
+
+        setImageUrls(urls);
+
+      } catch (error) {
+        console.error('Error fetching animals or images:', error);
+        setError('Échec de la récupération des animaux ou des images. Veuillez réessayer plus tard.');
+      } finally {
+        setLoadingImage(false);
       }
-    });
+    };
 
-    const fallbackImages = [
-      '/images/Crocodile.png',
-      '/images/Lion.png',
-      '/images/Renard-roux.png',
-      '/images/Tigre.png',
-    ];
-
-    urls = shuffleArray(urls);
-    setImageUrls(urls.length > 0 ? urls : fallbackImages);
-  }, [animals]);
+    fetchAnimalsAndImages();
+  }, []);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex(prevIndex => (prevIndex === imageUrls.length - 1 ? 0 : prevIndex + 1));
     setDirection('right');
-  }, [imageUrls.length]);
+  }, [imageUrls]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 20000);
+    }, 20000); // Change slide every 20 seconds
 
     return () => clearInterval(interval);
   }, [nextSlide]);
@@ -59,13 +74,7 @@ export default function Presentation({ animals, error, loadingImage }: Presentat
     setDirection('left');
   };
 
-  const shuffleArray = (array: string[]) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
+  const currentImageUrl = imageUrls[currentIndex] || '/images/Pasdimage.jpg';
 
   return (
     <section className="w-full flex flex-col gap-6 w-full md:w-2/3 lg:w-3/4 text-start px-2">
@@ -91,10 +100,12 @@ export default function Presentation({ animals, error, loadingImage }: Presentat
               transition={{ duration: 0.5, type: 'tween' }}
             >
             <Image
-              src={imageUrls[currentIndex] || '/images/Pasdimage.jpg'}
+              src={currentImageUrl}
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               alt={`Image ${currentIndex}`}
               className="object-center object-cover"
+              priority 
             />
             </motion.div>
           </motion.div>

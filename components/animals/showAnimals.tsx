@@ -7,11 +7,12 @@ import Animal from '@/models/animal';
 
 import { db } from '@/lib/db/firebaseConfig.mjs';
 import { doc, updateDoc, increment, setDoc, getDoc } from 'firebase/firestore';
+import Image from 'next/image';
 
 export default function ShowAnimals() {
   const [habitats, setHabitats] = useState<Habitat[]>([]);
   const [selectedHabitat, setSelectedHabitat] = useState<Habitat | null>(null);
-  const [animals, setAnimals] = useState<Animal[]>([])
+  const [animals, setAnimals] = useState<Animal[]>([]);
   const [selectedAnimal, setSelectedAnimal] = useState<Animal | null>(null);
   const [modal, setModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -74,39 +75,35 @@ export default function ShowAnimals() {
 
   useEffect(() => {
     fetchHabitats("habitats");
-    fetchAnimals("animals")
+    fetchAnimals("animals");
   }, [fetchHabitats, fetchAnimals]);
 
   const openModal = (habitat: Habitat) => {
     setSelectedHabitat(habitat);
     setModal(true);
-  }
+  };
 
   const selectAnimal = (animal: Animal) => {
-    setSelectedAnimal(animal)
-    addOrUpdateConsultation(animal)
-  }
+    setSelectedAnimal(animal);
+    addOrUpdateConsultation(animal);
+  };
 
   const getBackgroundImageUrl = (habitat: Habitat) => {
+    let imageUrl = '/images/Pasdimage.jpg';
+
     if (typeof habitat.imageUrl === 'string') {
       try {
         const parsedImageUrl = JSON.parse(habitat.imageUrl);
         if (Array.isArray(parsedImageUrl) && parsedImageUrl.length > 0) {
-          return parsedImageUrl[0];
-        } else {
-          console.error('Parsed imageUrl is not an array or is empty:', parsedImageUrl);
-          return '/images/Pasdimage.jpg'; // Default image URL
+          imageUrl = parsedImageUrl[0];
         }
       } catch (e) {
         console.error('Error parsing imageUrl:', e);
-        return '/images/Pasdimage.jpg'; // Default image URL
       }
     } else if (Array.isArray(habitat.imageUrl) && habitat.imageUrl.length > 0) {
-      return habitat.imageUrl[0];
-    } else {
-      console.error('imageUrl is not a string or array:', habitat.imageUrl);
-      return '/images/Pasdimage.jpg'; // Default image URL
+      imageUrl = habitat.imageUrl[0];
     }
+    return imageUrl;
   };
 
   const filteredAnimals = selectedHabitat ? animals.filter(animal => (animal.habitatId).toString() === selectedHabitat.name) : [];
@@ -137,18 +134,23 @@ export default function ShowAnimals() {
       <Loading loading={loading}>
         <h1 className='text-3xl font-bold font-caption mb-12 text-center'>Nos Habitats</h1>
         <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-2'>
-          {habitats.map((habitat, index) => (
+        {habitats.map((habitat, index) => (
             <div
               key={index}
-              className='flex flex-col justify-between h-[200px] border-2 border-muted rounded-md p-2 cursor-pointer bg-cover bg-center'
-              style={{ backgroundImage: `url(${getBackgroundImageUrl(habitat)})` }}
+              className='flex flex-col justify-between h-[200px] lg:h-[250px] border-2 border-muted rounded-md p-2 cursor-pointer relative'
               onClick={() => openModal(habitat)}
             >
-              <h2 className='text-2xl font-bold text-center text-white bg-black bg-opacity-35 p-2 rounded-b'>{habitat.name}</h2>
+              <Image
+                src={getBackgroundImageUrl(habitat)}
+                alt={`Habitat ${index}`}
+                layout='fill'
+                objectFit='cover'
+                className='absolute inset-0'
+              />
+              <h2 className='text-2xl font-bold text-center text-white bg-black bg-opacity-35 p-2 rounded-b z-10'>{habitat.name}</h2>
             </div>
           ))}
         </div>
-
 
         {modal && selectedHabitat && (
           <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1'>
@@ -163,12 +165,12 @@ export default function ShowAnimals() {
                 <p className='px-2'>Description:</p> <p>{selectedHabitat.description}</p>
               </div>
               <div>
-              <ul>
+                <ul>
                   {filteredAnimals.map((animal) => (
                     <li 
                       key={animal.id}
                       onClick={() => selectAnimal(animal)}
-                      className='cursor-pointer hover:text-blue-500 mb-5 border-b-4  border-muted pb-3'
+                      className='cursor-pointer hover:text-blue-500 mb-5 border-b-4 border-muted pb-3'
                     >
                       <p className='sm:text-xl text-md'>{animal.name} : {animal.specieId}</p>
                       {selectedAnimal && selectedAnimal.id === animal.id &&

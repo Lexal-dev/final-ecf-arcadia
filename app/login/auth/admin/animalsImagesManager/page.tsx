@@ -276,7 +276,7 @@ export default function ImageAnimalsManager() {
                                         </select>
                                         {selectedImageUrl && (
                                             <div className='w-2/3 flex flex-col items-center justify-center mb-12'>
-                                                <div className='relative w-full h-48'>
+                                                <div className='relative w-[350px] h-[300px] lg:w-[550px] lg:h-[400px]'>
                                                     <Image
                                                         src={selectedImageUrl}
                                                         fill

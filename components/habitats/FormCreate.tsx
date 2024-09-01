@@ -48,7 +48,7 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
             <div className="md:w-1/2 w-full bg-foreground p-6 rounded shadow-md  text-secondary">
                 <div className='w-full text-xl flex items-center justify-between md:px-4 mb-6'>
                     <h1 className='w-full md:text-3xl text-2xl font-bold'>Ajouter un habitat</h1>

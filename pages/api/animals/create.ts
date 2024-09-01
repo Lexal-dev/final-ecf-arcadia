@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             // Find the species and habitat IDs based on their names
             const specie = await Specie.findOne({ where: { id: specieName } });
             const habitat = await Habitat.findOne({ where: { id: habitatName } });
-            const etat = "Good health"
+            const etat = "En bonne santé"
             if (!specie) {
                 res.status(404).json({ success: false, message: `Species with name ${specieName} not found.` });
                 return;

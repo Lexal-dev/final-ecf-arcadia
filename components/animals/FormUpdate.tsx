@@ -89,15 +89,13 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
     };
 
     fetchSpeciesAndHabitats();
-  }, []); // Pas besoin d'ajouter 'error' comme dépendance ici
+  }, []); 
 
   const handleUpdateAnimal = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Réinitialiser l'erreur avant de tenter la soumission
+
     setError(null);
   
-    // Set default value for etat if it is empty
     const updatedData = {
       ...formData,
       etat: formData.etat || 'Bonne santé'
@@ -128,7 +126,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ animal, onUpdateSuccess, onClos
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
       <div className="bg-foreground p-6 rounded shadow-md w-full md:w-1/2 text-secondary">
         <div className='flex w-full justify-between mb-6'>
           <h1 className='w-3/4 sm:text-3xl text-2xl font-bold'>Modifier un animal</h1>

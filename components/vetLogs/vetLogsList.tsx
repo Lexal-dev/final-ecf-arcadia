@@ -164,7 +164,7 @@ export default function VetLogsList() {
 
   
   return (
-    <main className="w-full flex flex-col items-center ">
+    <main className="w-full flex flex-col items-center">
       <Loading loading={loading}>
       <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Rapports vétérinaire</h1>
       <select onChange={handleHabitatChange} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>
@@ -205,7 +205,7 @@ export default function VetLogsList() {
       </div>
 
       {modal && (
-        <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 px-1'>
+        <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
           <div className='flex flex-col bg-foreground rounded-lg p-4 w-full md:w-2/3 text-secondary'>    
             <ul>
                 <div className='flex justify-between w-full'>

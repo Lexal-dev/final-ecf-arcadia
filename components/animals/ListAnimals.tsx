@@ -124,7 +124,7 @@ export default function ListAnimals() {
         </div>
 
       {modal && (
-        <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 px-1'>
+        <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
           <div className='bg-foreground rounded-lg p-4 max-w-xl w-full text-secondary'>
             <div className='flex justify-between items-center'>
               <h1 className='w-full sm:text-3xl text-2xl font-bold'>Détails du rapport pour {selectedAnimal?.name}</h1>

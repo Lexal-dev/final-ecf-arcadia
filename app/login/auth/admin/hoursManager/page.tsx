@@ -54,7 +54,7 @@ export default function HoursManager() {
     };
 
     return (
-        <main className="flex flex-col py-12 items-center px-2">
+        <main className="flex flex-col py-12 items-center">
             <Loading loading={loading}>
                 <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Gestion des horraires</h1>
                 <div className="overflow-x-auto w-full flex flex-col items-center">

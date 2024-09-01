@@ -99,7 +99,7 @@ export default function AvisManager() {
     };
 
     return (
-        <main className="flex flex-col items-center py-12 min-h-[200x] px-2">
+        <main className="flex flex-col items-center py-12 min-h-[200x]">
             <Loading loading={loading}>
                 <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Modération des commentaires</h1>
                 <div className="flex justify-between mb-1">

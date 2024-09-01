@@ -43,7 +43,7 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ specie, onUpdateSuccess, onClos
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-1">
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-full md:w-1/2 bg-foreground p-6 rounded shadow-md  text-secondary">
         <div className='flex w-full justify-between mb-6'>
           <h1 className='w-full sm:text-3xl text-2xl font-bold'>Mise à jour de l&apos;espèce</h1>

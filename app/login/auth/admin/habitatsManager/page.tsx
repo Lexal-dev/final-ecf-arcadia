@@ -47,7 +47,7 @@ const HabitatsManager: React.FC = () => {
 
     // Initial fetch of habitats data
     const initFetch = useCallback(async () => {
-        await fetchHabitats('habitats');
+        await fetchHabitats('habitats').finally(() => {setLoading(false)});
     }, [fetchHabitats]);
 
     // Function to handle deletion of a habitat
@@ -136,9 +136,7 @@ const HabitatsManager: React.FC = () => {
     };
 
     useEffect(() => {
-        initFetch().finally(() => {
-            setLoading(false);
-        });
+        initFetch();
     }, [initFetch]);
 
     // Effect to ensure only one modal is open at a time
@@ -153,7 +151,7 @@ const HabitatsManager: React.FC = () => {
     }, [modalCreate, modalUpdate]);
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200px] px-2'>
+        <main className='flex flex-col items-center py-12 min-h-[200px]'>
             <Loading loading={loading}>
                 <h1 className='text-3xl mb-4 font-caption font-bold'>Gestion des habitats</h1>
                 <button onClick={() => setModalCreate(true)} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>

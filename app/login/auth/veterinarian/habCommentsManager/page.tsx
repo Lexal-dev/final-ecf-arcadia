@@ -66,9 +66,9 @@ const HabitatsCommentsManager: React.FC = () => {
     };
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200px] px-2'>
+        <main className='flex flex-col items-center py-12 min-h-[200px]'>
             <Loading loading={loading}>
-                <h1 className='text-3xl mb-4 font-caption font-bold'>Gestion des commentaires habitats</h1>
+                <h1 className='text-center text-3xl mb-4 font-caption font-bold'>Gestion des commentaires habitats</h1>
                 <div className='overflow-x-auto w-full flex flex-col items-center'>
                     <table className="w-full md:w-2/3">
                         <thead className='bg-muted-foreground'>

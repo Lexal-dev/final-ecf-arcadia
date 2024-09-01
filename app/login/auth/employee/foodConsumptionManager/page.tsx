@@ -101,7 +101,7 @@ export default function FoodConsumptionManager() {
     : animals;
 
   return (
-    <main className='w-full flex flex-col justify-center px-2 items-center py-6'>
+    <main className='w-full flex flex-col justify-center items-center py-6'>
       <Loading loading={loading}>
         <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Rapport de nourriture par animal</h1>
 
@@ -145,14 +145,14 @@ export default function FoodConsumptionManager() {
         </div>
 
         {showModal && selectedAnimal && (
-          <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1'>
+          <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50'>
             <div className='bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary'>
               <div className='flex w-full justify-between mb-6'>
                 <h1 className='w-full sm:text-3xl text-2xl font-bold'>Ajouter un rapport</h1>
                 <button onClick={closeModal} className="text-red-500 hover:text-red-700"><MdClose size={36} /></button>
               </div>
               <form onSubmit={handleSubmit} className='text-secondary'>
-                {error && <p className="text-red-500 mb-4">{error}</p>} {/* Display error message */}
+                {error && <p className="text-red-500 mb-4">{error}</p>}
 
                 <input
                   type="text"

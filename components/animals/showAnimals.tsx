@@ -136,19 +136,19 @@ export default function ShowAnimals() {
     <div className='min-h-[250px] w-full flex flex-col items-center'>
       <Loading loading={loading}>
         <h1 className='text-3xl font-bold font-caption mb-12 text-center'>Nos Habitats</h1>
-        <div className='w-full flex  md:flex-row flex-col justify-around'>
-          {habitats.map((habitat, index) => 
-          <div className='h-full w-full flex flex-col justify-around px-2 md:mb-0 mb-4'>
-            <h2 className='text-3xl font-bold font-caption mb-2 text-center'>{habitat.name}</h2>
-            <button 
-              key={index} 
-              onClick={() => openModal(habitat)}
-              className='w-full h-[300px] border-2 border-muted rounded-md p-2 cursor-pointer bg-cover bg-center'
+        <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-2'>
+          {habitats.map((habitat, index) => (
+            <div
+              key={index}
+              className='flex flex-col justify-between h-[200px] border-2 border-muted rounded-md p-2 cursor-pointer bg-cover bg-center'
               style={{ backgroundImage: `url(${getBackgroundImageUrl(habitat)})` }}
-            />            
-          </div>
-          )}
+              onClick={() => openModal(habitat)}
+            >
+              <h2 className='text-2xl font-bold text-center text-white bg-black bg-opacity-35 p-2 rounded-b'>{habitat.name}</h2>
+            </div>
+          ))}
         </div>
+
 
         {modal && selectedHabitat && (
           <div className='fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 px-1'>
@@ -168,7 +168,7 @@ export default function ShowAnimals() {
                     <li 
                       key={animal.id}
                       onClick={() => selectAnimal(animal)}
-                      className='cursor-pointer hover:text-blue-500 mb-5'
+                      className='cursor-pointer hover:text-blue-500 mb-5 border-b-4  border-muted pb-3'
                     >
                       <p className='sm:text-xl text-md'>{animal.name} : {animal.specieId}</p>
                       {selectedAnimal && selectedAnimal.id === animal.id &&

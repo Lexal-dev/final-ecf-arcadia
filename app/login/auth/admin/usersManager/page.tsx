@@ -91,7 +91,7 @@ export default function UsersManager() {
     };
 
     return (
-        <main className='flex flex-col items-center py-12 min-h-[200px] px-2'>
+        <main className='flex flex-col items-center py-12 min-h-[200px]'>
             <Loading loading={loading}>
                 <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Gestion des Utilisateurs</h1>
                 <button

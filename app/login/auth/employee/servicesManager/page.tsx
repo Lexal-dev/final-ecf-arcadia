@@ -48,7 +48,7 @@ export default function ServiceManager() {
   };
 
   return (
-    <main className="flex flex-col items-center py-12 min-h-[200x] px-2">
+    <main className="flex flex-col items-center py-12 min-h-[200x]">
       <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Gestion des services</h1>
       <div className="overflow-x-auto w-full flex flex-col items-center">
         {loading ? (

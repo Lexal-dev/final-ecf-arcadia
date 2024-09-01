@@ -219,7 +219,7 @@ export default function ImageHabitatManager() {
     };
 
     return (
-        <main className='flex flex-col items-center py-12 px-2 min-h-[200x]'>
+        <main className='flex flex-col items-center py-12 min-h-[200x]'>
             <Loading loading={loading}>
                 <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Gestion des images : habitats</h1>
                 <div className='overflow-x-auto w-full flex flex-col items-center'>
@@ -250,7 +250,7 @@ export default function ImageHabitatManager() {
                 </table>
 
                     {modal && (
-                        <div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-70 z-50 text-secondary px-1'>
+                        <div className='fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-70 z-50 text-secondary'>
                             <div className='flex flex-col justify-between sm:w-2/3 w-full h-[75%] bg-white rounded-lg overflow-y-auto'>
                                 <div>
                                     <div className='w-full flex justify-end mb-2 p-2'>

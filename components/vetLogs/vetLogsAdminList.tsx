@@ -122,7 +122,7 @@ export default function VetLogsAdminList() {
   };
 
   return (
-    <div className=''>
+    <div>
       <Loading loading={loading}>
         <h1 className="sm:text-3xl text-2xl font-caption font-bold mb-12 text-center">Rapports vétérinaires</h1>
         <div className="w-full flex flex-col md:flex-row gap-x-6">

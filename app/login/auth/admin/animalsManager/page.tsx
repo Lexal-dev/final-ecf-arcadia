@@ -56,12 +56,12 @@ const AnimalsManager: React.FC = () => {
   }, []);
 
   const initFetch = useCallback(async () => {
-    await fetchAnimals('animals');
+    await fetchAnimals('animals').finally(() => setLoading(false));
   }, [fetchAnimals]);
 
   useEffect(() => {
-      initFetch().finally(() => setLoading(false));
-  }, [initFetch]); // Ajoutez `initFetch` dans les dépendances
+      initFetch();
+  }, [initFetch]);
 
   const handleDelete = async (animal: Animal) => {
     const animalId = Number(animal.id);
@@ -160,7 +160,7 @@ const AnimalsManager: React.FC = () => {
 
   return (
     
-      <main className='flex flex-col items-center py-12 min-h-[200x] px-2'>
+      <main className='flex flex-col items-center py-12 min-h-[200x]'>
         <Loading loading={loading}>
         <h1 className=' sm:text-3xl text-2xl mb-4 font-caption font-bold'>Gestion des animaux</h1>
           <button onClick={() => setModalCreate(true)} className='bg-foreground hover:bg-muted-foreground hover:text-white text-secondary py-1 px-3 rounded-md mb-6'>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { MdClose } from 'react-icons/md';
 
@@ -16,6 +16,8 @@ interface Habitat {
   comment: string;
 }
 
+
+
 const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClose }) => {
   
   const [formData, setFormData] = useState({
@@ -26,9 +28,17 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
 
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   const handleUpdateHabitat = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Réinitialiser les erreurs avant la validation
+    setError(null); 
 
     try {
       const token = sessionStorage.getItem('token');
@@ -55,6 +65,8 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ habitat, onUpdateSuccess, onClo
       setError('Une erreur est survenue lors de la mise à jour.');
     }
   };
+
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

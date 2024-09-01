@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 
 interface FormCreateProps {
@@ -32,6 +32,14 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
             console.error('Error creating service:', data.message);
         }
     };
+    
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+    
+        return () => {
+          document.body.style.overflow = 'auto';
+        };
+      }, []);
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

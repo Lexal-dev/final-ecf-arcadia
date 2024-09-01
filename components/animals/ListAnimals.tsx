@@ -82,6 +82,18 @@ export default function ListAnimals() {
     }
   }, [selectedHabitatName])
 
+  useEffect(() => {
+    if (modal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [modal]);
+
   return (
     <>
      <h1 className='sm:text-3xl text-2xl mb-4 font-caption font-bold'>Rapports des employés</h1>
@@ -125,7 +137,7 @@ export default function ListAnimals() {
 
       {modal && (
         <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
-          <div className='bg-foreground rounded-lg p-4 max-w-xl w-full text-secondary'>
+          <div className='bg-foreground rounded-lg p-4 max-w-xl w-full text-secondary overflow-y-auto'>
             <div className='flex justify-between items-center'>
               <h1 className='w-full sm:text-3xl text-2xl font-bold'>Détails du rapport pour {selectedAnimal?.name}</h1>
               <button onClick={() => setModal(false)} className='text-red-600 hover:text-red-700 text-xl hover:text-2xl'><MdClose size={36} /></button>

@@ -100,6 +100,17 @@ export default function FoodConsumptionManager() {
     ? animals.filter(animal => animal.habitatId.toString() === selectedHabitatName)
     : animals;
 
+    useEffect(() => {
+      if (showModal) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
+      }
+    
+      return () => {
+        document.body.style.overflow = 'auto';
+      };
+    }, [showModal]);
   return (
     <main className='w-full flex flex-col justify-center items-center py-6'>
       <Loading loading={loading}>

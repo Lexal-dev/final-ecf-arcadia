@@ -39,7 +39,6 @@ next-env.d.ts
 
 #password js
 hashPass.js
-lib/db/postgreeSQL
 
 # Ignorer le répertoire config
 /config/
@@ -49,5 +48,3 @@ lib/db/postgreeSQL
 
 /pages/api/hours/create.ts
 /page/api/hours/delete.ts
-
-Documents

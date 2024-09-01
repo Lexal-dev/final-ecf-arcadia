@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
@@ -52,6 +52,14 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ service, onUpdateSuccess, onClo
       setServerError('Une erreur est survenue lors de la mise à jour du service.');
     }
   };
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">

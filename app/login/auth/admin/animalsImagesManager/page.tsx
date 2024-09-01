@@ -218,6 +218,18 @@ export default function ImageAnimalsManager() {
         return currentTableUrl.filter(url => url !== imageUrlToRemove);
     };
 
+    useEffect(() => {
+        if (modal) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = 'auto';
+        }
+      
+        return () => {
+          document.body.style.overflow = 'auto';
+        };
+      }, [modal]);
+      
     return (
         <main className='flex flex-col items-center py-12 min-h-[200px]'>
             <Loading loading={loading}>

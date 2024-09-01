@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
@@ -50,7 +50,13 @@ const FormUpdate: React.FC<ServiceUpdateFormProps> = ({ service, onUpdateSuccess
       setServerError('Une erreur est survenue lors de la mise à jour.');
     }
   };
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
 
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
   return (
     <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
       <div className='bg-foreground p-6 rounded shadow-md md:w-1/2 text-secondary'>

@@ -110,6 +110,14 @@ const FormCreate: React.FC<FormCreateProps> = ({ onCreateSuccess, onClose }) => 
         }
     };
 
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+    
+        return () => {
+          document.body.style.overflow = 'auto';
+        };
+      }, []);
+      
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
             <div className="bg-foreground p-6 rounded shadow-md w-full md:w-1/2 text-secondary">

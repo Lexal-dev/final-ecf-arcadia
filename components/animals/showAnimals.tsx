@@ -129,6 +129,18 @@ export default function ShowAnimals() {
     }
   };
 
+  useEffect(() => {
+    if (modal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [modal]);
+  
   return (
     <div className='min-h-[250px] w-full flex flex-col items-center'>
       <Loading loading={loading}>

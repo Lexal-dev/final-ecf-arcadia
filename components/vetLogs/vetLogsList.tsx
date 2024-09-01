@@ -22,7 +22,6 @@ export default function VetLogsList() {
   const [updateModal, setUpdateModal] = useState<boolean>(false); 
   const [updatedVetLog, setUpdatedVetLog] = useState<VetLog | null>(null);
   const [loading, setLoading] = useState<boolean>(true)
-  const [sending, setSending] = useState<boolean>(false);
   const token = sessionStorage.getItem('token');
   
   const fetchAnimal = async (additionalParam: string | number) => {
@@ -163,7 +162,18 @@ export default function VetLogsList() {
     ? vetLogs.filter(vetLog => vetLog.animalId === selectedAnimalId)
     : [];
 
-  
+    useEffect(() => {
+      if (modal) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
+      }
+    
+      return () => {
+        document.body.style.overflow = 'auto';
+      };
+    }, [modal]);
+
   return (
     <main className="w-full flex flex-col items-center">
       <Loading loading={loading}>
@@ -207,7 +217,7 @@ export default function VetLogsList() {
 
       {modal && (
         <div className='fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50'>
-          <div className='flex flex-col bg-foreground rounded-lg p-4 w-full md:w-2/3 text-secondary'>    
+          <div className='flex flex-col bg-foreground rounded-lg p-4 w-full md:w-2/3 text-secondary max-h-[80vh] overflow-y-auto'>    
             <ul>
                 <div className='flex justify-between w-full'>
                 {showCreateForm && (

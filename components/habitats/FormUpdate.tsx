@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 
 interface FormUpdateProps {
@@ -52,6 +52,15 @@ const handleUpdateHabitat = async (e: React.FormEvent) => {
     setError('Erreur de connexion à la base de données: ' + error.message);
   }
 };
+
+useEffect(() => {
+  document.body.style.overflow = 'hidden';
+
+  return () => {
+    document.body.style.overflow = 'auto';
+  };
+}, []);
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">

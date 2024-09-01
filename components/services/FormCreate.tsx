@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 import { toast } from 'react-toastify';
 
@@ -40,6 +40,15 @@ export default function FormCreate({ onCreateSuccess, onClose }: FormCreateProps
             setServerError('Une erreur est survenue lors de la création du service.');
         }
     };
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+    
+        return () => {
+          document.body.style.overflow = 'auto';
+        };
+      }, []);
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
             <div className="w-full sm:w-1/2 bg-foreground p-6 rounded shadow-md text-secondary">

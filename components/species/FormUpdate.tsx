@@ -1,6 +1,6 @@
 "use client"
 import Specie from '@/models/specie';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdClose } from 'react-icons/md';
 
 interface FormUpdateProps {
@@ -42,6 +42,14 @@ const FormUpdate: React.FC<FormUpdateProps> = ({ specie, onUpdateSuccess, onClos
     }
   };
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+  
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-full md:w-1/2 bg-foreground p-6 rounded shadow-md  text-secondary">

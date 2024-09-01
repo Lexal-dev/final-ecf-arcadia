@@ -73,7 +73,7 @@ export default function ImageAnimalsManager() {
         await fetchListAll();
         await fetchAnimals('animals');
         setLoading(false);
-    }, []); // Ajoutez les dépendances si `fetchListAll` ou `fetchAnimals` changent
+    }, []); 
     
     useEffect(() => {
         init();

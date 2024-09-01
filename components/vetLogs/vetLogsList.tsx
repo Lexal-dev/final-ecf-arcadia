@@ -22,6 +22,7 @@ export default function VetLogsList() {
   const [updateModal, setUpdateModal] = useState<boolean>(false); 
   const [updatedVetLog, setUpdatedVetLog] = useState<VetLog | null>(null);
   const [loading, setLoading] = useState<boolean>(true)
+  const [sending, setSending] = useState<boolean>(false);
   const token = sessionStorage.getItem('token');
   
   const fetchAnimal = async (additionalParam: string | number) => {

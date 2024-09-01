@@ -140,7 +140,7 @@ const SpaceNav: React.FC = () => {
                         ) : (
                             <ul className="flex flex-wrap justify-between gap-4 pt-2 w-full">
                                 {filteredNavItems().map((navItem, index) => (
-                                    <li key={index} className="w-1/3 md:w-1/4 p-2 text-sm md:text-lg font-semibold hover:text-secondary text-center">
+                                    <li key={index} className="w-1/3 md:w-1/4 p-2 text-lg md:text-xl font-semibold hover:text-secondary text-center">
                                         <Link href={navItem.path} className={`block ${navItem.active ? 'text-secondary' : ''}`}>
                                             {navItem.name}
                                         </Link>
@@ -152,7 +152,7 @@ const SpaceNav: React.FC = () => {
                 ) : (
                     <p className="text-md w-full font-bold text-center pt-3">MENU {userRoles.join(', ')}</p>
                 )}
-                <div className="w-full items-center justify-center text-center">
+                <div className="w-full items-center justify-center text-center md:pt-0 pt-3">
                     <button onClick={() => setIsOpen(!isOpen)}>
                         {isOpen ? (<FaCaretUp size={20} />) : (<FaCaretDown size={20} />)}
                     </button>

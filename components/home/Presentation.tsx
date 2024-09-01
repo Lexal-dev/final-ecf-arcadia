@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { Animal } from "@/lib/types/types";
 
-import { storage } from '@/lib/db/firebaseConfig.mjs'; // Import Firebase config
+import { storage } from '@/lib/db/firebaseConfig.mjs';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
 
 export default function Presentation() {
@@ -31,7 +31,7 @@ export default function Presentation() {
           sessionStorage.setItem('animals', JSON.stringify(data.animals));
         }
 
-        const imagesRef = ref(storage, 'images/animals'); // Assurez-vous que le chemin est correct
+        const imagesRef = ref(storage, 'images/animals');
         const imageList = await listAll(imagesRef);
 
         if (imageList.items.length === 0) {

@@ -42,7 +42,7 @@ const AvisList: React.FC = () => {
   return (
     <div className='sm:w-3/4 w-full px-1'>
       <h3 className='text-4xl font-caption text-center mb-6'>Les commentaires laissés par nos visiteurs</h3>
-      <div className="flex justify-center items-center min-w-full max-h-[600px] border-2 p-6 rounded-md bg-muted overflow-auto">
+      <div className="flex min-w-full max-h-[600px] border-2 rounded-md p-6 bg-muted overflow-y-auto">
         {loading ? (
           <p className='w-full text-center'>Chargement des commentaires...</p>
         ) : error ? (

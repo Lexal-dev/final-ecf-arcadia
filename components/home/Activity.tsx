@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { ImageData } from '@/lib/types/types';
-import useIsMobile from '@/components/hook/useIsMobile';  // Importer le hook
+import useIsMobile from '@/components/hook/useIsMobile';
 
 export default function Activity() {
   const [imagesHabitats, setImagesHabitats] = useState<ImageData[]>([]);

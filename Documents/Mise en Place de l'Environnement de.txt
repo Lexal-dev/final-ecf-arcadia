@@ -1,0 +1,52 @@
+Mise en Place de l’Environnement de Travail
+
+Pour répondre aux besoins du projet de développement de l'application web/mobile pour le zoo Arcadia, j'ai choisi une stack technique moderne et efficace. Voici les détails de l’environnement de travail mis en place, ainsi que la justification de mes choix :
+
+1. Stack Front-End :
+
+Next.js:
+
+Explication : j'ai opté pour Next.js, un framework React, car il permet de créer des applications performantes grâce à son rendu côté serveur (SSR) et son support du static site generation (SSG). Ceci est essentiel pour une application comme celle du zoo, où la rapidité de chargement des pages et le SEO sont primordiaux pour une bonne expérience utilisateur et une meilleure visibilité en ligne.
+
+TypeScript :
+
+Explication : L’utilisation de TypeScript permet d’ajouter un typage statique à JavaScript, ce qui améliore la fiabilité du code et facilite la maintenance à long terme. Cela aide à prévenir les erreurs courantes et à mieux documenter le code pour les futurs développeurs.
+
+Tailwind CSS :
+
+Explication : Tailwind CSS a été choisi pour le style de l'application car il offre une grande flexibilité avec ses classes utilitaires. Il permet un développement rapide et une personnalisation facile, tout en assurant une cohérence dans le design. De plus, il s’intègre parfaitement avec Next.js.
+
+ShadcnUI:
+
+Explication : Choix : ShadCN UI a été utilisé pour les composants UI réutilisables et élégants, ce qui accélère le développement des interfaces utilisateur tout en maintenant une apparence professionnelle et soignée.
+
+
+2. Stack Back-End :
+
+Node.js : 
+
+Explication : Node.js a été sélectionné pour le back-end en raison de sa capacité à gérer des opérations d'entrée/sortie intensives de manière non bloquante, ce qui est idéal pour les applications web modernes. De plus, il permet une unification du code front-end et back-end avec JavaScript.
+
+Sequelize (ORM) :
+
+Explication : Sequelize, en tant qu'ORM, simplifie les interactions avec la base de données MySQL. Il permet une gestion facile des modèles de données et assure la portabilité du code, tout en garantissant une abstraction des requêtes SQL complexes.
+
+
+MySQL:
+
+Explication : Nous avons choisi MySQL comme base de données relationnelle pour le developpement.
+
+PostgreSQL : 
+
+Explication :PostgreSQL a été choisis comme base de donnée relationnelle pour la production, le fournisseur étant neon.tech (il est en adéquation avec Vercel pour le deploiement)
+
+
+3. Éditeur de Code :
+
+Visual Studio Code (VS Code) :
+
+Explication : VS Code est l’éditeur de code de choix pour ce projet en raison de sa légèreté, de son large écosystème d’extensions (pour TypeScript, Tailwind CSS, Sequelize, etc.), et de son support intégré pour Git, ce qui facilite le développement et la collaboration en équipe.
+
+
+
+

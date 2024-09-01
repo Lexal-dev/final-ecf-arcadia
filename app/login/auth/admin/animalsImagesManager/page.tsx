@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import Loading from '@/components/Loading';
 import Image from 'next/image';
 
+
 interface Animal {
     id: number;
     name: string;
@@ -30,7 +31,8 @@ export default function ImageAnimalsManager() {
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [images, setImages] = useState<ImageData[]>([]);
     const token = sessionStorage.getItem('token');
-    
+
+
     const fetchListAll = async () => {
         try {
             const res = await listAll(ref(storage, 'images/animals'));
@@ -111,17 +113,13 @@ export default function ImageAnimalsManager() {
     }
 
     const onCloseModal = async () => {
-        setModal(false);
-        setLoading(true);
-        
-        await fetchListAll();
-        await fetchAnimals('animals');
-        
-
+        setLoading(true)
         setSelectedAnimal(null);
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
-        setLoading(false);
+        await init(); 
+
+        window.location.reload()
     };
 
     const updateImage = async (url: string) => {

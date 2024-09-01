@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import Loading from '@/components/Loading';
 import Image from 'next/image';
 
+
 interface Habitat {
     id: number;
     name: string;
@@ -29,6 +30,7 @@ export default function ImageHabitatManager() {
     const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const [images, setImages] = useState<ImageData[]>([]);
     const token = sessionStorage.getItem('token');
+
 
     const fetchListAll = async () => {
         try {
@@ -71,7 +73,7 @@ export default function ImageHabitatManager() {
         await fetchListAll();
         await fetchHabitats('habitats');
         setLoading(false);
-    }, []); // Ajoutez les dépendances si `fetchListAll` ou `fetchAnimals` changent
+    }, []); 
     
     useEffect(() => {
         init();
@@ -107,17 +109,13 @@ export default function ImageHabitatManager() {
         setModal(false)
     }
     const onCloseModal = async () => {
-        setModal(false);
-        setLoading(true);
-
-        await fetchListAll()
-        await fetchHabitats('habitats'); // Re-fetch habitats after modal close
-        
-
+        setLoading(true)
         setSelectedHabitat(null);
         setCurrentTableUrl([]);
         setSelectedImageUrl(null);
-        setLoading(false);
+        await init();
+
+        window.location.reload()
     };
 
     const updateImage = async (url: string) => {

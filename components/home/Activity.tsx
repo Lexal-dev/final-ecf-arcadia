@@ -1,139 +1,173 @@
 "use client";
-import React, { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import { Animal } from "@/lib/types/types";
-
-import { storage } from '@/lib/db/firebaseConfig.mjs'; // Import Firebase config
+import { storage } from '@/lib/db/firebaseConfig.mjs';
 import { getDownloadURL, listAll, ref } from 'firebase/storage';
+import Image from 'next/image';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { ImageData } from '@/lib/types/types';
+import useIsMobile from '@/components/hook/useIsMobile';  // Importer le hook
 
-export default function Presentation() {
-  const [animals, setAnimals] = useState<Animal[]>([]);
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [direction, setDirection] = useState<'left' | 'right' | null>(null);
-  const [error, setError] = useState<string>('');
-  const [loadingImage, setLoadingImage] = useState<boolean>(true);
+export default function Activity() {
+  const [imagesHabitats, setImagesHabitats] = useState<ImageData[]>([]);
+  const [imagesAnimals, setImagesAnimals] = useState<ImageData[]>([]);
+  const [shuffleTab, setShuffleTab] = useState<ImageData[]>([]);
 
-  useEffect(() => {
-    const fetchAnimalsAndImages = async () => {
-      setLoadingImage(true);
-      try {
-        const cachedAnimals = sessionStorage.getItem('animals');
-        if (cachedAnimals) {
-          setAnimals(JSON.parse(cachedAnimals));
-        } else {
-          const response = await fetch('/api/animals/read?additionalParam=animals');
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const data = await response.json();
-          setAnimals(data.animals);
-          sessionStorage.setItem('animals', JSON.stringify(data.animals));
-        }
+  const isMobile = useIsMobile(); 
 
-        const imagesRef = ref(storage, 'images/animals'); // Assurez-vous que le chemin est correct
-        const imageList = await listAll(imagesRef);
-
-        if (imageList.items.length === 0) {
-          throw new Error('Aucune image trouvée dans Firebase Storage.');
-        }
-
-        const urls = await Promise.all(
-          imageList.items.map(item => getDownloadURL(item))
-        );
-
-        setImageUrls(urls);
-
-      } catch (error) {
-        console.error('Error fetching animals or images:', error);
-        setError('Échec de la récupération des animaux ou des images. Veuillez réessayer plus tard.');
-      } finally {
-        setLoadingImage(false);
-      }
-    };
-
-    fetchAnimalsAndImages();
-  }, []);
-
-  const nextSlide = useCallback(() => {
-    setCurrentIndex(prevIndex => (prevIndex === imageUrls.length - 1 ? 0 : prevIndex + 1));
-    setDirection('right');
-  }, [imageUrls]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 20000); // Change slide every 20 seconds
-
-    return () => clearInterval(interval);
-  }, [nextSlide]);
-
-  const prevSlide = () => {
-    setCurrentIndex(prevIndex => (prevIndex === 0 ? imageUrls.length - 1 : prevIndex - 1));
-    setDirection('left');
+  const fetchListAll = async () => {
+    try {
+      const res = await listAll(ref(storage, `images/habitats`));
+      const imageInfos = await Promise.all(
+        res.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return {
+            name: itemRef.name,
+            url
+          };
+        })
+      );
+      setImagesHabitats(imageInfos);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des fichiers :', error);
+    }
+    try {
+      const res = await listAll(ref(storage, `images/animals`));
+      const imageInfos = await Promise.all(
+        res.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return {
+            name: itemRef.name,
+            url
+          };
+        })
+      );
+      setImagesAnimals(imageInfos);
+    } catch (error) {
+      console.error('Erreur lors de la récupération des fichiers :', error);
+    }
   };
 
-  const currentImageUrl = imageUrls[currentIndex] || '/images/Pasdimage.jpg';
+  const shuffleImage = (...arrays: ImageData[][]) => {
+    let combinedArray: ImageData[] = [];
+    arrays.forEach(array => {
+      combinedArray = [...combinedArray, ...array];
+    });
+    return combinedArray;
+  };
+
+  useEffect(() => {
+    if (imagesAnimals.length !== 0 && imagesHabitats.length !== 0) {
+      const combinedArray = shuffleImage(imagesAnimals, imagesHabitats);
+      setShuffleTab(combinedArray);
+    }
+  }, [imagesAnimals, imagesHabitats]);
+
+  useEffect(() => {
+    fetchListAll();
+  }, []);
+
+  const getUrlAtIndex = (index: number): string | undefined => {
+    if (index >= 0 && index < shuffleTab.length) {
+      return shuffleTab[index].url;
+    }
+    return undefined;
+  };
+
+  // Table of image URLs for services
+  const serviceImages = [
+    '/images/Restaurant.png',
+    '/images/Souvenir.png',
+    '/images/Train.png',
+    '/images/Stand.png'
+  ];
 
   return (
-    <section className="w-full flex flex-col gap-6 w-full md:w-2/3 lg:w-3/4 text-start px-2">
-      <h1 className="text-4xl font-caption text-center mb-6">Présentation du zoo</h1>
-      <p className="text-start text-md md:text-xl">
-        Bienvenue au Zoo Arcadia, un lieu de merveilles et de découvertes. Notre zoo offre une expérience unique avec une
-        variété d&apos;animaux, de beaux paysages et des programmes éducatifs.
+    <section className='w-full flex flex-col gap-6 w-full md:w-2/3 lg:w-3/4 text-start px-2'>
+      <h3 className="text-4xl font-caption text-center mb-6">Les différentes activités du parc</h3>
+      <p className="text-start text-lg md:text-xl mb-6">
+        Arcadia vous propose une multitude d&apos;activités allant du visionnage des habitats au animaux qui y vivent.
+        Aussi vous aurez accès à plusieurs services comprenant un train qui fait le tour du parc, un guide audio et bien d&apos;autres services.
       </p>
 
-      {loadingImage ? (
-        <p className="text-center">Chargement des images...</p>
-      ) : (
-        <div className="flex flex-col gap-6">
-          <motion.div
-            key={currentIndex}
-            className="relative overflow-hidden border-2 bg-black"
-            style={{ paddingBottom: '50%' }}
-          >
-            <motion.div
-              className="absolute inset-0 flex justify-center items-center"
-              initial={{ opacity: 0, x: direction === 'left' ? '-100%' : '100%' }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, type: 'tween' }}
-            >
-              <Image
-                src={currentImageUrl}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                alt={`Image ${currentIndex}`}
-                className="object-center object-cover"
-                priority // Add the priority attribute here
-              />
-            </motion.div>
-          </motion.div>
+      {/* Section Habitats & Animaux */}
+      <div className='w-full flex flex-col items-center mb-12'>
+        <div className='flex flex-col mb-6'>
+          <p className='text-lg md:text-xl mb-6'>Pour accéder à nos habitats et animaux</p> 
+          <Link href="/habitats" className='text-center text-blue-300 hover:text-blue-400 hover:text-bold'>Clickez ici</Link>
+        </div>
 
-          <div className="w-full flex justify-between mt-4">
-            <motion.button
-              onClick={prevSlide}
-              className="text-white text-4xl font-bold px-4 rounded hover:text-green-400"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ duration: 0.2 }}
-            >
-              <FaAngleLeft />
-            </motion.button>
-            <motion.button
-              onClick={nextSlide}
-              className="text-white text-4xl font-bold px-4 rounded hover:text-green-400"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ duration: 0.2 }}
-            >
-              <FaAngleRight />
-            </motion.button>
+        <div className="w-full flex">
+          <div className="flex flex-wrap gap-1 w-full justify-center">
+            {isMobile ? (
+              // show unique image
+              <div className="flex-shrink-0 w-full">
+                <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
+                  <Image
+                    src={getUrlAtIndex(0) || '/images/Pasdimage.jpg'}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    alt={`habitats&animaux 0`}
+                  />
+                </div>
+              </div>
+            ) : (
+              // show 4 images
+              [0, 1, 2, 3].map((index) => (
+                <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
+                  <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
+                    <Image
+                      src={getUrlAtIndex(index) || '/images/Pasdimage.jpg'}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      alt={`habitats&animaux ${index}`}
+                    />
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
-      )}
+      </div>
 
-      {error && <p>Erreur : {error}</p>}
-      {animals.length === 0 && !loadingImage && !error && <p className='w-full text-center'>Aucun animal trouvé.</p>}
+      {/* Section Services */}
+      <div className='w-full flex flex-col items-center'>
+        <div className='flex flex-col mb-6'>
+          <p className='text-lg md:text-xl mb-6'>Pour accéder à nos services</p>
+          <Link href="/services" className='text-center text-blue-300 hover:text-blue-400 hover:text-bold'>Clickez ici</Link>  
+        </div>
+
+        <div className="w-full flex">
+          <div className="flex flex-wrap gap-1 w-full justify-center">
+            {isMobile ? (
+              // show unique image for mobile
+              <div className="flex-shrink-0 w-full">
+                <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
+                  <Image
+                    src={serviceImages[0]}  // Use the first image
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    alt={`services 0`}
+                  />
+                </div>
+              </div>
+            ) : (
+              // show 4 images for larger screens
+              serviceImages.map((src, index) => (
+                <div key={index} className="flex-shrink-0 w-full md:w-1/2 lg:w-1/3">
+                  <div className="relative w-full h-0 pb-[60%] border border-2 border-green-300">
+                    <Image
+                      src={src}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      alt={`services ${index}`}
+                    />
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

@@ -59,7 +59,7 @@ const ServicePage: React.FC = () => {
     };
 
        
-     useEffect(() => { fetchServices("service");}, []);
+    useEffect(() => { fetchServices("service");}, []);
 
     const openModal = (service: Service) => {
         setSelectedService(service);

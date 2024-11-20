@@ -48,3 +48,5 @@ hashPass.js
 
 /pages/api/hours/create.ts
 /page/api/hours/delete.ts
+
+mysql-init.sql

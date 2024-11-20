@@ -1,6 +1,6 @@
-import { DataTypes, Model } from 'sequelize';
-import bcrypt from 'bcryptjs';
-import sequelize from '@/lib/db/sequelize.mjs';
+import { DataTypes, Model } from "sequelize";
+import bcrypt from "bcryptjs";
+import sequelize from "@/lib/db/sequelize.mjs";
 
 const SALT_ROUNDS = 10;
 
@@ -17,13 +17,13 @@ class User extends Model<UserAttributes> implements UserAttributes {
   public password!: string;
   public role!: string;
 
-  // Hash le mot de passe avant de le sauvegarder
+  // Hash password out to save
   public async setPassword(password: string): Promise<void> {
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
     this.password = hashedPassword;
   }
 
-  // Compare le mot de passe fourni avec le mot de passe haché
+  // Compare password with hash password
   public async comparePassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password);
   }
@@ -42,7 +42,7 @@ User.init(
       unique: true,
       validate: {
         isEmail: {
-          msg: 'Email must be valid.',
+          msg: "Email must be valid.",
         },
       },
     },
@@ -53,12 +53,12 @@ User.init(
     role: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: 'EMPLOYEE',
+      defaultValue: "EMPLOYEE",
     },
   },
   {
     sequelize,
-    tableName: 'users',
+    tableName: "users",
     timestamps: false,
   }
 );

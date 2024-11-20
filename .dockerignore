@@ -1,0 +1,13 @@
+#ignore les fichiers:
+#dépendances
+node_modules/
+
+#IDE
+.vscode/
+
+#log sauf si dev
+
+
+#cache de npm
+npm-debug.log
+yarn-error.log

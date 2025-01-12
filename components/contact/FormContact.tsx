@@ -168,9 +168,6 @@ const FormContact: React.FC<FormContactProps> = () => {
         >
           {isLoading ? 'Envoi en cours...' : 'Envoyer'}
         </button>
-        {isSuccess && (
-          <p className="text-green-700 text-center mt-4">Votre message a été envoyé avec succès !</p>
-        )}
       </form>
 
     </>

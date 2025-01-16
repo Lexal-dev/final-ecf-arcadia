@@ -49,6 +49,20 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: {
+          args: [12, 100],
+          msg: "Le mot de passe doit contenir au moins 12 caractères.",
+        },
+        isStrongPassword(value: string) {
+          const regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{12,}$/;
+          if (!regex.test(value)) {
+            throw new Error(
+              "Le mot de passe doit contenir au moins 12 caractères, dont un chiffre, un caractère spécial, et une lettre."
+            );
+          }
+        },
+      },
     },
     role: {
       type: DataTypes.STRING,

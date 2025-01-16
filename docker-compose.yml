@@ -1,48 +1,62 @@
+# Définition des services pour l'application
 services:
+  # Service MySQL pour la base de données
   mysql:
     build:
       context: .
-      dockerfile: Dockerfile.mysql
-    image: mysql:latest
+      dockerfile: Dockerfile.mysql # Fichier Dockerfile  pour initialiser MySQL
+    image: mysql:latest # Image  officielle MySQL
     container_name: mysql-arcadia
     env_file:
       - .env
+    # Variables d'environnement nécessaires pour MySQL
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DEV_DB_DATABASE}
     ports:
       - "3306:3306"
+
     networks:
       - arcadia-networks
+    # Volume pour persister les données MySQL
     volumes:
       - mysql-data:/var/lib/mysql
 
+  # Service de l'application
   arcadia:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile # Fichier Dockerfile pour configurer le service Arcadia
     container_name: arcadia-app
     ports:
       - "3000:3000"
+
+    # Variables d'environnement nécessaires à l'application
     environment:
-      DB_NODE_ENV: ${NODE_ENV}
-      DB_HOST: ${DEV_DB_HOST}
-      DB_USER: ${DEV_DB_USER}
-      DB_PASSWORD: ${DEV_DB_PASSWORD}
-      DEV_DB_DATABASE: ${DEV_DB_DATABASE}
+      DB_NODE_ENV: ${NODE_ENV} # Environnement Node.js (développement, production)
+      DB_HOST: ${DEV_DB_HOST} # Hôte de la base de données
+      DB_USER: ${DEV_DB_USER} # Utilisateur de la base de données
+      DB_PASSWORD: ${DEV_DB_PASSWORD} # Mot de passe de la base de données
+      DEV_DB_DATABASE: ${DEV_DB_DATABASE} # Nom de la base de données
     depends_on:
-      - mysql
+      - mysql # Dépendance au service MySQL
+
+    # Réseau partagé avec le service MySQL
     networks:
       - arcadia-networks
+
+    # Volumes pour synchroniser les fichiers de l'application
     volumes:
-      - .:/app
-      - /app/node_modules
+      - .:/app # Synchronisation du code source local avec le conteneur
+      - /app/node_modules # Répertoire des dépendances Node.js
+
     command: ["npm", "run", "dev"]
 
 networks:
   arcadia-networks:
     driver: bridge
 
+# Volume pour stocker les données MySQL de manière persistante
 volumes:
   mysql-data:
     driver: local

@@ -14,8 +14,10 @@ const Modal: React.FC<ModalProps> = ({ service, onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="flex flex-col justify-between bg-foreground p-6 rounded-lg text-secondary w-[600px] h-[400px]">
-        <p className="text-3xl text-center font-bold mb-2">{service.name}</p>
-        <p className="h-1/3 text-xl tracking-wide leading-6">
+        <p className="text-3xl text-center font-bold mb-2 break-words whitespace-normal">
+          {service.name}
+        </p>
+        <p className="h-1/3 text-xl tracking-wide leading-6 break-words whitespace-normal">
           {service.description}
         </p>
         <button
@@ -95,16 +97,20 @@ const ServicePage: React.FC = () => {
         Nos services disponibles par
       </h1>
       <Loading loading={loading}>
-        <section className="bg-muted p-6 rounded-lg border border-slate-200">
+        <section className="bg-muted p-6 rounded-lg border border-slate-200 max-h-[500px] overflow-auto">
           <div className="flex flex-wrap justify-center gap-6">
             {services.map((service) => (
               <div
                 key={service.id}
-                className="border-2 bg-foreground hover:bg-background border-slate-200 p-2 rounded-md w-[250px] cursor-pointer text-secondary hover:text-white"
+                className="border-2 bg-foreground hover:bg-background border-slate-200 p-2 rounded-md w-[250px] cursor-pointer text-secondary hover:text-white max-h-[500px]"
                 onClick={() => openModal(service)}
               >
-                <p className="text-xl font-bold mb-2">{service.name}</p>
-                <p className="text-md">{service.description}</p>
+                <p className="text-xl font-bold mb-2 break-words whitespace-normal">
+                  {service.name}
+                </p>
+                <p className="text-md break-words whitespace-normal">
+                  {service.description}
+                </p>
               </div>
             ))}
           </div>

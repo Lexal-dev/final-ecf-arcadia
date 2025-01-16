@@ -3,14 +3,18 @@ import nodemailer from "nodemailer";
 import User from "@/models/user";
 import { hashPassword } from "@/lib/security/passwordUtils";
 import { validateRoleAccess } from "@/lib/security/validateUtils";
-import { checkRateLimit } from "@/lib/security/rateLimiter";
+
+function validatePassword(password: string): boolean {
+  const regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{12,}$/;
+  return regex.test(password);
+}
 
 async function sendWelcomeEmail(email: string, username: string) {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || "587"),
-      secure: process.env.SMTP_PORT === "465", // True if port is 465, else false
+      secure: process.env.SMTP_PORT === "465",
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
@@ -18,7 +22,7 @@ async function sendWelcomeEmail(email: string, username: string) {
     });
 
     const mailOptions = {
-      from: "nekodev67@outlook.com",
+      from: process.env.SMTP_USER,
       to: email,
       subject: "Welcome to Our Platform",
       text: `Hello ${username},\n\nWelcome to our platform. Your account has been successfully created.`,
@@ -45,7 +49,7 @@ export default async function handler(
     if (!token || !validateRoleAccess("ADMIN", token)) {
       return res
         .status(403)
-        .json({ success: false, message: "Access denied. Admins only." });
+        .json({ success: false, message: "Accés non autorisé." });
     }
 
     const { email, password, role } = req.body;
@@ -53,7 +57,16 @@ export default async function handler(
     if (!email || !password || !role) {
       return res
         .status(400)
-        .json({ success: false, message: "All fields are required." });
+        .json({ success: false, message: "Tous les champs sont requis." });
+    }
+
+    // Validate password
+    if (!validatePassword(password)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Le mot de passe doit contenir 12 caractére contenant au moins 1 chiffre et 1 caratére spécial",
+      });
     }
 
     try {
@@ -61,7 +74,7 @@ export default async function handler(
       if (existingUser) {
         return res
           .status(400)
-          .json({ success: false, message: "Email is already in use." });
+          .json({ success: false, message: "Email non disponible" });
       }
 
       const hashedPassword = await hashPassword(password);
@@ -74,28 +87,24 @@ export default async function handler(
       // Send welcome email, but don't block user creation if it fails
       sendWelcomeEmail(email, email).catch((error) => {
         // Log the error but continue
-        console.error("Failed to send welcome email:", error);
+        console.error("Echec de l'envois de l'email", error);
       });
 
-      return res
-        .status(201)
-        .json({
-          success: true,
-          message: "User created successfully.",
-          user: newUser,
-        });
+      return res.status(201).json({
+        success: true,
+        message: "Utilisateur a bien été créé",
+        user: newUser,
+      });
     } catch (error) {
       console.error("Error creating user:", error);
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message: "Server error. Please try again later.",
-          error: String(error),
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Erreur serveur, réessayer plus tard.",
+        error: String(error),
+      });
     }
   } else {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).end(`Method ${req.method} not allowed`);
+    return res.status(405).end(`Method non autorisée`);
   }
 }

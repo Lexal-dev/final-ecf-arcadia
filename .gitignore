@@ -49,4 +49,10 @@ hashPass.js
 /pages/api/hours/create.ts
 /page/api/hours/delete.ts
 
+docker-compose.ymml
+dockerfile
+Dockerfile.mysql
+.dockerignore
+
 mysql-init.sql
+nodemailer.js

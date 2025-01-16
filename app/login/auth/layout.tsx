@@ -6,12 +6,10 @@ export const metadata: Metadata = {
   description: "Page d'authentification",
 };
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <UserProvider>
-   
-        {children}
-  
-    </UserProvider>
-  );
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <UserProvider>{children}</UserProvider>;
 }

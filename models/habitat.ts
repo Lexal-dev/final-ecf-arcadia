@@ -1,5 +1,5 @@
-import { DataTypes, Model } from 'sequelize';
-import sequelizeInstance from '@/lib/db/sequelize.mjs';
+import { DataTypes, Model } from "sequelize";
+import sequelizeInstance from "@/lib/db/sequelize.mjs";
 
 class Habitat extends Model {
   public id!: number;
@@ -48,13 +48,13 @@ Habitat.init(
       },
     },
     imageUrl: {
-      type: DataTypes.JSON, // Use JSON for imageUrl, or TEXT if necessary
+      type: DataTypes.JSON,
       allowNull: true,
     },
   },
   {
     sequelize: sequelizeInstance,
-    tableName: 'habitats',
+    tableName: "habitats",
     timestamps: false,
   }
 );
